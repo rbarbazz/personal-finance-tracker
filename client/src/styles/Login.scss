@@ -1,0 +1,32 @@
+@import 'shared.scss';
+
+/*
+==========================================================================
+   Login component
+==========================================================================
+*/
+
+.login-container {
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 30px;
+    text-align: center;
+}
+input {
+    &[type='email'],
+    &[type='password'] {
+        border: rgba(0, 0, 0, 0.5) solid 1px;
+        border-radius: 10px;
+        padding: 10px 20px;
+        margin: 10px;
+    }
+    &:focus {
+        outline: none;
+    }
+}
+button {
+    -webkit-appearance: none;
+}
