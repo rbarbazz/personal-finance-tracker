@@ -4,18 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "tsnd --respawn --no-notify server.ts",
+    "watch": "tsnd -r dotenv/config --respawn --no-notify server.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.20.1",
+    "passport": "^0.4.0",
+    "passport-local": "^1.0.0",
+    "pg": "^7.12.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.2",
     "@types/node": "^12.12.7",
+    "@types/passport": "^1.0.1",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.2"
   }

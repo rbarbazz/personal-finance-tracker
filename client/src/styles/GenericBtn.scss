@@ -1,0 +1,21 @@
+@import 'shared.scss';
+
+/*
+==========================================================================
+   GenericBtn component
+==========================================================================
+*/
+
+.generic-btn {
+    -webkit-appearance: none;
+    background-color: $primary-color;
+    border: none;
+    color: white;
+    cursor: pointer;
+    padding: 15px;
+    transition: background-color, 0.3s;
+
+    &:hover {
+        background-color: $primary-color-dark;
+    }
+}

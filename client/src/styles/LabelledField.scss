@@ -1,0 +1,28 @@
+@import 'shared.scss';
+
+/*
+==========================================================================
+   LabelledField component
+==========================================================================
+*/
+
+.labelled-field {
+    display: flex;
+    flex-direction: column;
+}
+.generic-label {
+    text-align: left;
+}
+.generic-input {
+    &[type='email'],
+    &[type='text'],
+    &[type='password'] {
+        border: rgba(170, 164, 164, 0.5) solid 1px;
+        color: $primary-color;
+        min-width: 300px;
+        padding: 15px;
+    }
+    &:focus {
+        outline: $primary-color solid 2px;
+    }
+}

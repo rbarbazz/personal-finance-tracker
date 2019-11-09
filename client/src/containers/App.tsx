@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 
 import '../styles/App.scss';
-import { Login } from '../components/Login';
+import { Login } from './Login';
 
 const App: React.FC = () => {
   const [isLoggedIn, toggleIsLoggedIn] = useState(false);
@@ -12,7 +12,7 @@ const App: React.FC = () => {
       <Router>
         <Switch>
           <Route exact path="/">
-            {isLoggedIn ? '' : <Login toggleIsLoggedIn={toggleIsLoggedIn} />}
+            {isLoggedIn ? 'Logged in!' : <Login toggleIsLoggedIn={toggleIsLoggedIn} />}
           </Route>
         </Switch>
       </Router>

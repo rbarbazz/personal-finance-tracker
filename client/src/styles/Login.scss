@@ -11,22 +11,30 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    padding: 30px;
     text-align: center;
-}
-input {
-    &[type='email'],
-    &[type='password'] {
-        border: rgba(0, 0, 0, 0.5) solid 1px;
-        border-radius: 10px;
-        padding: 10px 20px;
-        margin: 10px;
-    }
-    &:focus {
-        outline: none;
+
+    .labelled-field {
+        margin-bottom: $default-margin / 2;
     }
 }
-button {
+.greetings-paragraph {
+    font-size: 2em;
+    letter-spacing: 0.05em;
+    margin: 0 0 $default-margin;
+}
+#login-btn {
+    margin: ($default-margin / 2) 0 $default-margin;
+}
+.toggle-registered-btn {
     -webkit-appearance: none;
+    border: none;
+    color: $primary-color;
+    cursor: pointer;
+    font-weight: 700;
+    outline: none;
+    transition: color, 0.3s;
+
+    &:hover {
+        color: $primary-color-dark;
+    }
 }
