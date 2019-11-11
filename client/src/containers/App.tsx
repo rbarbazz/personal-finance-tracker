@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Redirect,
+  Switch,
+  Route,
+} from 'react-router-dom';
 
 import '../styles/App.scss';
 import { Login } from './Login';
+import { LoadingBars } from '../components/LoadingBars';
 
 const App: React.FC = () => {
-  const getPreviousSession = async () => {
+  const initialIsLoggedIn = async () => {
+    toggleIsLoading(true);
     try {
-      const res = await fetch('/login',{
-        method: 'POST',
+      const res = await fetch('/login', {
+        method: 'GET',
       });
+      toggleIsLoading(false);
       if (res.status === 200) {
         toggleIsLoggedIn(true);
       }
@@ -18,19 +26,32 @@ const App: React.FC = () => {
     }
   };
   const [isLoggedIn, toggleIsLoggedIn] = useState(false);
+  const [isLoading, toggleIsLoading] = useState(false);
+
   useEffect(() => {
-    getPreviousSession();
+    initialIsLoggedIn();
   }, []);
 
   return (
     <div className="app">
-      <Router>
-        <Switch>
-          <Route exact path="/">
-            {isLoggedIn ? 'Logged in!' : <Login toggleIsLoggedIn={toggleIsLoggedIn} />}
-          </Route>
-        </Switch>
-      </Router>
+      {isLoading ? (
+        <LoadingBars />
+      ) : (
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              {isLoggedIn ? (
+                <Redirect to="/dashboard" />
+              ) : (
+                <Login toggleIsLoggedIn={toggleIsLoggedIn} />
+              )}
+            </Route>
+            <Route exact path="/dashboard">
+              {!isLoggedIn ? <Redirect to="/" /> : <LoadingBars />}
+            </Route>
+          </Switch>
+        </Router>
+      )}
     </div>
   );
 };
