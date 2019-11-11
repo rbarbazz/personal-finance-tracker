@@ -11,20 +11,20 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
   const [email, setEmail] = useState('');
   const [fName, setFName] = useState('');
   const [password, setPassword] = useState('');
-  const loginUser = async (userData: User) => {
+  const loginUser = async (userData: User, isRegistered: boolean) => {
     try {
-      const res = await fetch('/login', {
+      const res = await fetch(isRegistered ? '/login' : '/register', {
         method: 'POST',
         headers: {
-          'Accept': 'application/json',
+          Accept: 'application/json',
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(userData),
       });
       if (res.status === 200) {
-        toggleIsLoggedIn(true);
-      } else {
-        console.error(`${res.status} - ${res.statusText}`);
+        const { error, message } = await res.json();
+        if (!error) toggleIsLoggedIn(true);
+        else console.error(message);
       }
     } catch (error) {
       console.error(error);
@@ -58,7 +58,7 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
         value={password}
       />
       <GenericBtn
-        action={() => loginUser({ fName, email, password })}
+        action={() => loginUser({ fName, email, password }, isRegistered)}
         id="login-btn"
         value={isRegistered ? 'Login' : 'Sign up'}
       />
