@@ -10,6 +10,7 @@ import '../styles/App.scss';
 import { Login } from './Login';
 import { LoadingBars } from '../components/LoadingBars';
 import { Dashboard } from './Dashboard';
+import { SideMenu } from '../components/SideMenu';
 
 const App: React.FC = () => {
   const initialIsLoggedIn = async () => {
@@ -40,30 +41,29 @@ const App: React.FC = () => {
       {isLoading ? (
         <LoadingBars />
       ) : (
-        <Router>
-          <Switch>
-            <Route exact path="/">
-              {isLoggedIn ? (
-                <Redirect to="/dashboard" />
-              ) : (
-                <Login toggleIsLoggedIn={toggleIsLoggedIn} />
-              )}
-            </Route>
-            <Route exact path="/dashboard">
-              {isLoggedIn ? (
-                <Dashboard toggleIsLoggedIn={toggleIsLoggedIn} />
-              ) : (
+        <div className="main-container">
+          <Router>
+            {isLoggedIn && <SideMenu toggleIsLoggedIn={toggleIsLoggedIn} />}
+            <Switch>
+              <Route exact path="/">
+                {isLoggedIn ? (
+                  <Redirect to="/dashboard" />
+                ) : (
+                  <Login toggleIsLoggedIn={toggleIsLoggedIn} />
+                )}
+              </Route>
+              <Route exact path="/dashboard">
+                {isLoggedIn ? <Dashboard /> : <Redirect to="/" />}
+              </Route>
+              <Route exact path="/operations">
+                {isLoggedIn ? <LoadingBars /> : <Redirect to="/" />}
+              </Route>
+              <Route path="*">
                 <Redirect to="/" />
-              )}
-            </Route>
-            <Route exact path="/operations">
-              {isLoggedIn ? <LoadingBars /> : <Redirect to="/" />}
-            </Route>
-            <Route path="*">
-              <Redirect to="/" />
-            </Route>
-          </Switch>
-        </Router>
+              </Route>
+            </Switch>
+          </Router>
+        </div>
       )}
     </div>
   );

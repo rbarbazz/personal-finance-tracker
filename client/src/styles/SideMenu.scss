@@ -7,6 +7,7 @@
 */
 
 .side-menu-container {
+    align-items: start;
     display: flex;
     flex-direction: column;
 
@@ -19,6 +20,7 @@
         font-family: $primary-font-family;
         font-size: 1.5em;
         margin: ($default-margin / 2) 0;
+        padding: 0;
         text-decoration: none;
 
         &:first-child {

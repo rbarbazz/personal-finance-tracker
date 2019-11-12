@@ -17,3 +17,9 @@ body {
   min-height: 100vh;
   justify-content: center;
 }
+.main-container {
+  background-color: white;
+  border-radius: 10px;
+  display: flex;
+  padding: $default-margin;
+}
