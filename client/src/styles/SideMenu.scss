@@ -1,0 +1,33 @@
+@import 'shared.scss';
+
+/*
+==========================================================================
+   SideMenu component
+==========================================================================
+*/
+
+.side-menu-container {
+    display: flex;
+    flex-direction: column;
+
+    .side-menu-item {
+        -webkit-appearance: none;
+        border: none;
+        color: $primary-color;
+        cursor: pointer;
+        font-family: $primary-font-family;
+        font-size: 1.5em;
+        margin: ($default-margin / 2) 0;
+        text-decoration: none;
+
+        &:first-child {
+            margin-top: 0;
+        }
+        &:last-child {
+            margin-bottom: 0;
+        }
+        &:focus {
+            outline: none;
+        }
+    }
+}

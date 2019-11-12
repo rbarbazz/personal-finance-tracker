@@ -14,9 +14,10 @@ const createUsers = async () => {
     table.string('fName');
     table.string('email');
     table.string('password');
+    table.timestamps(true, true)
   });
 };
 
 export default () => {
   createUsers();
-}
+};

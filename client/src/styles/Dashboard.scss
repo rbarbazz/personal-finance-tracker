@@ -1,0 +1,15 @@
+@import 'shared.scss';
+
+/*
+==========================================================================
+   Dashboard container
+==========================================================================
+*/
+
+.dashboard-container {
+    background-color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: $default-margin;
+}

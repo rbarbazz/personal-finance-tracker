@@ -79,6 +79,12 @@ app.get('/login', (req, res) => {
   }
 });
 
+// Logout
+app.get('/logout', (req, res) => {
+  req.logout();
+  res.send();
+});
+
 // Login and Register routes
 app.post('/login', passport.authenticate('local'), (req, res) => {
   res.send({ error: false, message: '' });

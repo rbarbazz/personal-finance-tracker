@@ -2,7 +2,7 @@
 
 /*
 ==========================================================================
-   Login component
+   Login container
 ==========================================================================
 */
 
@@ -11,6 +11,7 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
+    padding: $default-margin;
     text-align: center;
 
     .labelled-field {

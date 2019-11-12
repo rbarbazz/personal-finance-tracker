@@ -9,6 +9,7 @@ import {
 import '../styles/App.scss';
 import { Login } from './Login';
 import { LoadingBars } from '../components/LoadingBars';
+import { Dashboard } from './Dashboard';
 
 const App: React.FC = () => {
   const initialIsLoggedIn = async () => {
@@ -49,7 +50,17 @@ const App: React.FC = () => {
               )}
             </Route>
             <Route exact path="/dashboard">
-              {!isLoggedIn ? <Redirect to="/" /> : <LoadingBars />}
+              {isLoggedIn ? (
+                <Dashboard toggleIsLoggedIn={toggleIsLoggedIn} />
+              ) : (
+                <Redirect to="/" />
+              )}
+            </Route>
+            <Route exact path="/operations">
+              {isLoggedIn ? <LoadingBars /> : <Redirect to="/" />}
+            </Route>
+            <Route path="*">
+              <Redirect to="/" />
             </Route>
           </Switch>
         </Router>
