@@ -19,7 +19,9 @@ const App: React.FC = () => {
       });
       toggleIsLoading(false);
       if (res.status === 200) {
-        toggleIsLoggedIn(true);
+        const { userLoginStatus } = await res.json();
+
+        toggleIsLoggedIn(userLoginStatus);
       }
     } catch (error) {
       console.error(error);

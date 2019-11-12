@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 import '../styles/Login.scss';
 import { GenericBtn } from '../components/GenericBtn';
@@ -11,8 +11,9 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
   const [email, setEmail] = useState('');
   const [fName, setFName] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState({ error: false, value: '' });
   const loginUser = async (userData: User, isRegistered: boolean) => {
+    if (!isRegistered) setPassword('');
     try {
       const res = await fetch(isRegistered ? '/login' : '/register', {
         method: 'POST',
@@ -24,19 +25,22 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
       if (res.status === 200) {
         const { accountCreated, error, message } = await res.json();
 
-        setMessage(message);
+        setMessage({ error, value: message });
         if (accountCreated) {
-          setPassword('');
           return toggleIsRegistered(true);
         }
         if (!error) return toggleIsLoggedIn(true);
       } else {
-        setMessage('Wrong Email or Password');
+        setMessage({ error: true, value: 'Wrong Email or Password' });
       }
     } catch (error) {
-      setMessage('An error has occurred');
+      setMessage({ error: true, value: 'An error has occurred' });
     }
   };
+
+  useEffect(() => {
+    setMessage({ error: false, value: '' });
+  }, [email, password, fName]);
 
   return (
     <div className="login-container">
@@ -64,7 +68,11 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
         label="Password"
         value={password}
       />
-      {message !== '' && <p className="message-container">{message}</p>}
+      {message.value !== '' && (
+        <p className={`message-container${!message.error ? ' success' : ''}`}>
+          {message.value}
+        </p>
+      )}
       <GenericBtn
         action={() => loginUser({ fName, email, password }, isRegistered)}
         id="login-btn"
@@ -76,7 +84,10 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
             ? "Don't have an account? "
             : 'Already have an account? '}
           <button
-            onClick={() => toggleIsRegistered(!isRegistered)}
+            onClick={() => {
+              setMessage({ error: false, value: '' });
+              toggleIsRegistered(!isRegistered);
+            }}
             className="toggle-registered-btn"
           >
             {isRegistered ? 'Sign up' : 'Sign in'}

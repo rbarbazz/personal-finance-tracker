@@ -5,6 +5,7 @@ import passport from 'passport';
 import passportLocal from 'passport-local';
 import bcrypt from 'bcrypt';
 import path from 'path';
+import validator from 'validator';
 
 import initDatabase, { knex } from './initDatabase';
 
@@ -72,9 +73,9 @@ passport.deserializeUser(async (id: number, done) => {
 // Check current login status
 app.get('/login', (req, res) => {
   if (req.user) {
-    res.send();
+    res.send({ userLoginStatus: true });
   } else {
-    res.status(401).send();
+    res.send({ userLoginStatus: false });
   }
 });
 
@@ -89,9 +90,20 @@ app.post('/register', async (req, res) => {
     .first();
 
   if (user) return res.send({ error: true, message: 'Email already in use' });
+  if (fName.length > 50)
+    return res.send({ error: true, message: 'First name is too long' });
+  if (!validator.isAlpha(fName))
+    return res.send({
+      error: true,
+      message: 'First name must only contain letters',
+    });
+  if (!validator.isEmail(email))
+    return res.send({
+      error: true,
+      message: 'Please enter a valid email',
+    });
   if (password.length < 12)
     return res.send({ error: true, message: 'Password is too short' });
-
   bcrypt.hash(password, 10, async (error, hash) => {
     if (error) return res.send({ error: true, message: 'An error occurred' });
     await knex<User>('users').insert({ email, fName, password: hash });
