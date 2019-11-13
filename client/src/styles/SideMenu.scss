@@ -7,30 +7,26 @@
 */
 
 .side-menu-container {
-    align-items: start;
     display: flex;
     flex-direction: column;
-
+    
     .side-menu-item {
         -webkit-appearance: none;
-        background-color: white;
+        background-color: $primary-color;
         border: none;
-        color: $primary-color;
+        color: white;
         cursor: pointer;
         font-family: $primary-font-family;
         font-size: 1.5em;
-        margin: ($default-margin / 2) 0;
-        padding: 0;
+        padding: ($default-margin / 2) $default-margin;
+        text-align: left;
         text-decoration: none;
 
-        &:first-child {
-            margin-top: 0;
-        }
-        &:last-child {
-            margin-bottom: 0;
-        }
         &:focus {
             outline: none;
+        }
+        &.selected {
+            background-color: $primary-color-dark;
         }
     }
 }
