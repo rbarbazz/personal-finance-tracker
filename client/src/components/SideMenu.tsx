@@ -22,22 +22,18 @@ export const SideMenu: React.FC<{ toggleIsLoggedIn: Function }> = ({
 
   return (
     <div className="side-menu-container">
-      <Link
-        className={`side-menu-item${
-          pathname === '/dashboard' ? ' selected' : ''
-        }`}
-        to="/dashboard"
-      >
-        Dashboard
-      </Link>
-      <Link
-        className={`side-menu-item${
-          pathname === '/operations' ? ' selected' : ''
-        }`}
-        to="/operations"
-      >
-        Operations
-      </Link>
+      {['dashboard', 'operations'].map((item) => (
+        <Link
+          className={`side-menu-item${
+            pathname === `/${item}` ? ' selected' : ''
+          }`}
+          key={`side-menu-item-${item}`}
+          to={`/${item}`}
+        >
+          {item}
+          <div className="arrow-left"></div>
+        </Link>
+      ))}
       <button className="side-menu-item" onClick={logout}>
         Log Out
       </button>

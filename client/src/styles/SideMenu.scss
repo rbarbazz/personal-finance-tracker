@@ -6,10 +6,21 @@
 ==========================================================================
 */
 
+.arrow-left {
+    border-bottom: 20px solid transparent;
+    border-right: 20px solid white;
+    border-top: 20px solid transparent;
+    display: none;
+    height: 0;
+    position: absolute;
+    right: 0;
+    top: calc(50% - 20px);
+    width: 0;
+}
 .side-menu-container {
     display: flex;
     flex-direction: column;
-    
+
     .side-menu-item {
         -webkit-appearance: none;
         background-color: $primary-color;
@@ -18,15 +29,21 @@
         cursor: pointer;
         font-family: $primary-font-family;
         font-size: 1.5em;
-        padding: ($default-margin / 2) $default-margin;
+        padding: $small-margin $big-margin;
+        position: relative;
         text-align: left;
         text-decoration: none;
+        text-transform: capitalize;
+        transition: background-color, 0.3s;
 
         &:focus {
             outline: none;
         }
-        &.selected {
+        &:hover {
             background-color: $primary-color-dark;
+        }
+        &.selected .arrow-left {
+            display: block;
         }
     }
 }

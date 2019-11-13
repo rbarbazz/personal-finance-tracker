@@ -11,20 +11,20 @@
     border-radius: 10px;
     display: flex;
     flex-direction: column;
-    padding: $default-margin;
+    padding: $big-margin;
     text-align: center;
 
     .labelled-field {
-        margin-bottom: $default-margin / 2;
+        margin-bottom: $big-margin / 2;
     }
 }
 .greetings-paragraph {
     font-size: 2em;
     letter-spacing: 0.05em;
-    margin: 0 0 $default-margin;
+    margin: 0 0 $big-margin;
 }
 #login-btn {
-    margin: ($default-margin / 2) 0 $default-margin;
+    margin: $small-margin 0 $big-margin;
 
     &:focus {
         outline: none;

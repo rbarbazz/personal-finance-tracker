@@ -7,7 +7,7 @@ export const LabelledField: React.FC<{
   id: string;
   label: string;
   type: string;
-  value: string;
+  value: any;
 }> = ({ setter, id, label, type, value }) => (
   <div className="labelled-field">
     <label className="generic-label" htmlFor={`${id}-field`}>

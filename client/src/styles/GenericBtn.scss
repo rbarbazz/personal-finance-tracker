@@ -12,10 +12,15 @@
     border: none;
     color: white;
     cursor: pointer;
+    font-family: $primary-font-family;
+    min-width: 136px;
     padding: 15px;
     transition: background-color, 0.3s;
 
     &:hover {
         background-color: $primary-color-dark;
+    }
+    &:focus {
+        outline: none;
     }
 }

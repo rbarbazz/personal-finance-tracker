@@ -10,5 +10,14 @@
     background-color: white;
     display: flex;
     flex-direction: column;
+    padding: $small-margin $big-margin;
     width: 100%;
+}
+.action-buttons-container {
+    display: flex;
+    justify-content: flex-end;
+
+    .generic-btn {
+        margin-left: $small-margin;
+    }
 }
