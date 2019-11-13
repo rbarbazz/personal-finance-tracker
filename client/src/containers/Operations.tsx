@@ -21,7 +21,12 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
             value="Add Operation"
           />
         </div>
-        <AddOperationDialog toggleNewOperation={toggleNewOperation} open={newOperationVisible}/>
+        {newOperationVisible && (
+          <AddOperationDialog
+            toggleNewOperation={toggleNewOperation}
+            open={true}
+          />
+        )}
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import '../styles/Login.scss';
 import { GenericBtn } from '../components/GenericBtn';
 import { LabelledField } from '../components/LabelledField';
+import { InfoMessage } from '../components/InfoMessage';
 
 export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,
@@ -12,8 +13,10 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
   const [fName, setFName] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState({ error: false, value: '' });
+  const [isLoading, toggleLoading] = useState(false);
   const loginUser = async (userData: User, isRegistered: boolean) => {
     if (!isRegistered) setPassword('');
+    toggleLoading(true);
     try {
       const res = await fetch(isRegistered ? '/login' : '/register', {
         method: 'POST',
@@ -22,6 +25,7 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
         },
         body: JSON.stringify(userData),
       });
+      toggleLoading(false);
       if (res.status === 200) {
         const { accountCreated, error, message } = await res.json();
 
@@ -69,13 +73,12 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
         value={password}
       />
       {message.value !== '' && (
-        <p className={`message-container${!message.error ? ' success' : ''}`}>
-          {message.value}
-        </p>
+        <InfoMessage error={message.error} value={message.value} />
       )}
       <GenericBtn
         action={() => loginUser({ fName, email, password }, isRegistered)}
         id="login-btn"
+        isLoading={isLoading}
         value={isRegistered ? 'Login' : 'Sign up'}
       />
       <div className="toggle-registered-container">

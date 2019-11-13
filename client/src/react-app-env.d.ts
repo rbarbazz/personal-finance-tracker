@@ -5,3 +5,15 @@ declare interface User {
   email: string;
   password: string;
 }
+
+declare interface Operation {
+  operationDate: string;
+  amount: number;
+  label: string;
+  categoryId: string;
+}
+
+declare interface Category {
+  id: number;
+  title: string;
+}

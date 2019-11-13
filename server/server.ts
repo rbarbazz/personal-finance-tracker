@@ -122,6 +122,53 @@ app.post('/register', async (req, res) => {
   });
 });
 
+// Get all categories
+app.get('/categories', async (req, res) => {
+  if (req.user) {
+    const categories = await knex<Category>('categories').select();
+
+    res.send({ categories });
+  } else {
+    res.status(401).send();
+  }
+});
+
+// Add an operation
+app.post('/operations', async (req: any, res) => {
+  if (req.user) {
+    const {
+      operationDate: operationDateStr,
+      amount,
+      label,
+      categoryId,
+    } = req.body;
+    const operationDate = new Date(operationDateStr);
+
+    if (isNaN(operationDate.getDate()))
+      return res.send({ error: true, message: 'Wrong date' });
+    if (isNaN(amount) || amount == 0)
+      return res.send({ error: true, message: 'Wrong amount' });
+    if (label.length < 1)
+      return res.send({ error: true, message: 'Label is too short' });
+    if (label.length > 255)
+      return res.send({ error: true, message: 'Label is too long' });
+    if (isNaN(categoryId))
+      return res.send({ error: true, message: 'Wrong category' });
+
+    await knex<Operation>('operations').insert({
+      operationDate,
+      amount,
+      label,
+      categoryId,
+      userId: req.user.id,
+    });
+
+    res.send({ error: false, message: '' });
+  } else {
+    res.status(401).send();
+  }
+});
+
 // Default
 app.get('*', (req, res) => {
   res.sendFile(path.join(`${staticFolder}/index.html`));

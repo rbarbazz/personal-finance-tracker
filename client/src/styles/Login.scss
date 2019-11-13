@@ -7,6 +7,7 @@
 */
 
 .login-container {
+    align-items: center;
     background-color: white;
     border-radius: 10px;
     display: flex;
@@ -17,6 +18,9 @@
     .labelled-field {
         margin-bottom: $big-margin / 2;
     }
+    .generic-btn {
+        width: 100%;
+    }
 }
 .greetings-paragraph {
     font-size: 2em;
@@ -25,10 +29,6 @@
 }
 #login-btn {
     margin: $small-margin 0 $big-margin;
-
-    &:focus {
-        outline: none;
-    }
 }
 .toggle-registered-btn {
     -webkit-appearance: none;
@@ -42,18 +42,5 @@
 
     &:hover {
         color: $primary-color-dark;
-    }
-}
-.message-container {
-    background-color: #f8d7da;
-    color: #d32f2f;
-    margin: 0;
-    outline: 1px solid #d32f2f;
-    padding: 16px;
-
-    &.success {
-        background-color: #d4edda;
-        color: #43a047;
-        outline: 1px solid #43a047;
     }
 }
