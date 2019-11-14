@@ -28,6 +28,7 @@ const createCategories = async () => {
     table.string('title');
   });
   await knex<Category>('categories').insert([
+    { title: 'Uncategorized' },
     { title: 'Groceries' },
     { title: 'Transport' },
     { title: 'Home' },

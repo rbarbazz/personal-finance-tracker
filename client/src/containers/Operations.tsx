@@ -33,7 +33,7 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
   };
   useEffect(() => {
     getOperations();
-  }, [newOperationVisible]);
+  }, [newOperationVisible, uploadVisible]);
 
   return (
     <div className="main-container">
@@ -59,7 +59,7 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
           />
         )}
         <div className="table-container">
-          <Table aria-label="simple table">
+          <Table stickyHeader aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell>Date</TableCell>

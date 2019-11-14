@@ -54,7 +54,7 @@ export const UploadDialog: React.FC<{
           You can batch import transactions by uploading CSV files.
           <br />
           <br />
-          The four expected columns are: "date", "amount", "label" and
+          Files need to contain at least those four columns: "date", "amount", "label" and
           "category".
         </p>
         <label

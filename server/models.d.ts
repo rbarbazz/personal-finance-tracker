@@ -1,5 +1,5 @@
 declare interface User {
-  id: number;
+  id?: number;
   fName: string;
   email: string;
   password: string;
@@ -8,15 +8,15 @@ declare interface User {
 }
 
 declare interface Operation {
-  id: number;
+  id?: number;
   operationDate: Date;
   amount: number;
   label: string;
-  categoryId: string;
+  categoryId: number;
   userId: number;
 }
 
 declare interface Category {
-  id: number;
+  id?: number;
   title: string;
 }

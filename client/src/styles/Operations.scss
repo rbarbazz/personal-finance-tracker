@@ -25,6 +25,7 @@
 .table-container {
     border: 5px solid $primary-color;
     border-radius: 10px;
+    overflow: auto;
 
     .MuiTableCell-root {
         font-family: $primary-font-family;

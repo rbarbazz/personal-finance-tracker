@@ -7,6 +7,8 @@ import bcrypt from 'bcrypt';
 import path from 'path';
 import validator from 'validator';
 import multer from 'multer';
+import fs from 'fs';
+import csv from 'csv-parser';
 
 import initDatabase, { knex } from './initDatabase';
 
@@ -33,7 +35,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
-const upload = multer();
+const upload = multer({ dest: 'tmp/' });
 
 /**
  * Passport middleware
@@ -165,6 +167,46 @@ app.get('/operations', async (req: any, res) => {
 app.post('/operations', upload.array('csvFiles', 10), async (req: any, res) => {
   if (req.user) {
     if (req.files) {
+      await req.files.forEach(async (file: Express.Multer.File) => {
+        if (file.mimetype !== 'text/csv')
+          return res.send({ error: true, message: 'Wrong file type' });
+        if (file.size > 1000000)
+          return res.send({ error: true, message: 'File is too large' });
+
+        const operationList: Operation[] = [];
+        const categories = await knex<Category>('categories').select();
+
+        fs.createReadStream(file.path)
+          .pipe(csv({ separator: ';' }))
+          .on('data', data => {
+            const { date, amount, label, category: categoryTitle } = data;
+            const operationDate = new Date(date);
+            const parsedFloat = parseFloat(amount.replace(',', '.'));
+            let categoryId = 1;
+            const found = categories.find(
+              category => category.title === categoryTitle,
+            );
+
+            if (found && found.id) categoryId = found.id;
+            if (isNaN(operationDate.getDate())) return;
+            if (isNaN(parsedFloat) || parsedFloat == 0) return;
+            if (label.length < 1) return;
+            if (label.length > 255) return;
+
+            operationList.push({
+              operationDate,
+              amount: parsedFloat,
+              label,
+              categoryId,
+              userId: req.user.id,
+            });
+          })
+          .on('end', async () => {
+            if (operationList.length > 0) {
+              await knex<Operation>('operations').insert(operationList);
+            }
+          });
+      });
       res.send({ error: false, message: '' });
     } else {
       const {
