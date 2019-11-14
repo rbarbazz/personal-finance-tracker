@@ -22,7 +22,7 @@ export const SideMenu: React.FC<{ toggleIsLoggedIn: Function }> = ({
 
   return (
     <div className="side-menu-container">
-      {['dashboard', 'operations'].map((item) => (
+      {['dashboard', 'transactions'].map((item) => (
         <Link
           className={`side-menu-item${
             pathname === `/${item}` ? ' selected' : ''

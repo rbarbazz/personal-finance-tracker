@@ -20,6 +20,7 @@
 .side-menu-container {
     display: flex;
     flex-direction: column;
+    margin-top: $big-margin;
 
     .side-menu-item {
         -webkit-appearance: none;

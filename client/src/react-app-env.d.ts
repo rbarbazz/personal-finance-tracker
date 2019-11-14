@@ -7,10 +7,12 @@ declare interface User {
 }
 
 declare interface Operation {
+  id?: number;
   operationDate: string;
   amount: number;
   label: string;
-  categoryId: string;
+  categoryId: number;
+  title?: Category.title;
 }
 
 declare interface Category {

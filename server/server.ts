@@ -67,9 +67,8 @@ passport.deserializeUser(async (id: number, done) => {
 });
 
 /**
- * Routes
+ * Authentication
  */
-
 // Check current login status
 app.get('/login', (req, res) => {
   if (req.user) {
@@ -122,12 +121,39 @@ app.post('/register', async (req, res) => {
   });
 });
 
+/**
+ * Categories
+ */
 // Get all categories
 app.get('/categories', async (req, res) => {
   if (req.user) {
     const categories = await knex<Category>('categories').select();
 
     res.send({ categories });
+  } else {
+    res.status(401).send();
+  }
+});
+
+/**
+ * Operations
+ */
+// Get all operations
+app.get('/operations', async (req: any, res) => {
+  if (req.user) {
+    const operations = await knex<Operation>('operations')
+      .select(
+        'operations.id',
+        'operationDate',
+        'amount',
+        'label',
+        'categories.title',
+      )
+      .join('categories', { 'operations.categoryId': 'categories.id' })
+      .where('userId', req.user.id)
+      .orderBy('operationDate', 'desc');
+
+    res.send({ operations });
   } else {
     res.status(401).send();
   }
@@ -169,7 +195,7 @@ app.post('/operations', async (req: any, res) => {
   }
 });
 
-// Default
+// Default route
 app.get('*', (req, res) => {
   res.sendFile(path.join(`${staticFolder}/index.html`));
 });

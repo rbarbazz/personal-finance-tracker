@@ -10,14 +10,28 @@
     background-color: white;
     display: flex;
     flex-direction: column;
-    padding: $small-margin $big-margin;
+    padding: $big-margin;
     width: 100%;
 }
 .action-buttons-container {
     display: flex;
     justify-content: flex-end;
+    margin-bottom: $big-margin;
 
     .generic-btn {
         margin-left: $small-margin;
+    }
+}
+.table-container {
+    border: 5px solid $primary-color;
+    border-radius: 10px;
+
+    .MuiTableCell-root {
+        font-family: $primary-font-family;
+        font-size: 16px;
+
+        &.MuiTableCell-head {
+            font-weight: 600;
+        }
     }
 }

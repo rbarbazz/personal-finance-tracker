@@ -57,7 +57,7 @@ const App: React.FC = () => {
                 <Redirect to="/" />
               )}
             </Route>
-            <Route exact path="/operations">
+            <Route exact path="/transactions">
               {isLoggedIn ? (
                 <Operations toggleIsLoggedIn={toggleIsLoggedIn} />
               ) : (
