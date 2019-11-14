@@ -1,0 +1,41 @@
+@import 'shared.scss';
+
+/*
+==========================================================================
+   UploadDialog component
+==========================================================================
+*/
+
+.upload-dialog {
+    align-items: center;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 5px;
+    padding: $big-margin;
+}
+.upload-title {
+    color: $primary-color;
+    font-family: $primary-font-family;
+    font-size: 2em;
+    letter-spacing: 0.05em;
+    margin: 0 0 $small-margin;
+}
+.upload-explanations {
+    font-family: $primary-font-family;
+    font-size: 18px;
+}
+#upload-csv-btn {
+    margin: $small-margin 0 0;
+}
+#upload-input {
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+#upload-input-label {
+    margin-bottom: $small-margin;
+}

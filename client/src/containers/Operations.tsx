@@ -9,11 +9,13 @@ import '../styles/Operations.scss';
 import { SideMenu } from '../components/SideMenu';
 import { GenericBtn } from '../components/GenericBtn';
 import { AddOperationDialog } from '../components/AddOperationDialog';
+import { UploadDialog } from '../components/UploadDialog';
 
 export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,
 }) => {
   const [newOperationVisible, toggleNewOperation] = useState(false);
+  const [uploadVisible, toggleUpload] = useState(false);
   const [operationList, setOperationList] = useState<Operation[]>([]);
   const getOperations = async () => {
     try {
@@ -24,7 +26,6 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
         const { operations }: { operations: Operation[] } = await res.json();
 
         setOperationList(operations);
-        console.log(operations);
       }
     } catch (error) {
       console.error(error);
@@ -39,7 +40,13 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
       <SideMenu toggleIsLoggedIn={toggleIsLoggedIn} />
       <div className="operations-container">
         <div className="action-buttons-container">
-          <GenericBtn action={() => {}} value="Upload CSV" />
+          <GenericBtn
+            action={() => toggleUpload(!uploadVisible)}
+            value="Upload CSV"
+          />
+          {uploadVisible && (
+            <UploadDialog toggleUpload={toggleUpload} open={true} />
+          )}
           <GenericBtn
             action={() => toggleNewOperation(!newOperationVisible)}
             value="Add Operation"
@@ -65,6 +72,7 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
               {operationList.map(row => {
                 const { id, operationDate, amount, label, title } = row;
                 const dateLocale = new Date(operationDate).toLocaleDateString();
+
                 return (
                   <TableRow key={`row${id}`}>
                     <TableCell component="th" scope="row">

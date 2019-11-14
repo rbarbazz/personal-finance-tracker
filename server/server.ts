@@ -6,6 +6,7 @@ import passportLocal from 'passport-local';
 import bcrypt from 'bcrypt';
 import path from 'path';
 import validator from 'validator';
+import multer from 'multer';
 
 import initDatabase, { knex } from './initDatabase';
 
@@ -32,6 +33,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+const upload = multer();
 
 /**
  * Passport middleware
@@ -160,36 +162,40 @@ app.get('/operations', async (req: any, res) => {
 });
 
 // Add an operation
-app.post('/operations', async (req: any, res) => {
+app.post('/operations', upload.array('csvFiles', 10), async (req: any, res) => {
   if (req.user) {
-    const {
-      operationDate: operationDateStr,
-      amount,
-      label,
-      categoryId,
-    } = req.body;
-    const operationDate = new Date(operationDateStr);
+    if (req.files) {
+      res.send({ error: false, message: '' });
+    } else {
+      const {
+        operationDate: operationDateStr,
+        amount,
+        label,
+        categoryId,
+      } = req.body;
+      const operationDate = new Date(operationDateStr);
 
-    if (isNaN(operationDate.getDate()))
-      return res.send({ error: true, message: 'Wrong date' });
-    if (isNaN(amount) || amount == 0)
-      return res.send({ error: true, message: 'Wrong amount' });
-    if (label.length < 1)
-      return res.send({ error: true, message: 'Label is too short' });
-    if (label.length > 255)
-      return res.send({ error: true, message: 'Label is too long' });
-    if (isNaN(categoryId))
-      return res.send({ error: true, message: 'Wrong category' });
+      if (isNaN(operationDate.getDate()))
+        return res.send({ error: true, message: 'Wrong date' });
+      if (isNaN(amount) || amount == 0)
+        return res.send({ error: true, message: 'Wrong amount' });
+      if (label.length < 1)
+        return res.send({ error: true, message: 'Label is too short' });
+      if (label.length > 255)
+        return res.send({ error: true, message: 'Label is too long' });
+      if (isNaN(categoryId))
+        return res.send({ error: true, message: 'Wrong category' });
 
-    await knex<Operation>('operations').insert({
-      operationDate,
-      amount,
-      label,
-      categoryId,
-      userId: req.user.id,
-    });
+      await knex<Operation>('operations').insert({
+        operationDate,
+        amount,
+        label,
+        categoryId,
+        userId: req.user.id,
+      });
 
-    res.send({ error: false, message: '' });
+      res.send({ error: false, message: '' });
+    }
   } else {
     res.status(401).send();
   }
