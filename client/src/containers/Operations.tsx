@@ -10,6 +10,7 @@ import { SideMenu } from '../components/SideMenu';
 import { GenericBtn } from '../components/GenericBtn';
 import { AddOperationDialog } from '../components/AddOperationDialog';
 import { UploadDialog } from '../components/UploadDialog';
+import { LoadingBars } from '../components/LoadingBars';
 
 export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,
@@ -58,35 +59,41 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
             open={true}
           />
         )}
-        <div className="table-container">
-          <Table stickyHeader aria-label="simple table">
-            <TableHead>
-              <TableRow>
-                <TableCell>Date</TableCell>
-                <TableCell>Amount</TableCell>
-                <TableCell>Label</TableCell>
-                <TableCell>Category</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {operationList.map(row => {
-                const { id, operationDate, amount, label, title } = row;
-                const dateLocale = new Date(operationDate).toLocaleDateString();
+        {operationList.length === 0 ? (
+          <LoadingBars />
+        ) : (
+          <div className="table-container">
+            <Table stickyHeader aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Date</TableCell>
+                  <TableCell>Amount</TableCell>
+                  <TableCell>Label</TableCell>
+                  <TableCell>Category</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {operationList.map(row => {
+                  const { id, operationDate, amount, label, title } = row;
+                  const dateLocale = new Date(
+                    operationDate,
+                  ).toLocaleDateString();
 
-                return (
-                  <TableRow key={`row${id}`}>
-                    <TableCell component="th" scope="row">
-                      {dateLocale}
-                    </TableCell>
-                    <TableCell>{amount}</TableCell>
-                    <TableCell>{label}</TableCell>
-                    <TableCell>{title}</TableCell>
-                  </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
+                  return (
+                    <TableRow key={`row${id}`}>
+                      <TableCell component="th" scope="row">
+                        {dateLocale}
+                      </TableCell>
+                      <TableCell>{amount}</TableCell>
+                      <TableCell>{label}</TableCell>
+                      <TableCell>{title}</TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        )}
       </div>
     </div>
   );

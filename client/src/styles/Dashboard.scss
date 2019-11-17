@@ -7,8 +7,23 @@
 */
 
 .dashboard-container {
+    align-items: center;
     background-color: white;
     display: flex;
     flex-direction: column;
+    padding: $big-margin;
     width: 100%;
+}
+.chart-container {
+    height: 600px;
+    width: 100%;
+}
+.section-title {
+    text-align: center;
+    font-size: 2.5em;
+    margin: 0;
+}
+.chart-title {
+    font-size: 1.5em;
+    margin: $big-margin 0 $small-margin;
 }

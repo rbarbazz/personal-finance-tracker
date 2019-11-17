@@ -24,6 +24,7 @@
 .upload-explanations {
     font-family: $primary-font-family;
     font-size: 18px;
+    margin: $small-margin 0;
 }
 #upload-csv-btn {
     margin: $small-margin 0 0;
@@ -37,5 +38,5 @@
 	z-index: -1;
 }
 #upload-input-label {
-    margin-bottom: $small-margin;
+    margin: $small-margin 0;
 }

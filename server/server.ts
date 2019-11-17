@@ -168,15 +168,17 @@ app.post('/operations', upload.array('csvFiles', 10), async (req: any, res) => {
   if (req.user) {
     if (req.files) {
       await req.files.forEach(async (file: Express.Multer.File) => {
-        if (file.mimetype !== 'text/csv')
+        const { mimetype, size, path } = file;
+
+        if (mimetype !== 'text/csv')
           return res.send({ error: true, message: 'Wrong file type' });
-        if (file.size > 1000000)
+        if (size > 1000000)
           return res.send({ error: true, message: 'File is too large' });
 
         const operationList: Operation[] = [];
         const categories = await knex<Category>('categories').select();
 
-        fs.createReadStream(file.path)
+        fs.createReadStream(path)
           .pipe(csv({ separator: ';' }))
           .on('data', data => {
             const { date, amount, label, category: categoryTitle } = data;
@@ -202,6 +204,9 @@ app.post('/operations', upload.array('csvFiles', 10), async (req: any, res) => {
             });
           })
           .on('end', async () => {
+            fs.unlink(path, err => {
+              if (err) console.error(err);
+            });
             if (operationList.length > 0) {
               await knex<Operation>('operations').insert(operationList);
             }
@@ -238,6 +243,52 @@ app.post('/operations', upload.array('csvFiles', 10), async (req: any, res) => {
 
       res.send({ error: false, message: '' });
     }
+  } else {
+    res.status(401).send();
+  }
+});
+
+/**
+ * Charts
+ */
+app.get('/charts', async (req: any, res) => {
+  type chartData = {
+    keys: string[];
+    data: object[];
+  };
+  if (req.user) {
+    const today = new Date();
+    const monthlyBarChart: chartData = { keys: [], data: [] };
+    monthlyBarChart.keys = (
+      await knex<Category>('categories')
+        .select('title')
+        .whereNot('title', 'Uncategorized')
+    ).map(category => category.title);
+
+    for (let i = 6; i >= 0; i--) {
+      const from = new Date(today.getFullYear(), today.getMonth() - i - 1, 1);
+      const to = new Date(today.getFullYear(), today.getMonth() - i, 0);
+      const month = from.toLocaleString('default', { month: 'long' });
+
+      const sumsForMonth = await knex<Operation>('operations')
+        .select('categories.title')
+        .sum('amount')
+        .join('categories', { 'operations.categoryId': 'categories.id' })
+        .where('userId', req.user.id)
+        .whereBetween('operationDate', [from, to])
+        .whereNot('categories.title', 'Uncategorized')
+        .groupBy('categories.title');
+
+      if (sumsForMonth.length > 0) {
+        let currentObj: { [index: string]: number } = {};
+
+        sumsForMonth.forEach(category => {
+          currentObj[category.title] = Math.abs(category.sum);
+        });
+        monthlyBarChart.data.push({ ...currentObj, month });
+      }
+    }
+    res.send({ charts: { monthlyBarChart } });
   } else {
     res.status(401).send();
   }
