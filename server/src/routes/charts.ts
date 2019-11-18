@@ -31,10 +31,11 @@ chartsRouter.get('/charts', async (req: any, res) => {
       const sumsForMonth = await knex<Operation>('operations')
         .select('categories.title')
         .sum('amount')
-        .join('categories', { 'operations.categoryId': 'categories.id' })
+        .leftJoin('categories', { 'operations.categoryId': 'categories.id' })
         .where('userId', req.user.id)
-        .whereBetween('operationDate', [from, to])
-        .whereNot('categories.title', 'Uncategorized')
+        .andWhere('amount', '<', 0)
+        .andWhereBetween('operationDate', [from, to])
+        .andWhereNot('categories.title', 'Uncategorized')
         .groupBy('categories.title');
 
       if (sumsForMonth.length > 0) {

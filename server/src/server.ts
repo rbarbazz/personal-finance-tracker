@@ -75,7 +75,7 @@ passport.deserializeUser(async (id: number, done) => {
 });
 
 // Default route
-app.get('*', (req, res) => {
+app.get('*', (_req, res) => {
   if (process.env.NODE_ENV === 'development') return res.send();
 
   return res.sendFile(path.join(`${staticFolder}/index.html`));
