@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "tsnd -r dotenv/config --respawn --no-notify server.ts"
+    "watch": "tsnd -r dotenv/config --respawn --no-notify src/server.ts"
   },
   "keywords": [],
   "author": "",

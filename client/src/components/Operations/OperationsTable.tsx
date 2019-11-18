@@ -4,7 +4,7 @@ import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import { OperationRow } from '../../../../server/models';
+import { OperationRow } from '../../../../server/src/db/models';
 import { OperationTableRow } from './OperationsTableRow';
 
 export const OperationTable: React.FC<{

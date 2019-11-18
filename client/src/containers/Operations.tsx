@@ -5,7 +5,7 @@ import { SideMenu } from '../components/SideMenu';
 import { GenericBtn } from '../components/GenericBtn';
 import { UpsertOperationDialog } from '../components/Operations/UpsertOperationDialog';
 import { UploadDialog } from '../components/Operations/UploadDialog';
-import { OperationRow } from '../../../server/models.d';
+import { OperationRow } from '../../../server/src/db/models';
 import { OperationTable } from '../components/Operations/OperationsTable';
 
 export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({

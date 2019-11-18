@@ -1,7 +1,7 @@
 import Knex from 'knex';
 
 import { knexConfig } from './knexfile';
-import { Category } from './models.d';
+import { Category } from './models';
 import categoryTitlesJson from './categoryTitles.json';
 
 const categoryTitles: { [index: string]: string[] } = categoryTitlesJson;

@@ -7,7 +7,7 @@ import { GenericBtn } from '../GenericBtn';
 import { LabelledField } from '../LabelledField';
 import { LoadingBars } from '../LoadingBars';
 import { InfoMessage } from '../InfoMessage';
-import { Category, Operation } from '../../../../server/models';
+import { Category, Operation } from '../../../../server/src/db/models';
 
 export const UpsertOperationDialog: React.FC<{
   toggleDialog: Function;
