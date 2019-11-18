@@ -11,7 +11,7 @@ import fs from 'fs';
 import csv from 'csv-parser';
 
 import initDatabase, { knex } from './initDatabase';
-import { User, Category, Operation } from './models';
+import { User, Category, Operation, OperationRow } from './models';
 
 /**
  * Create DB and the tables if they are not present
@@ -132,7 +132,10 @@ app.post('/register', async (req, res) => {
 // Get all categories
 app.get('/categories', async (req, res) => {
   if (req.user) {
-    const categories = await knex<Category>('categories').select();
+    const categories = await knex<Category>('categories').whereNot(
+      'parentCategoryId',
+      0,
+    );
 
     res.send({ categories });
   } else {
@@ -146,7 +149,7 @@ app.get('/categories', async (req, res) => {
 // Get all operations
 app.get('/operations', async (req: any, res) => {
   if (req.user) {
-    const operations = await knex<Operation>('operations')
+    const operations: OperationRow[] = await knex<Operation>('operations')
       .select(
         'operations.id',
         'operationDate',
@@ -154,7 +157,7 @@ app.get('/operations', async (req: any, res) => {
         'label',
         'categories.title as categoryTitle',
       )
-      .join('categories', { 'operations.categoryId': 'categories.id' })
+      .leftJoin('categories', { 'operations.categoryId': 'categories.id' })
       .where('userId', req.user.id)
       .orderBy('operationDate', 'desc');
 
@@ -242,10 +245,31 @@ app.post('/operations', upload.array('csvFiles', 10), async (req: any, res) => {
         userId: req.user.id,
       });
 
-      res.send({ error: false, message: '' });
+      return res.send({ error: false, message: '' });
     }
   } else {
-    res.status(401).send();
+    return res.status(401).send();
+  }
+});
+
+app.delete('/operations/:operationId', async (req: any, res) => {
+  if (req.user) {
+    const { operationId } = req.params;
+    const operation = await knex<Operation>('operations')
+      .where('id', operationId)
+      .first();
+
+    if (operation && operation.userId && operation.userId === req.user.id) {
+      await knex<Operation>('operations')
+        .where('id', operationId)
+        .first()
+        .del();
+    } else {
+      return res.status(401).send();
+    }
+    return res.send();
+  } else {
+    return res.status(401).send();
   }
 });
 
@@ -264,6 +288,7 @@ app.get('/charts', async (req: any, res) => {
       await knex<Category>('categories')
         .select('title')
         .whereNot('title', 'Uncategorized')
+        .where('parentCategoryId', 0)
     ).map(category => category.title);
 
     for (let i = 6; i >= 0; i--) {
@@ -289,15 +314,15 @@ app.get('/charts', async (req: any, res) => {
         monthlyBarChart.data.push({ ...currentMonth, month });
       }
     }
-    res.send({ charts: { monthlyBarChart } });
+    return res.send({ charts: { monthlyBarChart } });
   } else {
-    res.status(401).send();
+    return res.status(401).send();
   }
 });
 
 // Default route
 app.get('*', (req, res) => {
-  res.sendFile(path.join(`${staticFolder}/index.html`));
+  return res.sendFile(path.join(`${staticFolder}/index.html`));
 });
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));

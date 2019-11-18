@@ -1,17 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 
 import '../styles/Operations.scss';
 import { SideMenu } from '../components/SideMenu';
 import { GenericBtn } from '../components/GenericBtn';
-import { AddOperationDialog } from '../components/AddOperationDialog';
-import { UploadDialog } from '../components/UploadDialog';
-import { LoadingBars } from '../components/LoadingBars';
+import { AddOperationDialog } from '../components/Operations/AddOperationDialog';
+import { UploadDialog } from '../components/Operations/UploadDialog';
 import { OperationRow } from '../../../server/models.d';
+import { OperationTable } from '../components/Operations/OperationsTable';
 
 export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,
@@ -33,6 +28,7 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
       console.error(error);
     }
   };
+
   useEffect(() => {
     getOperations();
   }, [newOperationVisible, uploadVisible]);
@@ -42,64 +38,26 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
       <SideMenu toggleIsLoggedIn={toggleIsLoggedIn} />
       <div className="operations-container">
         <div className="action-buttons-container">
-          <GenericBtn
-            action={() => toggleUpload(!uploadVisible)}
-            value="Upload CSV"
-          />
+          <GenericBtn action={() => toggleUpload(true)} value="Upload CSV" />
           {uploadVisible && (
             <UploadDialog toggleUpload={toggleUpload} open={true} />
           )}
           <GenericBtn
-            action={() => toggleNewOperation(!newOperationVisible)}
+            action={() => toggleNewOperation(true)}
             value="Add Operation"
           />
+          {newOperationVisible && (
+            <AddOperationDialog
+              toggleNewOperation={toggleNewOperation}
+              open={true}
+            />
+          )}
         </div>
-        {newOperationVisible && (
-          <AddOperationDialog
-            toggleNewOperation={toggleNewOperation}
-            open={true}
+        {operationList.length > 0 && (
+          <OperationTable
+            operationList={operationList}
+            getOperations={getOperations}
           />
-        )}
-        {operationList.length === 0 ? (
-          <LoadingBars />
-        ) : (
-          <div className="table-container">
-            <Table stickyHeader aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Date</TableCell>
-                  <TableCell>Amount</TableCell>
-                  <TableCell>Label</TableCell>
-                  <TableCell>Category</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {operationList.map(row => {
-                  const {
-                    id,
-                    operationDate,
-                    amount,
-                    label,
-                    categoryTitle,
-                  } = row;
-                  const dateLocale = new Date(
-                    operationDate,
-                  ).toLocaleDateString();
-
-                  return (
-                    <TableRow key={`row${id}`}>
-                      <TableCell component="th" scope="row">
-                        {dateLocale}
-                      </TableCell>
-                      <TableCell>{amount}</TableCell>
-                      <TableCell>{label}</TableCell>
-                      <TableCell>{categoryTitle}</TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </div>
         )}
       </div>
     </div>

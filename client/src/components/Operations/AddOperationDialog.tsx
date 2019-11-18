@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 import Select from 'react-select';
 
-import '../styles/AddOperationDialog.scss';
-import { GenericBtn } from '../components/GenericBtn';
-import { LabelledField } from './LabelledField';
-import { LoadingBars } from './LoadingBars';
-import { InfoMessage } from './InfoMessage';
-import { Category, Operation } from '../../../server/models.d';
+import '../../styles/AddOperationDialog.scss';
+import { GenericBtn } from '../GenericBtn';
+import { LabelledField } from '../LabelledField';
+import { LoadingBars } from '../LoadingBars';
+import { InfoMessage } from '../InfoMessage';
+import { Category, Operation } from '../../../../server/models';
 
 export const AddOperationDialog: React.FC<{
   toggleNewOperation: Function;
@@ -124,7 +124,7 @@ export const AddOperationDialog: React.FC<{
                 operationDate,
                 amount,
                 label,
-                categoryId: category ? category.value : 0,
+                categoryId: category ? category.value : 1,
               });
             }}
             id="add-operation-btn"

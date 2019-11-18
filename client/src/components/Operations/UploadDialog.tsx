@@ -1,10 +1,9 @@
 import React, { useState, useRef } from 'react';
 import Dialog from '@material-ui/core/Dialog';
 
-import '../styles/UploadDialog.scss';
-import '../styles/GenericBtn.scss';
-import { GenericBtn } from './GenericBtn';
-import { InfoMessage } from './InfoMessage';
+import '../../styles/UploadDialog.scss';
+import { GenericBtn } from '../GenericBtn';
+import { InfoMessage } from '../InfoMessage';
 
 export const UploadDialog: React.FC<{
   toggleUpload: Function;
@@ -59,7 +58,6 @@ export const UploadDialog: React.FC<{
         </p>
         <label
           id="upload-input-label"
-          className="generic-btn"
           htmlFor="upload-input"
         >
           Select one or more files

@@ -38,5 +38,11 @@
 	z-index: -1;
 }
 #upload-input-label {
+    border: 3px $primary-color dotted;
+    color: $primary-color;
+    cursor: pointer;
+    font-family: $primary-font-family;
+    font-weight: 600;
     margin: $small-margin 0;
+    padding: $small-margin;
 }
