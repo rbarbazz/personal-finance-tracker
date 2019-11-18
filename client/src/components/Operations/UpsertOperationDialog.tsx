@@ -1,54 +1,52 @@
 import React, { useState, useEffect } from 'react';
 import Dialog from '@material-ui/core/Dialog';
-import Select from 'react-select';
+import Select, { OptionTypeBase } from 'react-select';
 
-import '../../styles/AddOperationDialog.scss';
+import '../../styles/UpsertOperationDialog.scss';
 import { GenericBtn } from '../GenericBtn';
 import { LabelledField } from '../LabelledField';
 import { LoadingBars } from '../LoadingBars';
 import { InfoMessage } from '../InfoMessage';
 import { Category, Operation } from '../../../../server/models';
 
-export const AddOperationDialog: React.FC<{
-  toggleNewOperation: Function;
-  open: boolean;
-}> = ({ toggleNewOperation, open }) => {
-  const getCategories = async () => {
-    try {
-      const res = await fetch('/categories', {
-        method: 'GET',
-      });
-      if (res.status === 200) {
-        const data = await res.json();
-
-        setCategoryList(
-          data.categories.map(({ id, title }: Category) => ({
-            value: id,
-            label: title,
-          })),
-        );
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-  const addOperation = async (operation: Operation) => {
+export const UpsertOperationDialog: React.FC<{
+  toggleDialog: Function;
+  initialOperation?: Operation;
+  isEdit?: boolean;
+  getOperations: Function;
+}> = ({
+  toggleDialog,
+  initialOperation = {
+    id: 0,
+    operationDate: new Date().toISOString(),
+    amount: 0,
+    label: '',
+    categoryId: 1,
+  },
+  isEdit = false,
+  getOperations,
+}) => {
+  const upsertOperation = async (operation: Operation) => {
     toggleLoading(true);
     try {
-      const res = await fetch('/operations', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const res = await fetch(
+        `/operations${isEdit ? `/${initialOperation.id}` : ''}`,
+        {
+          method: isEdit ? 'PUT' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(operation),
         },
-        body: JSON.stringify(operation),
-      });
+      );
       toggleLoading(false);
       if (res.status === 200) {
         const { error, message } = await res.json();
 
         setMessage({ error, value: message });
         if (!error) {
-          toggleNewOperation(false);
+          toggleDialog(false);
+          getOperations();
         }
       } else {
         setMessage({ error: true, value: 'User is not logged in' });
@@ -57,22 +55,58 @@ export const AddOperationDialog: React.FC<{
       setMessage({ error: true, value: 'An error has occurred' });
     }
   };
-  const [operationDate, setDate] = useState('');
-  const [amount, setAmount] = useState(0);
-  const [label, setLabel] = useState('');
-  const [category, setCategory] = useState();
-  const [categoryList, setCategoryList] = useState([]);
+  const [operationDate, setDate] = useState(
+    new Date(initialOperation.operationDate).toISOString().slice(0, 10),
+  );
+  const [amount, setAmount] = useState(initialOperation.amount);
+  const [label, setLabel] = useState(initialOperation.label);
+  const [category, setCategory] = useState<OptionTypeBase>({
+    value: initialOperation.categoryId,
+  });
+  const [categoryList, setCategoryList] = useState<OptionTypeBase[]>([]);
   const [isLoading, toggleLoading] = useState(false);
   const [message, setMessage] = useState({ error: false, value: '' });
+
   useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const res = await fetch('/categories', {
+          method: 'GET',
+        });
+        if (res.status === 200) {
+          const { categories }: { categories: Category[] } = await res.json();
+
+          setCategoryList(
+            categories.map(({ id, title }: Category) => ({
+              value: id,
+              label: title,
+            })),
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
     getCategories();
   }, []);
+  useEffect(() => {
+    let initialCategory;
+
+    if (categoryList.length > 0) {
+      initialCategory = categoryList.find(
+        elem => elem.value === initialOperation.categoryId,
+      );
+    }
+    if (initialCategory) setCategory(initialCategory);
+  }, [categoryList, initialOperation.categoryId]);
 
   return (
-    <Dialog onClose={() => toggleNewOperation(false)} open={open}>
+    <Dialog onClose={() => toggleDialog(false)} open>
       {categoryList.length > 0 ? (
         <div className="new-operation-dialog">
-          <h3 className="new-operation-title">New Operation</h3>
+          <h3 className="new-operation-title">{`${
+            isEdit ? 'Edit' : 'Add'
+          } Operation`}</h3>
           <LabelledField
             setter={setDate}
             id="operation-date"
@@ -120,7 +154,7 @@ export const AddOperationDialog: React.FC<{
           )}
           <GenericBtn
             action={() => {
-              addOperation({
+              upsertOperation({
                 operationDate,
                 amount,
                 label,

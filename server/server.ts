@@ -156,6 +156,7 @@ app.get('/operations', async (req: any, res) => {
         'amount',
         'label',
         'categories.title as categoryTitle',
+        'categoryId',
       )
       .leftJoin('categories', { 'operations.categoryId': 'categories.id' })
       .where('userId', req.user.id)
@@ -252,6 +253,7 @@ app.post('/operations', upload.array('csvFiles', 10), async (req: any, res) => {
   }
 });
 
+// Delete an operation
 app.delete('/operations/:operationId', async (req: any, res) => {
   if (req.user) {
     const { operationId } = req.params;
@@ -262,12 +264,57 @@ app.delete('/operations/:operationId', async (req: any, res) => {
     if (operation && operation.userId && operation.userId === req.user.id) {
       await knex<Operation>('operations')
         .where('id', operationId)
-        .first()
         .del();
     } else {
       return res.status(401).send();
     }
     return res.send();
+  } else {
+    return res.status(401).send();
+  }
+});
+
+// Update an operation
+app.put('/operations/:operationId', async (req: any, res) => {
+  if (req.user) {
+    const { operationId } = req.params;
+    const operation = await knex<Operation>('operations')
+      .where('id', operationId)
+      .first();
+
+    if (operation && operation.userId && operation.userId === req.user.id) {
+      const {
+        operationDate: operationDateStr,
+        amount,
+        label,
+        categoryId,
+      } = req.body;
+      const operationDate = new Date(operationDateStr);
+
+      if (isNaN(operationDate.getDate()))
+        return res.send({ error: true, message: 'Wrong date' });
+      if (isNaN(amount) || amount == 0)
+        return res.send({ error: true, message: 'Wrong amount' });
+      if (label.length < 1)
+        return res.send({ error: true, message: 'Label is too short' });
+      if (label.length > 255)
+        return res.send({ error: true, message: 'Label is too long' });
+      if (isNaN(categoryId))
+        return res.send({ error: true, message: 'Wrong category' });
+
+      await knex<Operation>('operations')
+        .where('id', operationId)
+        .update({
+          operationDate,
+          amount,
+          label,
+          categoryId,
+        });
+
+      return res.send({ error: false, message: '' });
+    } else {
+      return res.status(401).send();
+    }
   } else {
     return res.status(401).send();
   }

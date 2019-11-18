@@ -7,8 +7,7 @@ import { InfoMessage } from '../InfoMessage';
 
 export const UploadDialog: React.FC<{
   toggleUpload: Function;
-  open: boolean;
-}> = ({ toggleUpload, open }) => {
+}> = ({ toggleUpload }) => {
   const uploadFiles = async (files: FileList) => {
     if (files.length < 1)
       return setMessage({
@@ -46,20 +45,17 @@ export const UploadDialog: React.FC<{
   const fileInput = useRef<HTMLInputElement>(null);
 
   return (
-    <Dialog onClose={() => toggleUpload(false)} open={open}>
+    <Dialog onClose={() => toggleUpload(false)} open>
       <div className="upload-dialog">
         <h3 className="upload-title">Import Transactions</h3>
         <p className="upload-explanations">
           You can batch import transactions by uploading CSV files.
           <br />
           <br />
-          Files need to contain at least those four columns: "date", "amount", "label" and
-          "category".
+          Files need to contain at least those four columns: "date", "amount",
+          "label" and "category".
         </p>
-        <label
-          id="upload-input-label"
-          htmlFor="upload-input"
-        >
+        <label id="upload-input-label" htmlFor="upload-input">
           Select one or more files
         </label>
         <input
