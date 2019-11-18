@@ -11,6 +11,7 @@ import fs from 'fs';
 import csv from 'csv-parser';
 
 import initDatabase, { knex } from './initDatabase';
+import { User, Category, Operation } from './models';
 
 /**
  * Create DB and the tables if they are not present
@@ -151,7 +152,7 @@ app.get('/operations', async (req: any, res) => {
         'operationDate',
         'amount',
         'label',
-        'categories.title',
+        'categories.title as categoryTitle',
       )
       .join('categories', { 'operations.categoryId': 'categories.id' })
       .where('userId', req.user.id)
@@ -280,12 +281,12 @@ app.get('/charts', async (req: any, res) => {
         .groupBy('categories.title');
 
       if (sumsForMonth.length > 0) {
-        let currentObj: { [index: string]: number } = {};
+        let currentMonth: { [index: string]: number } = {};
 
         sumsForMonth.forEach(category => {
-          currentObj[category.title] = Math.abs(category.sum);
+          currentMonth[category.title] = Math.abs(category.sum);
         });
-        monthlyBarChart.data.push({ ...currentObj, month });
+        monthlyBarChart.data.push({ ...currentMonth, month });
       }
     }
     res.send({ charts: { monthlyBarChart } });

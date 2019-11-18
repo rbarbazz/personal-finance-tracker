@@ -11,20 +11,21 @@ import { GenericBtn } from '../components/GenericBtn';
 import { AddOperationDialog } from '../components/AddOperationDialog';
 import { UploadDialog } from '../components/UploadDialog';
 import { LoadingBars } from '../components/LoadingBars';
+import { OperationRow } from '../../../server/models.d';
 
 export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,
 }) => {
   const [newOperationVisible, toggleNewOperation] = useState(false);
   const [uploadVisible, toggleUpload] = useState(false);
-  const [operationList, setOperationList] = useState<Operation[]>([]);
+  const [operationList, setOperationList] = useState<OperationRow[]>([]);
   const getOperations = async () => {
     try {
       const res = await fetch('/operations', {
         method: 'GET',
       });
       if (res.status === 200) {
-        const { operations }: { operations: Operation[] } = await res.json();
+        const { operations }: { operations: OperationRow[] } = await res.json();
 
         setOperationList(operations);
       }
@@ -74,7 +75,13 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
               </TableHead>
               <TableBody>
                 {operationList.map(row => {
-                  const { id, operationDate, amount, label, title } = row;
+                  const {
+                    id,
+                    operationDate,
+                    amount,
+                    label,
+                    categoryTitle,
+                  } = row;
                   const dateLocale = new Date(
                     operationDate,
                   ).toLocaleDateString();
@@ -86,7 +93,7 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
                       </TableCell>
                       <TableCell>{amount}</TableCell>
                       <TableCell>{label}</TableCell>
-                      <TableCell>{title}</TableCell>
+                      <TableCell>{categoryTitle}</TableCell>
                     </TableRow>
                   );
                 })}

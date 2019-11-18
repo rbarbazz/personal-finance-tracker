@@ -1,0 +1,55 @@
+{
+  "Uncategorized": [],
+  "Transport": [
+    "Public Transit",
+    "Taxis/Ubers",
+    "Car payments (incl. interest)",
+    "Parking",
+    "Insurance",
+    "Repairs",
+    "Transport Others"
+  ],
+  "Home": [
+    "Rent or Mortgage Payment",
+    "Strata Fees",
+    "Insurance",
+    "Electricity",
+    "Gas",
+    "Water",
+    "Trash",
+    "Internet/Cable/Phones",
+    "Repairs & Maintenance",
+    "Property Taxes",
+    "Home Other(2nd property, time share, etc.)"
+  ],
+  "Living": [
+    "Groceries",
+    "Eating/Drinking Out",
+    "Clothing",
+    "Homegoods/Décor/Garden",
+    "Electronics",
+    "Entertainment/Hobbies",
+    "Subscriptions (Netflix, Amazon Prime, Spotify, etc.)",
+    "Classes & Activities",
+    "Gym & Sports",
+    "Grooming (Haircuts, Nail Salon, Massage, etc.)",
+    "Daycare",
+    "Petcare",
+    "Education/Tuition",
+    "Medical/Dental/Healthcare",
+    "Gifts/Donations",
+    "Holidays",
+    "Living Other"
+  ],
+  "Miscellaneous": [
+    "Loan Repayment",
+    "Credit Card Debt",
+    "Taxes Outstanding",
+    "Miscellaneous Other"
+  ],
+  "Special Savings": [
+    "Emergency Fund",
+    "Kids College Fund",
+    "Special Savings Other"
+  ]
+}

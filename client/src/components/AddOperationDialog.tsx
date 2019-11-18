@@ -7,6 +7,7 @@ import { GenericBtn } from '../components/GenericBtn';
 import { LabelledField } from './LabelledField';
 import { LoadingBars } from './LoadingBars';
 import { InfoMessage } from './InfoMessage';
+import { Category, Operation } from '../../../server/models.d';
 
 export const AddOperationDialog: React.FC<{
   toggleNewOperation: Function;

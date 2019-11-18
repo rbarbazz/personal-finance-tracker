@@ -4,6 +4,7 @@ import '../styles/Login.scss';
 import { GenericBtn } from '../components/GenericBtn';
 import { LabelledField } from '../components/LabelledField';
 import { InfoMessage } from '../components/InfoMessage';
+import { User } from '../../../server/models.d';
 
 export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,

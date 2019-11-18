@@ -1,22 +1,27 @@
-declare interface User {
+export interface User {
   id?: number;
   fName: string;
   email: string;
   password: string;
-  created_at: Date;
-  updated_at: Date;
+  created_at?: Date;
+  updated_at?: Date;
 }
 
-declare interface Operation {
+export interface Operation {
   id?: number;
-  operationDate: Date;
+  operationDate: Date | string;
   amount: number;
   label: string;
   categoryId: number;
-  userId: number;
+  userId?: number;
 }
 
-declare interface Category {
+export interface OperationRow extends Operation {
+  categoryTitle: string;
+}
+
+export interface Category {
   id?: number;
   title: string;
+  parentCategoryId: number;
 }
