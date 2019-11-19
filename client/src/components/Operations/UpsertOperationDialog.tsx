@@ -7,11 +7,15 @@ import { GenericBtn } from '../GenericBtn';
 import { LabelledField } from '../LabelledField';
 import { LoadingBars } from '../LoadingBars';
 import { InfoMessage } from '../InfoMessage';
-import { Category, Operation } from '../../../../server/src/db/models';
+import {
+  CategoryDB,
+  OperationDB,
+  Operation,
+} from '../../../../server/src/db/models';
 
 export const UpsertOperationDialog: React.FC<{
   toggleDialog: Function;
-  initialOperation?: Operation;
+  initialOperation?: OperationDB;
   isEdit?: boolean;
   getOperations: Function;
 }> = ({
@@ -74,10 +78,10 @@ export const UpsertOperationDialog: React.FC<{
           method: 'GET',
         });
         if (res.status === 200) {
-          const { categories }: { categories: Category[] } = await res.json();
+          const { categories }: { categories: CategoryDB[] } = await res.json();
 
           setCategoryList(
-            categories.map(({ id, title }: Category) => ({
+            categories.map(({ id, title }: CategoryDB) => ({
               value: id,
               label: title,
             })),
@@ -129,7 +133,7 @@ export const UpsertOperationDialog: React.FC<{
             value={label}
           />
           <label htmlFor="category-select" className="generic-label">
-            Category
+            CategoryDB
           </label>
           <Select
             classNamePrefix="category-select"
@@ -155,10 +159,10 @@ export const UpsertOperationDialog: React.FC<{
           <GenericBtn
             action={() => {
               upsertOperation({
-                operationDate,
                 amount,
-                label,
                 categoryId: category ? category.value : 1,
+                label,
+                operationDate,
               });
             }}
             id="add-operation-btn"

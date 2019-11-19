@@ -1,27 +1,32 @@
 export interface User {
-  id?: number;
-  fName: string;
   email: string;
+  fName: string;
   password: string;
-  created_at?: Date;
-  updated_at?: Date;
+}
+export interface UserDB extends User {
+  created_at: Date;
+  id: number;
+  updated_at: Date;
 }
 
 export interface Operation {
-  id?: number;
-  operationDate: Date | string;
   amount: number;
-  label: string;
   categoryId: number;
+  label: string;
+  operationDate: Date | string;
   userId?: number;
 }
-
-export interface OperationRow extends Operation {
+export interface OperationDB extends Operation {
+  id: number;
+}
+export interface OperationRow extends OperationDB {
   categoryTitle: string;
 }
 
 export interface Category {
-  id?: number;
-  title: string;
   parentCategoryId: number;
+  title: string;
+}
+export interface CategoryDB extends Category {
+  id: number;
 }

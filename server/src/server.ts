@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 import path from 'path';
 
 import initDatabase, { knex } from './db/initDatabase';
-import { User } from './db/models';
+import { UserDB } from './db/models';
 import { authRouter } from './routes/auth';
 import { operationsRouter } from './routes/operations';
 import { categoriesRouter } from './routes/categories';
@@ -37,9 +37,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', authRouter);
-app.use('/', operationsRouter);
-app.use('/', categoriesRouter);
-app.use('/', chartsRouter);
+app.use('/operations', operationsRouter);
+app.use('/categories', categoriesRouter);
+app.use('/charts', chartsRouter);
 
 /**
  * Passport middleware
@@ -50,7 +50,7 @@ passport.use(
   new LocalStrategy(
     { usernameField: 'email' },
     async (email, password, done) => {
-      const user = await knex<User>('users')
+      const user = await knex<UserDB>('users')
         .where('email', email)
         .first();
 
@@ -63,12 +63,12 @@ passport.use(
   ),
 );
 
-passport.serializeUser((user: User, done) => {
+passport.serializeUser((user: UserDB, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(async (id: number, done) => {
-  const user = await knex<User>('users')
+passport.deserializeUser(async (id: UserDB['id'], done) => {
+  const user = await knex<UserDB>('users')
     .where('id', id)
     .first();
   done(null, user);

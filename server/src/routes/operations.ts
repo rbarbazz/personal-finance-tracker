@@ -4,7 +4,7 @@ import fs from 'fs';
 import csv from 'csv-parser';
 
 import { knex } from '../db/initDatabase';
-import { OperationRow, Operation, Category } from '../db/models';
+import { OperationRow, Operation, CategoryDB } from '../db/models';
 
 export const operationsRouter = Router();
 const upload = multer({ dest: '../../tmp/' });
@@ -13,7 +13,7 @@ const upload = multer({ dest: '../../tmp/' });
  * Operations
  */
 // Get all operations
-operationsRouter.get('/operations', async (req: any, res) => {
+operationsRouter.get('/', async (req: any, res) => {
   if (req.user) {
     const operations: OperationRow[] = await knex<Operation>('operations')
       .select(
@@ -36,7 +36,7 @@ operationsRouter.get('/operations', async (req: any, res) => {
 
 // Add an operation
 operationsRouter.post(
-  '/operations',
+  '/',
   upload.array('csvFiles', 10),
   async (req: any, res) => {
     if (req.user) {
@@ -50,7 +50,7 @@ operationsRouter.post(
             return res.send({ error: true, message: 'File is too large' });
 
           const operationList: Operation[] = [];
-          const categories = await knex<Category>('categories').select();
+          const categories = await knex<CategoryDB>('categories').select();
 
           fs.createReadStream(path)
             .pipe(csv({ separator: ';' }))
@@ -70,10 +70,10 @@ operationsRouter.post(
               if (label.length > 255) return;
 
               operationList.push({
-                operationDate,
                 amount: parsedFloat,
-                label,
                 categoryId,
+                label,
+                operationDate,
                 userId: req.user.id,
               });
             })
@@ -124,7 +124,7 @@ operationsRouter.post(
 );
 
 // Delete an operation
-operationsRouter.delete('/operations/:operationId', async (req: any, res) => {
+operationsRouter.delete('/:operationId', async (req: any, res) => {
   if (req.user) {
     const { operationId } = req.params;
     const operation = await knex<Operation>('operations')
@@ -145,7 +145,7 @@ operationsRouter.delete('/operations/:operationId', async (req: any, res) => {
 });
 
 // Update an operation
-operationsRouter.put('/operations/:operationId', async (req: any, res) => {
+operationsRouter.put('/:operationId', async (req: any, res) => {
   if (req.user) {
     const { operationId } = req.params;
     const operation = await knex<Operation>('operations')

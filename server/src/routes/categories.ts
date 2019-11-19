@@ -9,7 +9,7 @@ export const categoriesRouter = Router();
  * Categories
  */
 // Get all categories
-categoriesRouter.get('/categories', async (req, res) => {
+categoriesRouter.get('/', async (req, res) => {
   if (req.user) {
     const categories = await knex<Category>('categories').whereNot(
       'parentCategoryId',

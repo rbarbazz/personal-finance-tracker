@@ -1,7 +1,7 @@
 import Knex from 'knex';
 
 import { knexConfig } from './knexfile';
-import { Category } from './models';
+import { CategoryDB } from './models';
 import categoryTitlesJson from './categoryTitles.json';
 
 const categoryTitles: { [index: string]: string[] } = categoryTitlesJson;
@@ -32,17 +32,17 @@ const createCategories = async () => {
     table.integer('parentCategoryId');
   });
 
-  await knex<Category>('categories').insert(
+  await knex<CategoryDB>('categories').insert(
     Object.keys(categoryTitles).map(parentCategoryTitle => ({
       title: parentCategoryTitle,
       parentCategoryId: 0,
     })),
   );
 
-  const parentCategories = await knex<Category>('categories').select();
+  const parentCategories = await knex<CategoryDB>('categories').select();
   parentCategories.forEach(async parentCategory => {
     if (categoryTitles[parentCategory.title].length > 0) {
-      await knex<Category>('categories').insert(
+      await knex<CategoryDB>('categories').insert(
         categoryTitles[parentCategory.title].map(childCategory => ({
           title: childCategory,
           parentCategoryId: parentCategory.id,

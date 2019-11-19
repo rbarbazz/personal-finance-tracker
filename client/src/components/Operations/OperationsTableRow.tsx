@@ -32,7 +32,7 @@ export const OperationTableRow: React.FC<{
   const dateLocale = new Date(operationDate).toLocaleDateString();
 
   return (
-    <TableRow key={`row${id}`}>
+    <TableRow>
       <TableCell component="th" scope="row">
         {dateLocale}
       </TableCell>
