@@ -7,18 +7,38 @@
 */
 
 .dashboard-container {
-    align-items: center;
     background-color: white;
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     padding: $big-margin;
     width: 100%;
 }
 .chart-container {
-    height: 600px;
+    height: 100%;
     width: 100%;
 }
 .chart-title {
     font-size: 1.5em;
     margin: $small-margin 0 $small-margin;
+}
+.chart-wrapper {
+    align-items: center;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+    justify-content: center;
+    max-width: 1200px;
+    padding: $small-margin $big-margin $big-margin;
+    transition: box-shadow 0.2s;
+    width: calc(50% - (#{$big-margin} * 3));
+
+    &:hover {
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
+            0 3px 10px 0 rgba(0, 0, 0, 0.19);
+    }
+}
+.chart-error-message {
+    font-weight: 600;
 }

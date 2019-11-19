@@ -1,16 +1,23 @@
 import React, { useEffect, useState } from 'react';
 
 import '../styles/Analytics.scss';
-import { LoadingBars } from '../components/LoadingBars';
 import { MonthlyBarChart } from '../components/Analytics/MonthlyBarChart';
 import { SideMenu } from '../components/SideMenu';
+import { TreeMapChart } from '../components/Analytics/TreeMapChart';
+
+type Charts = {
+  monthlyBarChart: any;
+  treeMapChart: any;
+};
 
 export const Analytics: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,
 }) => {
-  const [charts, setCharts] = useState<{
-    [index: string]: { keys: string[]; data: object[] };
-  }>({});
+  const [charts, setCharts] = useState<Charts>({
+    monthlyBarChart: {},
+    treeMapChart: {},
+  });
+  const [isLoading, toggleLoading] = useState(true);
 
   useEffect(() => {
     const abortController = new AbortController();
@@ -20,11 +27,12 @@ export const Analytics: React.FC<{ toggleIsLoggedIn: Function }> = ({
           method: 'GET',
           signal: abortController.signal,
         });
+        toggleLoading(false);
         if (res.status === 200) {
           const {
             charts,
           }: {
-            charts: { [index: string]: { keys: string[]; data: object[] } };
+            charts: Charts;
           } = await res.json();
 
           setCharts(charts);
@@ -47,16 +55,12 @@ export const Analytics: React.FC<{ toggleIsLoggedIn: Function }> = ({
     <div className="main-container">
       <SideMenu toggleIsLoggedIn={toggleIsLoggedIn} />
       <div className="dashboard-container">
-        {Object.keys(charts).length > 0 ? (
-          charts.monthlyBarChart.data.length > 0 && (
-            <MonthlyBarChart
-              keys={charts.monthlyBarChart.keys}
-              data={charts.monthlyBarChart.data}
-            />
-          )
-        ) : (
-          <LoadingBars />
-        )}
+        <MonthlyBarChart
+          keys={charts.monthlyBarChart.keys}
+          data={charts.monthlyBarChart.data}
+          isLoading={isLoading}
+        />
+        <TreeMapChart root={{}} isLoading={isLoading} />
       </div>
     </div>
   );
