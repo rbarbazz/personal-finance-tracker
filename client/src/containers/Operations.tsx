@@ -1,24 +1,29 @@
 import React, { useState, useEffect } from 'react';
 
 import '../styles/Operations.scss';
-import { SideMenu } from '../components/SideMenu';
 import { GenericBtn } from '../components/GenericBtn';
-import { UpsertOperationDialog } from '../components/Operations/UpsertOperationDialog';
-import { UploadDialog } from '../components/Operations/UploadDialog';
+import { LoadingBars } from '../components/LoadingBars';
 import { OperationRow } from '../../../server/src/db/models';
 import { OperationTable } from '../components/Operations/OperationsTable';
+import { ReactComponent as Add } from '../icons/Add.svg';
+import { ReactComponent as FileAdd } from '../icons/FileAdd.svg';
+import { SideMenu } from '../components/SideMenu';
+import { UploadDialog } from '../components/Operations/UploadDialog';
+import { UpsertOperationDialog } from '../components/Operations/UpsertOperationDialog';
 
 export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,
 }) => {
   const [addOperationVisible, toggleAddDialog] = useState(false);
-  const [uploadVisible, toggleUpload] = useState(false);
+  const [isLoading, toggleLoading] = useState(true);
   const [operationList, setOperationList] = useState<OperationRow[]>([]);
+  const [uploadVisible, toggleUpload] = useState(false);
   const getOperations = async () => {
     try {
       const res = await fetch('/operations', {
         method: 'GET',
       });
+      toggleLoading(false);
       if (res.status === 200) {
         const { operations }: { operations: OperationRow[] } = await res.json();
 
@@ -38,9 +43,25 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
       <SideMenu toggleIsLoggedIn={toggleIsLoggedIn} />
       <div className="operations-container">
         <div className="action-buttons-container">
-          <GenericBtn action={() => toggleUpload(true)} value="Upload CSV" />
+          <GenericBtn
+            action={() => toggleUpload(true)}
+            value={
+              <>
+                {'Upload file'}
+                <FileAdd />
+              </>
+            }
+          />
           {uploadVisible && <UploadDialog toggleUpload={toggleUpload} />}
-          <GenericBtn action={() => toggleAddDialog(true)} value="Add Operation" />
+          <GenericBtn
+            action={() => toggleAddDialog(true)}
+            value={
+              <>
+                {'Add Operation'}
+                <Add />
+              </>
+            }
+          />
           {addOperationVisible && (
             <UpsertOperationDialog
               toggleDialog={toggleAddDialog}
@@ -48,11 +69,15 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
             />
           )}
         </div>
-        {operationList.length > 0 && (
-          <OperationTable
-            operationList={operationList}
-            getOperations={getOperations}
-          />
+        {isLoading ? (
+          <LoadingBars />
+        ) : (
+          operationList.length > 0 && (
+            <OperationTable
+              operationList={operationList}
+              getOperations={getOperations}
+            />
+          )
         )}
       </div>
     </div>

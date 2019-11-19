@@ -7,7 +7,7 @@ import {
 } from 'react-router-dom';
 
 import '../styles/App.scss';
-import { Dashboard } from './Dashboard';
+import { Analytics } from './Analytics';
 import { LoadingBars } from '../components/LoadingBars';
 import { Login } from './Login';
 import { Operations } from './Operations';
@@ -46,14 +46,14 @@ const App: React.FC = () => {
           <Switch>
             <Route exact path="/">
               {isLoggedIn ? (
-                <Redirect to="/dashboard" />
+                <Redirect to="/analytics" />
               ) : (
                 <Login toggleIsLoggedIn={toggleIsLoggedIn} />
               )}
             </Route>
-            <Route exact path="/dashboard">
+            <Route exact path="/analytics">
               {isLoggedIn ? (
-                <Dashboard toggleIsLoggedIn={toggleIsLoggedIn} />
+                <Analytics toggleIsLoggedIn={toggleIsLoggedIn} />
               ) : (
                 <Redirect to="/" />
               )}

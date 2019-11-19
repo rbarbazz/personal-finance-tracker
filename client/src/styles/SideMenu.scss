@@ -24,11 +24,12 @@
 
     .side-menu-item {
         -webkit-appearance: none;
+        align-items: center;
         background-color: $primary-color;
         border: none;
         color: white;
         cursor: pointer;
-        font-family: $primary-font-family;
+        display: flex;
         font-size: 1.5em;
         padding: $small-margin $big-margin;
         position: relative;
@@ -45,6 +46,12 @@
         }
         &.selected .arrow-left {
             display: block;
+        }
+        svg {
+            fill: white;
+            height: 24px;
+            margin-right: 15px;
+            width: 24px;
         }
     }
 }

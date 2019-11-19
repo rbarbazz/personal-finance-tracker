@@ -7,7 +7,6 @@
 */
 
 .new-operation-dialog {
-    align-items: center;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -24,6 +23,7 @@
     font-size: 2em;
     letter-spacing: 0.05em;
     margin: 0 0 $small-margin;
+    text-align: center;
 }
 .generic-label {
     text-align: left;

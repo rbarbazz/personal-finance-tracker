@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 
 import '../styles/Login.scss';
 import { GenericBtn } from '../components/GenericBtn';
-import { LabelledField } from '../components/LabelledField';
 import { InfoMessage } from '../components/InfoMessage';
+import { LabelledField } from '../components/LabelledField';
+import { ReactComponent as Email } from '../icons/Email.svg';
+import { ReactComponent as Lock } from '../icons/Lock.svg';
+import { ReactComponent as Person } from '../icons/Person.svg';
 import { User } from '../../../server/src/db/models';
 
 export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
@@ -55,7 +58,12 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
           setter={setFName}
           id="fname"
           type="text"
-          label="First Name"
+          label={
+            <>
+              <Person />
+              {'First Name'}
+            </>
+          }
           value={fName}
         />
       )}
@@ -63,14 +71,24 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
         setter={setEmail}
         id="email"
         type="email"
-        label="Email"
+        label={
+          <>
+            <Email />
+            {'Email'}
+          </>
+        }
         value={email}
       />
       <LabelledField
         setter={setPassword}
         id="password"
         type="password"
-        label="Password"
+        label={
+          <>
+            <Lock />
+            {'Password'}
+          </>
+        }
         value={password}
       />
       {message.value !== '' && (

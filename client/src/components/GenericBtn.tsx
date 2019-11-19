@@ -7,7 +7,7 @@ export const GenericBtn: React.FC<{
   action: Function;
   id?: string;
   isLoading?: boolean;
-  value: string;
+  value: string | React.ReactChild;
 }> = ({ action, id, value, isLoading = false }) =>
   !isLoading ? (
     <button className="generic-btn" id={id || ''} onClick={() => action()}>

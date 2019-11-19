@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-import '../styles/Dashboard.scss';
+import '../styles/Analytics.scss';
 import { LoadingBars } from '../components/LoadingBars';
-import { MonthlyBarChart } from '../components/Dashboard/MonthlyBarChart';
+import { MonthlyBarChart } from '../components/Analytics/MonthlyBarChart';
 import { SideMenu } from '../components/SideMenu';
 
-export const Dashboard: React.FC<{ toggleIsLoggedIn: Function }> = ({
+export const Analytics: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,
 }) => {
   const [charts, setCharts] = useState<{
@@ -47,7 +47,6 @@ export const Dashboard: React.FC<{ toggleIsLoggedIn: Function }> = ({
     <div className="main-container">
       <SideMenu toggleIsLoggedIn={toggleIsLoggedIn} />
       <div className="dashboard-container">
-        <h2 className="section-title">Analysis</h2>
         {Object.keys(charts).length > 0 ? (
           charts.monthlyBarChart.data.length > 0 && (
             <MonthlyBarChart

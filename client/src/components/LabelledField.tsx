@@ -5,7 +5,7 @@ import '../styles/LabelledField.scss';
 export const LabelledField: React.FC<{
   setter: Function;
   id: string;
-  label: string;
+  label: string | React.ReactChild;
   type: string;
   value: any;
 }> = ({ setter, id, label, type, value }) => (

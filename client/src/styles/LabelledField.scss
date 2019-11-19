@@ -11,10 +11,19 @@
     flex-direction: column;
 }
 .generic-label {
+    align-items: center;
     color: $primary-color;
+    display: flex;
     font-family: $primary-font-family;
     margin-bottom: 5px;
     text-align: left;
+
+    svg {
+        fill: $primary-color;
+        height: 18px;
+        margin-right: 5px;
+        width: 18px;
+    }
 }
 .generic-input {
     &[type='email'],
@@ -22,7 +31,7 @@
     &[type='password'],
     &[type='date'],
     &[type='number'] {
-        border: hsl(0,0%,80%) solid 1px;
+        border: hsl(0, 0%, 80%) solid 1px;
         color: $primary-color;
         font-family: $primary-font-family;
         min-width: 300px;
@@ -32,6 +41,6 @@
         outline: $primary-color solid 2px;
     }
     &:hover {
-        border-color: hsl(0,0%,70%);
+        border-color: hsl(0, 0%, 70%);
     }
 }

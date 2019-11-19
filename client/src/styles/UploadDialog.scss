@@ -7,7 +7,6 @@
 */
 
 .upload-dialog {
-    align-items: center;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -20,6 +19,7 @@
     font-size: 2em;
     letter-spacing: 0.05em;
     margin: 0 0 $small-margin;
+    text-align: center;
 }
 .upload-explanations {
     font-family: $primary-font-family;
@@ -39,6 +39,9 @@
     code {
         color: $primary-color;
         font-size: 18px;
+    }
+    strong {
+        color: $primary-color;
     }
 }
 #upload-csv-btn {
@@ -60,4 +63,5 @@
     font-weight: 600;
     margin: $small-margin 0;
     padding: $small-margin;
+    text-align: center;
 }

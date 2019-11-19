@@ -1,7 +1,10 @@
-import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import React from 'react';
 
 import '../styles/SideMenu.scss';
+import { ReactComponent as Chart } from '../icons/Chart.svg';
+import { ReactComponent as Logout } from '../icons/Logout.svg';
+import { ReactComponent as PriceTag } from '../icons/PriceTag.svg';
 
 export const SideMenu: React.FC<{ toggleIsLoggedIn: Function }> = ({
   toggleIsLoggedIn,
@@ -22,20 +25,25 @@ export const SideMenu: React.FC<{ toggleIsLoggedIn: Function }> = ({
 
   return (
     <div className="side-menu-container">
-      {['dashboard', 'transactions'].map((item) => (
+      {[
+        { title: 'analytics', icon: <Chart /> },
+        { title: 'transactions', icon: <PriceTag /> },
+      ].map(item => (
         <Link
           className={`side-menu-item${
-            pathname === `/${item}` ? ' selected' : ''
+            pathname === `/${item.title}` ? ' selected' : ''
           }`}
-          key={`side-menu-item-${item}`}
-          to={`/${item}`}
+          key={`side-menu-item-${item.title}`}
+          to={`/${item.title}`}
         >
-          {item}
+          {item.icon}
+          {item.title}
           <div className="arrow-left"></div>
         </Link>
       ))}
       <button className="side-menu-item" onClick={logout}>
-        Log Out
+        <Logout />
+        {'Log Out'}
       </button>
     </div>
   );

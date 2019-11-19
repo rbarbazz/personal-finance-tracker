@@ -133,7 +133,7 @@ export const UpsertOperationDialog: React.FC<{
             value={label}
           />
           <label htmlFor="category-select" className="generic-label">
-            CategoryDB
+            Category
           </label>
           <Select
             classNamePrefix="category-select"

@@ -16,7 +16,7 @@ export const UploadDialog: React.FC<{
     if (files.length < 1)
       return setMessage({
         error: true,
-        value: 'Please select at least one CSV file',
+        value: 'Please select at least one file',
       });
     toggleLoading(true);
     const data = new FormData();
@@ -68,6 +68,10 @@ export const UploadDialog: React.FC<{
             If you choose to use a file provided by your bank for instance, it
             needs to contain at least those four columns: <code>date</code>,{' '}
             <code>amount</code>, <code>label</code> and <code>category</code>.
+          </li>
+          <li className="upload-explanation-item">
+            <strong>Note:</strong> expected date formats are <code>YYYY-MM-DD</code> or{' '}
+            <code>MM/DD/YYYY</code>.
           </li>
         </ul>
         <label id="upload-input-label" htmlFor="upload-input">
