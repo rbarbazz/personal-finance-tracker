@@ -23,19 +23,34 @@
 }
 .upload-explanations {
     font-family: $primary-font-family;
-    font-size: 18px;
+    font-size: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.upload-explanation-item {
     margin: $small-margin 0;
+
+    a {
+        color: $primary-color;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    code {
+        color: $primary-color;
+        font-size: 18px;
+    }
 }
 #upload-csv-btn {
     margin: $small-margin 0 0;
 }
 #upload-input {
-	width: 0.1px;
-	height: 0.1px;
-	opacity: 0;
-	overflow: hidden;
-	position: absolute;
-	z-index: -1;
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 0.1px;
+    z-index: -1;
 }
 #upload-input-label {
     border: 3px $primary-color dotted;

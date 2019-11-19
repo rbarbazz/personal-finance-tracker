@@ -52,7 +52,8 @@ chartsRouter.get('/', async (req: any, res) => {
         if (parentCategorySum !== null)
           currentMonthSums[parentCategory.title] = Math.abs(parentCategorySum);
       }
-      monthlyBarChart.data.push({ ...currentMonthSums, month });
+      if (Object.keys(currentMonthSums).length > 0)
+        monthlyBarChart.data.push({ ...currentMonthSums, month });
     }
     return res.send({ charts: { monthlyBarChart } });
   } else {

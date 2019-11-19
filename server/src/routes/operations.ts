@@ -53,7 +53,7 @@ operationsRouter.post(
           const categories = await knex<CategoryDB>('categories').select();
 
           fs.createReadStream(path)
-            .pipe(csv({ separator: ';' }))
+            .pipe(csv())
             .on('data', data => {
               const { date, amount, label, category: categoryTitle } = data;
               const operationDate = new Date(date);

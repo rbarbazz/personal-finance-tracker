@@ -2,26 +2,27 @@ import React, { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
   Redirect,
-  Switch,
   Route,
+  Switch,
 } from 'react-router-dom';
 
 import '../styles/App.scss';
-import { Login } from './Login';
-import { LoadingBars } from '../components/LoadingBars';
 import { Dashboard } from './Dashboard';
+import { LoadingBars } from '../components/LoadingBars';
+import { Login } from './Login';
 import { Operations } from './Operations';
 
 const App: React.FC = () => {
   const initialIsLoggedIn = async () => {
-    toggleIsLoading(true);
     try {
       const res = await fetch('/login', {
         method: 'GET',
       });
       toggleIsLoading(false);
       if (res.status === 200) {
-        const { userLoginStatus } = await res.json();
+        const {
+          userLoginStatus,
+        }: { userLoginStatus: boolean } = await res.json();
 
         toggleIsLoggedIn(userLoginStatus);
       }
@@ -30,7 +31,7 @@ const App: React.FC = () => {
     }
   };
   const [isLoggedIn, toggleIsLoggedIn] = useState(false);
-  const [isLoading, toggleIsLoading] = useState(false);
+  const [isLoading, toggleIsLoading] = useState(true);
 
   useEffect(() => {
     initialIsLoggedIn();
@@ -62,7 +63,7 @@ const App: React.FC = () => {
                 <Operations toggleIsLoggedIn={toggleIsLoggedIn} />
               ) : (
                 <Redirect to="/" />
-              )}{' '}
+              )}
             </Route>
             <Route path="*">
               <Redirect to="/" />

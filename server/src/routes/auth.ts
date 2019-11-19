@@ -1,6 +1,7 @@
-import passport from 'passport';
-import bcrypt from 'bcrypt';
 import { Router } from 'express';
+import bcrypt from 'bcrypt';
+import passport from 'passport';
+import validator from 'validator';
 
 import { knex } from '../db/initDatabase';
 import { User } from '../db/models';
@@ -26,7 +27,7 @@ authRouter.get('/logout', (req, res) => {
 });
 
 // Login
-authRouter.post('/login', passport.authenticate('local'), (req, res) => {
+authRouter.post('/login', passport.authenticate('local'), (_req, res) => {
   res.send({ error: false, message: '' });
 });
 
