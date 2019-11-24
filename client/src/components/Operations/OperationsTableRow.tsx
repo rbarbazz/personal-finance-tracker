@@ -29,7 +29,7 @@ export const OperationTableRow: React.FC<{
     categoryTitle,
     categoryId,
   } = operation;
-  const dateLocale = new Date(operationDate).toLocaleDateString();
+  const dateLocale = new Date(operationDate).toISOString().substring(0, 10);
 
   return (
     <TableRow>

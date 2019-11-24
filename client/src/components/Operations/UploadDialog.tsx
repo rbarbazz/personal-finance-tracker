@@ -66,12 +66,12 @@ export const UploadDialog: React.FC<{
           </li>
           <li className="upload-explanation-item">
             If you choose to use a file provided by your bank for instance, it
-            needs to contain at least those four columns: <code>date</code>,{' '}
-            <code>amount</code>, <code>label</code> and <code>category</code>.
+            needs to contain at least those three columns: <code>date</code>,{' '}
+            <code>amount</code> and <code>label</code>.
           </li>
           <li className="upload-explanation-item">
-            <strong>Note:</strong> expected date formats are <code>YYYY-MM-DD</code> or{' '}
-            <code>MM/DD/YYYY</code>.
+            <strong>Note:</strong> expected date formats are{' '}
+            <code>YYYY-MM-DD</code> or <code>DD-MM-YYYY</code>.
           </li>
         </ul>
         <label id="upload-input-label" htmlFor="upload-input">

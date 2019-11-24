@@ -1,7 +1,8 @@
 import { Router } from 'express';
-import multer from 'multer';
-import fs from 'fs';
 import csv from 'csv-parser';
+import fs from 'fs';
+import moment from 'moment';
+import multer from 'multer';
 
 import { knex } from '../db/initDatabase';
 import { OperationRow, Operation, CategoryDB } from '../db/models';
@@ -56,16 +57,23 @@ operationsRouter.post(
             .pipe(csv())
             .on('data', data => {
               const { date, amount, label, category: categoryTitle } = data;
-              const operationDate = new Date(date);
+
+              let operationDate = moment(
+                date,
+                ['YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY', 'DD/MM/YYYY'],
+                true,
+              );
+              if (!operationDate.isValid()) return;
+
               const parsedFloat = parseFloat(amount.replace(',', '.'));
+              if (isNaN(parsedFloat) || parsedFloat == 0) return;
+
               let categoryId = 1;
               const found = categories.find(
                 category => category.title === categoryTitle,
               );
-
               if (found && found.id) categoryId = found.id;
-              if (isNaN(operationDate.getDate())) return;
-              if (isNaN(parsedFloat) || parsedFloat == 0) return;
+
               if (label.length < 1) return;
               if (label.length > 255) return;
 
@@ -73,7 +81,7 @@ operationsRouter.post(
                 amount: parsedFloat,
                 categoryId,
                 label,
-                operationDate,
+                operationDate: operationDate.toDate(),
                 userId: req.user.id,
               });
             })
