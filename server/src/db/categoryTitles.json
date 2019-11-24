@@ -1,55 +1,90 @@
 {
   "Uncategorized": [],
-  "Transport": [
-    "Public Transit",
-    "Taxis/Ubers",
-    "Car payments (incl. interest)",
-    "Parking",
-    "Insurance",
-    "Repairs",
-    "Transport Others"
+  "Child Expenses": [
+    "After School Activities",
+    "Allowance",
+    "Baby Expenses",
+    "Child Support",
+    "Childcare",
+    "Kids Toys",
+    "School Supplies",
+    "School Tuition",
+    "Summer Camps"
   ],
-  "Home": [
-    "Rent or Mortgage Payment",
-    "Strata Fees",
-    "Insurance",
-    "Electricity",
-    "Gas",
-    "Water",
-    "Trash",
-    "Internet/Cable/Phones",
-    "Repairs & Maintenance",
-    "Property Taxes",
-    "Home Other(2nd property, time share, etc.)"
+  "Clothes": ["New Clothes", "Uniform/Work Clothes"],
+  "Debts": ["Credit Card Debt", "Loan Repayment"],
+  "Food": ["Coffee Shops", "Groceries", "Restaurants", "Work Meals"],
+  "Housing": [
+    "Furnitures",
+    "Garden",
+    "HOA Fees",
+    "Home Improvement",
+    "Home Insurance",
+    "Home Maintenance",
+    "Home Security",
+    "Homegoods",
+    "Housing Other",
+    "Mortage",
+    "Property Tax",
+    "Rent",
+    "Strata Fees"
   ],
-  "Living": [
-    "Groceries",
-    "Eating/Drinking Out",
-    "Clothing",
-    "Homegoods/Décor/Garden",
+  "Entertainment": [
+    "Activities",
+    "Books",
     "Electronics",
-    "Entertainment/Hobbies",
-    "Subscriptions (Netflix, Amazon Prime, Spotify, etc.)",
-    "Classes & Activities",
-    "Gym & Sports",
-    "Grooming (Haircuts, Nail Salon, Massage, etc.)",
-    "Daycare",
-    "Petcare",
-    "Education/Tuition",
-    "Medical/Dental/Healthcare",
-    "Gifts/Donations",
+    "Going Out",
+    "Hobbies",
     "Holidays",
-    "Living Other"
+    "Music",
+    "Other Entertainment Expenses",
+    "Sports",
+    "Subscriptions Services"
   ],
-  "Miscellaneous": [
-    "Loan Repayment",
-    "Credit Card Debt",
-    "Taxes Outstanding",
-    "Miscellaneous Other"
+  "Gifts/Donations": [
+    "Birthday",
+    "Charity",
+    "Church",
+    "Other Gifts/Donations",
+    "Political Party"
   ],
-  "Special Savings": [
+  "Healthcare": [
+    "Dental Care",
+    "Medical Care",
+    "Medications",
+    "Other Specialty Care",
+    "Vision Care"
+  ],
+  "Miscellaneous": ["Unusual Non-Recurring Expenses"],
+  "Personal Care": ["Beauty Products", "Haircuts", "Massage/Spa", "Nail Salon"],
+  "Pets": ["Pet Sitter", "Pets Food", "Pets Toys", "Veterinary Care"],
+  "Savings": [
     "Emergency Fund",
-    "Kids College Fund",
-    "Special Savings Other"
+    "Investing Fund",
+    "Home Fund",
+    "College Fund",
+    "Other Savings"
+  ],
+  "Taxes": ["Accountant Fees", "Income Tax", "Other Taxes"],
+  "Transport": [
+    "Insurance",
+    "Parking",
+    "Public Transit",
+    "Registration",
+    "Taxis/Ubers",
+    "Transport Other",
+    "Vehicule Fuel",
+    "Vehicule Loan",
+    "Vehicule Payment",
+    "Vehicule Repairs"
+  ],
+  "Utilities": [
+    "Cable",
+    "Electricity",
+    "Garbage",
+    "Gas",
+    "Internet",
+    "Phones",
+    "Water"
   ]
 }
