@@ -1,14 +1,24 @@
 import React, { useState } from 'react';
+import Select, { OptionTypeBase } from 'react-select';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
+
 import { OperationRow } from '../../../../server/src/db/models';
 import { UpsertOperationDialog } from './UpsertOperationDialog';
 
 export const OperationTableRow: React.FC<{
-  operation: OperationRow;
+  categoryList: OptionTypeBase[];
   getOperations: Function;
-}> = ({ operation, getOperations }) => {
+  operation: OperationRow;
+}> = ({ categoryList, operation, getOperations }) => {
+  const { id, operationDate, amount, label, categoryId } = operation;
+  const dateLocale = new Date(operationDate).toISOString().substring(0, 10);
   const [editOperationVisible, toggleEditDialog] = useState(false);
+  const [selectedCategory, setCategory] = useState<OptionTypeBase>(
+    categoryList.find(elem => elem.value === categoryId) || {
+      value: categoryId,
+    },
+  );
   const delOperation = async (operationId: number) => {
     try {
       const res = await fetch(`/operations/${operationId}`, {
@@ -21,15 +31,6 @@ export const OperationTableRow: React.FC<{
       console.error(error);
     }
   };
-  const {
-    id,
-    operationDate,
-    amount,
-    label,
-    categoryTitle,
-    categoryId,
-  } = operation;
-  const dateLocale = new Date(operationDate).toISOString().substring(0, 10);
 
   return (
     <TableRow>
@@ -38,7 +39,26 @@ export const OperationTableRow: React.FC<{
       </TableCell>
       <TableCell>{amount}</TableCell>
       <TableCell>{label}</TableCell>
-      <TableCell>{categoryTitle}</TableCell>
+      <TableCell>
+        <Select
+          classNamePrefix="category-select"
+          id="category-select"
+          menuPosition="fixed"
+          onChange={selectedOption => {
+            setCategory(selectedOption);
+          }}
+          options={categoryList}
+          theme={theme => ({
+            ...theme,
+            borderRadius: 0,
+            colors: {
+              ...theme.colors,
+              primary: '#007944',
+            },
+          })}
+          value={selectedCategory}
+        />
+      </TableCell>
       <TableCell>
         <button
           className="row-action-btn"
@@ -60,6 +80,7 @@ export const OperationTableRow: React.FC<{
             }}
             isEdit
             getOperations={getOperations}
+            categoryList={categoryList}
           />
         )}
         <button

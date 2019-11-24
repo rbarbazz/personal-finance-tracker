@@ -11,10 +11,9 @@ export const categoriesRouter = Router();
 // Get all categories
 categoriesRouter.get('/', async (req, res) => {
   if (req.user) {
-    const categories = await knex<Category>('categories').whereNot(
-      'parentCategoryId',
-      0,
-    );
+    const categories = await knex<Category>('categories')
+      .whereNot('parentCategoryId', 0)
+      .orderBy('title');
 
     res.send({ categories });
   } else {

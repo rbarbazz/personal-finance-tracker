@@ -1,9 +1,10 @@
+import { OptionTypeBase } from 'react-select';
 import React, { useState, useEffect } from 'react';
 
 import '../styles/Operations.scss';
 import { GenericBtn } from '../components/GenericBtn';
 import { LoadingBars } from '../components/LoadingBars';
-import { OperationRow } from '../../../server/src/db/models';
+import { OperationRow, CategoryDB } from '../../../server/src/db/models';
 import { OperationTable } from '../components/Operations/OperationsTable';
 import { ReactComponent as Add } from '../icons/Add.svg';
 import { ReactComponent as FileAdd } from '../icons/FileAdd.svg';
@@ -17,6 +18,7 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
   const [addOperationVisible, toggleAddDialog] = useState(false);
   const [isLoading, toggleLoading] = useState(true);
   const [operationList, setOperationList] = useState<OperationRow[]>([]);
+  const [categoryList, setCategoryList] = useState<OptionTypeBase[]>([]);
   const [uploadVisible, toggleUpload] = useState(false);
   const getOperations = async () => {
     try {
@@ -37,6 +39,28 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
   useEffect(() => {
     getOperations();
   }, [uploadVisible]);
+  useEffect(() => {
+    const getCategories = async () => {
+      try {
+        const res = await fetch('/categories', {
+          method: 'GET',
+        });
+        if (res.status === 200) {
+          const { categories }: { categories: CategoryDB[] } = await res.json();
+
+          setCategoryList(
+            categories.map(({ id, title }: CategoryDB) => ({
+              value: id,
+              label: title,
+            })),
+          );
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    getCategories();
+  }, []);
 
   return (
     <div className="main-container">
@@ -64,8 +88,9 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
           />
           {addOperationVisible && (
             <UpsertOperationDialog
-              toggleDialog={toggleAddDialog}
+              categoryList={categoryList}
               getOperations={getOperations}
+              toggleDialog={toggleAddDialog}
             />
           )}
         </div>
@@ -74,8 +99,9 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
         ) : (
           operationList.length > 0 && (
             <OperationTable
-              operationList={operationList}
+              categoryList={categoryList}
               getOperations={getOperations}
+              operationList={operationList}
             />
           )
         )}

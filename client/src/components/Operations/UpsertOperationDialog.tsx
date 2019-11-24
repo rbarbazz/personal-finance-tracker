@@ -1,35 +1,45 @@
-import React, { useState, useEffect } from 'react';
 import Dialog from '@material-ui/core/Dialog';
+import React, { useState } from 'react';
 import Select, { OptionTypeBase } from 'react-select';
 
 import '../../styles/UpsertOperationDialog.scss';
+import { Operation, OperationDB } from '../../../../server/src/db/models';
 import { GenericBtn } from '../GenericBtn';
+import { InfoMessage } from '../InfoMessage';
 import { LabelledField } from '../LabelledField';
 import { LoadingBars } from '../LoadingBars';
-import { InfoMessage } from '../InfoMessage';
-import {
-  CategoryDB,
-  OperationDB,
-  Operation,
-} from '../../../../server/src/db/models';
 
 export const UpsertOperationDialog: React.FC<{
-  toggleDialog: Function;
+  categoryList: OptionTypeBase[];
+  getOperations: Function;
   initialOperation?: OperationDB;
   isEdit?: boolean;
-  getOperations: Function;
+  toggleDialog: Function;
 }> = ({
+  categoryList,
   toggleDialog,
   initialOperation = {
-    id: 0,
-    operationDate: new Date().toISOString(),
     amount: 0,
-    label: '',
     categoryId: 1,
+    id: 0,
+    label: '',
+    operationDate: new Date().toISOString(),
   },
   isEdit = false,
   getOperations,
 }) => {
+  const [operationDate, setDate] = useState(
+    new Date(initialOperation.operationDate).toISOString().slice(0, 10),
+  );
+  const [amount, setAmount] = useState(initialOperation.amount);
+  const [label, setLabel] = useState(initialOperation.label);
+  const [category, setCategory] = useState<OptionTypeBase>(
+    categoryList.find(elem => elem.value === initialOperation.categoryId) || {
+      value: initialOperation.categoryId,
+    },
+  );
+  const [isLoading, toggleLoading] = useState(false);
+  const [message, setMessage] = useState({ error: false, value: '' });
   const upsertOperation = async (operation: Operation) => {
     toggleLoading(true);
     try {
@@ -59,50 +69,6 @@ export const UpsertOperationDialog: React.FC<{
       setMessage({ error: true, value: 'An error has occurred' });
     }
   };
-  const [operationDate, setDate] = useState(
-    new Date(initialOperation.operationDate).toISOString().slice(0, 10),
-  );
-  const [amount, setAmount] = useState(initialOperation.amount);
-  const [label, setLabel] = useState(initialOperation.label);
-  const [category, setCategory] = useState<OptionTypeBase>({
-    value: initialOperation.categoryId,
-  });
-  const [categoryList, setCategoryList] = useState<OptionTypeBase[]>([]);
-  const [isLoading, toggleLoading] = useState(false);
-  const [message, setMessage] = useState({ error: false, value: '' });
-
-  useEffect(() => {
-    const getCategories = async () => {
-      try {
-        const res = await fetch('/categories', {
-          method: 'GET',
-        });
-        if (res.status === 200) {
-          const { categories }: { categories: CategoryDB[] } = await res.json();
-
-          setCategoryList(
-            categories.map(({ id, title }: CategoryDB) => ({
-              value: id,
-              label: title,
-            })),
-          );
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    getCategories();
-  }, []);
-  useEffect(() => {
-    let initialCategory;
-
-    if (categoryList.length > 0) {
-      initialCategory = categoryList.find(
-        elem => elem.value === initialOperation.categoryId,
-      );
-    }
-    if (initialCategory) setCategory(initialCategory);
-  }, [categoryList, initialOperation.categoryId]);
 
   return (
     <Dialog onClose={() => toggleDialog(false)} open>
