@@ -1,31 +1,34 @@
+import { useSelector, useDispatch } from 'react-redux';
 import React, { useState } from 'react';
-import Select, { OptionTypeBase } from 'react-select';
+import Select from 'react-select';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
+import { getOperations } from '../../store/actions/operations';
 import { OperationRow } from '../../../../server/src/db/models';
+import { State } from '../../store/reducers';
 import { UpsertOperationDialog } from './UpsertOperationDialog';
+import { SelectOption } from '../../store/reducers/operations';
 
 export const OperationTableRow: React.FC<{
-  categoryList: OptionTypeBase[];
-  getOperations: Function;
   operation: OperationRow;
-}> = ({ categoryList, operation, getOperations }) => {
+}> = ({ operation }) => {
+  const dispatch = useDispatch();
+  const categories = useSelector((state: State) => state.operations.categories);
   const { id, operationDate, amount, label, categoryId } = operation;
   const dateLocale = new Date(operationDate).toISOString().substring(0, 10);
   const [editOperationVisible, toggleEditDialog] = useState(false);
-  const [selectedCategory, setCategory] = useState<OptionTypeBase>(
-    categoryList.find(elem => elem.value === categoryId) || {
-      value: categoryId,
-    },
+  const [selectedCategory, setCategory] = useState<SelectOption | any>(
+    categories.find(category => category.value === categoryId),
   );
+
   const delOperation = async (operationId: number) => {
     try {
       const res = await fetch(`/operations/${operationId}`, {
         method: 'DELETE',
       });
       if (res.status === 200) {
-        getOperations();
+        dispatch(getOperations());
       }
     } catch (error) {
       console.error(error);
@@ -39,15 +42,15 @@ export const OperationTableRow: React.FC<{
       </TableCell>
       <TableCell>{amount}</TableCell>
       <TableCell>{label}</TableCell>
-      <TableCell>
+      <TableCell style={{ minWidth: 200, maxWidth: 200 }}>
         <Select
+          className={'category-select'}
           classNamePrefix="category-select"
-          id="category-select"
           menuPosition="fixed"
           onChange={selectedOption => {
             setCategory(selectedOption);
           }}
-          options={categoryList}
+          options={categories}
           theme={theme => ({
             ...theme,
             borderRadius: 0,
@@ -79,8 +82,6 @@ export const OperationTableRow: React.FC<{
               categoryId,
             }}
             isEdit
-            getOperations={getOperations}
-            categoryList={categoryList}
           />
         )}
         <button

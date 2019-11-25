@@ -1,17 +1,21 @@
+import { useDispatch } from 'react-redux';
 import Dialog from '@material-ui/core/Dialog';
 import React, { useState, useRef } from 'react';
 
 import '../../styles/UploadDialog.scss';
 import { GenericBtn } from '../GenericBtn';
+import { getOperations } from '../../store/actions/operations';
 import { InfoMessage } from '../InfoMessage';
 
 export const UploadDialog: React.FC<{
   toggleUpload: Function;
 }> = ({ toggleUpload }) => {
+  const dispatch = useDispatch();
   const [isLoading, toggleLoading] = useState(false);
   const [message, setMessage] = useState({ error: false, value: '' });
   const [fileCount, setFileCount] = useState(0);
   const fileInput = useRef<HTMLInputElement>(null);
+
   const uploadFiles = async (files: FileList) => {
     if (files.length < 1)
       return setMessage({
@@ -36,6 +40,7 @@ export const UploadDialog: React.FC<{
         setMessage({ error, value: message });
         if (!error) {
           toggleUpload(false);
+          dispatch(getOperations());
         }
       } else {
         setMessage({ error: true, value: 'User is not logged in' });

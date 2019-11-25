@@ -7,10 +7,11 @@
 */
 
 .operations-container {
+    align-items: center;
     background-color: white;
     display: flex;
     flex-direction: column;
-    align-items: center;
+    justify-content: center;
     padding: $big-margin;
     width: 100%;
 }
@@ -58,4 +59,7 @@
     &:focus {
         outline: none;
     }
+}
+.category-select {
+    color: $primary-color;
 }

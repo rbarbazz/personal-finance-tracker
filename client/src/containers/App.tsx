@@ -22,29 +22,28 @@ const App: React.FC = () => {
   );
   const isLoggedIn = useSelector((state: State) => state.user.isLoggedIn);
 
-  const fetchUserStatus = () => {
-    return async (dispatch: Function) => {
-      dispatch(requestUserStatus());
-      try {
-        const res = await fetch('/login', {
-          method: 'GET',
-        });
-        if (res.status === 200) {
-          const {
-            isLoggedIn,
-            fName,
-          }: { isLoggedIn: boolean; fName: string } = await res.json();
-
-          dispatch(receiveUserStatus(isLoggedIn, fName));
-        } else dispatch(receiveUserStatus(false, ''));
-      } catch (error) {
-        dispatch(receiveUserStatus(false, ''));
-        console.error(error);
-      }
-    };
-  };
-
   useEffect(() => {
+    const fetchUserStatus = () => {
+      return async (dispatch: Function) => {
+        dispatch(requestUserStatus());
+        try {
+          const res = await fetch('/login', {
+            method: 'GET',
+          });
+          if (res.status === 200) {
+            const {
+              isLoggedIn,
+              fName,
+            }: { isLoggedIn: boolean; fName: string } = await res.json();
+  
+            dispatch(receiveUserStatus(isLoggedIn, fName));
+          } else dispatch(receiveUserStatus(false, ''));
+        } catch (error) {
+          dispatch(receiveUserStatus(false, ''));
+          console.error(error);
+        }
+      };
+    };
     dispatch(fetchUserStatus());
   }, [dispatch]);
 
