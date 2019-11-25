@@ -8,6 +8,7 @@ import {
   RESPONSE_UPSERT,
 } from '../actions/operations';
 import { OperationRow } from '../../../../server/src/db/models';
+import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
 
 export type SelectOption = {
   label: string;
@@ -32,7 +33,7 @@ const initialState = {
 
 export const operations = (
   state = initialState,
-  action: OperationsActionTypes,
+  action: OperationsActionTypes | UserActionTypes,
 ) => {
   switch (action.type) {
     case REQUEST_CATEGORIES:
@@ -61,6 +62,8 @@ export const operations = (
         ...state,
         isMakingUpsert: false,
       };
+    case USER_LOGGED_OUT:
+      return initialState;
     default:
       return state;
   }

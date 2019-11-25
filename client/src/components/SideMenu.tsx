@@ -19,6 +19,7 @@ export const SideMenu: React.FC = () => {
       });
       if (res.status === 200) {
         dispatch(userLoggedOut());
+        window.location.reload();
       }
     } catch (error) {
       console.error(error);

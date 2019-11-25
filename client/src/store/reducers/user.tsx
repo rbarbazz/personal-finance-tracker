@@ -2,7 +2,6 @@ import {
   RECEIVE_USER_STATUS,
   REQUEST_USER_STATUS,
   USER_LOGGED_IN,
-  USER_LOGGED_OUT,
   UserActionTypes,
 } from '../actions/user';
 
@@ -30,8 +29,6 @@ export const user = (state = initialState, action: UserActionTypes) => {
       };
     case USER_LOGGED_IN:
       return { ...state, fName: action.fName, isLoggedIn: true };
-    case USER_LOGGED_OUT:
-      return { ...state, fName: '', isLoggedIn: false };
     default:
       return state;
   }

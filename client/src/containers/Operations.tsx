@@ -26,6 +26,7 @@ export const Operations: React.FC = () => {
   const isFetchingOperations = useSelector(
     (state: State) => state.operations.isFetchingOperations,
   );
+  const operations = useSelector((state: State) => state.operations.operations);
   const [addOperationVisible, toggleAddDialog] = useState(false);
   const [uploadVisible, toggleUpload] = useState(false);
 
@@ -56,9 +57,11 @@ export const Operations: React.FC = () => {
       };
     };
 
-    dispatch(getCategories());
-    dispatch(getOperations());
-  }, [dispatch]);
+    if (operations.length < 1) {
+      dispatch(getCategories());
+      dispatch(getOperations());
+    }
+  }, [dispatch, operations.length]);
 
   return (
     <div className="main-container">

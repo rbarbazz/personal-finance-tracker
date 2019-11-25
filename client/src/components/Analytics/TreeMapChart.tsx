@@ -2,11 +2,12 @@ import React from 'react';
 import { ResponsiveTreeMap } from '@nivo/treemap';
 
 import { LoadingBars } from '../LoadingBars';
+import { TreeMapChartRoot } from '../../store/reducers/analytics';
 
-export const TreeMapChart: React.FC<{ root: object; isLoading: boolean }> = ({
-  root,
-  isLoading,
-}) => (
+export const TreeMapChart: React.FC<{
+  root: TreeMapChartRoot;
+  isLoading: boolean;
+}> = ({ root, isLoading }) => (
   <div className="chart-wrapper">
     {isLoading ? (
       <LoadingBars />
@@ -14,7 +15,7 @@ export const TreeMapChart: React.FC<{ root: object; isLoading: boolean }> = ({
       <>
         <h3 className="chart-title">Last Month Detailed Expenses</h3>
         <div className="chart-container">
-          {root ? (
+          {root && root.root.children && root.root.children.length > 0 ? (
             <ResponsiveTreeMap
               colors={['#790035', '#a62537', '#ce4b32', '#ec7623', '#ffa600']}
               identity="title"

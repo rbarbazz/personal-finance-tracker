@@ -4,7 +4,8 @@ import { knex } from '../db/initDatabase';
 import { Operation, Category, CategoryDB } from '../db/models';
 
 export const chartsRouter = Router();
-type chartData = {
+
+type MonthlyBarChartData = {
   keys: string[];
   data: object[];
 };
@@ -12,10 +13,10 @@ type chartData = {
 /**
  * Charts
  */
-chartsRouter.get('/', async (req: any, res) => {
+chartsRouter.get('/monthlybar', async (req: any, res) => {
   if (req.user) {
     const today = new Date();
-    const monthlyBarChart: chartData = { keys: [], data: [] };
+    const monthlyBarChart: MonthlyBarChartData = { keys: [], data: [] };
     const parentCategories: CategoryDB[] = await knex<CategoryDB>('categories')
       .whereNot('title', 'Uncategorized')
       .where('parentCategoryId', 0);
@@ -23,20 +24,33 @@ chartsRouter.get('/', async (req: any, res) => {
       parentCategory => parentCategory.title,
     );
 
+    // Get all children category ids by parent category
+    const childrenCategories: {
+      parentTitle: string;
+      childrenIds: number[];
+    }[] = [];
+    for (const parentCategory of parentCategories) {
+      const categoryIds = (
+        await knex<Category>('categories')
+          .select('id')
+          .where('parentCategoryId', parentCategory.id)
+      ).map(categoryId => categoryId.id);
+
+      childrenCategories.push({
+        parentTitle: parentCategory.title,
+        childrenIds: categoryIds,
+      });
+    }
+
     // Iterate on the last 6 months
-    for (let i = 5; i >= 0; i--) {
+    for (let i = 2; i >= 0; i--) {
       const from = new Date(today.getFullYear(), today.getMonth() - i - 1, 1);
       const to = new Date(today.getFullYear(), today.getMonth() - i, 0);
       const month = from.toLocaleString('default', { month: 'long' });
       const currentMonthSums: { [index: string]: number } = {};
 
-      // Get the sum for each parent category
-      for (const parentCategory of parentCategories) {
-        const categoryIds = (
-          await knex<Category>('categories')
-            .select('id')
-            .where('parentCategoryId', parentCategory.id)
-        ).map(categoryId => categoryId.id);
+      // Get the sum for each group of children
+      for (const children of childrenCategories) {
         const parentCategorySum = (
           await knex<Operation>('operations')
             .sum('amount')
@@ -44,19 +58,25 @@ chartsRouter.get('/', async (req: any, res) => {
               'operations.categoryId': 'categories.id',
             })
             .where('userId', req.user.id)
-            .whereIn('categories.id', categoryIds)
+            .whereIn('categories.id', children.childrenIds)
             .andWhere('amount', '<', 0)
             .andWhereBetween('operationDate', [from, to])
         )[0].sum;
 
         if (parentCategorySum !== null)
-          currentMonthSums[parentCategory.title] = Math.abs(parentCategorySum);
+          currentMonthSums[children.parentTitle] = Math.abs(parentCategorySum);
       }
       if (Object.keys(currentMonthSums).length > 0)
         monthlyBarChart.data.push({ ...currentMonthSums, month });
     }
-    return res.send({ charts: { monthlyBarChart } });
+    return res.send({ monthlyBarChart });
   } else {
     return res.status(401).send();
   }
+});
+
+chartsRouter.get('/treemap', async (req: any, res) => {
+  return res.send({
+    treeMapChart: { root: { title: 'Expenses', children: [] } },
+  });
 });
