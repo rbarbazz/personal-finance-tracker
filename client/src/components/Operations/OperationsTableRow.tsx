@@ -22,13 +22,29 @@ export const OperationTableRow: React.FC<{
     categories.find(category => category.value === categoryId),
   );
 
-  const delOperation = async (operationId: number) => {
+  const delOperation = async () => {
     try {
-      const res = await fetch(`/operations/${operationId}`, {
+      const res = await fetch(`/operations/${id}`, {
         method: 'DELETE',
       });
       if (res.status === 200) {
         dispatch(getOperations());
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const updateCategory = async (categoryId: number) => {
+    try {
+      const res = await fetch(`/operations/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ categoryId }),
+      });
+      if (res.status === 200) {
       }
     } catch (error) {
       console.error(error);
@@ -49,6 +65,7 @@ export const OperationTableRow: React.FC<{
           menuPosition="fixed"
           onChange={selectedOption => {
             setCategory(selectedOption);
+            if (selectedOption) updateCategory(selectedOption.value);
           }}
           options={categories}
           theme={theme => ({
@@ -87,7 +104,7 @@ export const OperationTableRow: React.FC<{
         <button
           className="row-action-btn"
           onClick={() => {
-            delOperation(id || 0);
+            delOperation();
           }}
         >
           Delete

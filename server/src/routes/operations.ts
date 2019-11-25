@@ -197,3 +197,29 @@ operationsRouter.put('/:operationId', async (req: any, res) => {
     return res.status(401).send();
   }
 });
+
+// Update category for an operation
+operationsRouter.patch('/:operationId', async (req: any, res) => {
+  if (req.user) {
+    const { operationId } = req.params;
+    const operation = await knex<Operation>('operations')
+      .where('id', operationId)
+      .first();
+
+    if (operation && operation.userId && operation.userId === req.user.id) {
+      const { categoryId } = req.body;
+
+      await knex<Operation>('operations')
+        .where('id', operationId)
+        .update({
+          categoryId,
+        });
+
+      return res.send({ error: false, message: '' });
+    } else {
+      return res.status(401).send();
+    }
+  } else {
+    return res.status(401).send();
+  }
+});
