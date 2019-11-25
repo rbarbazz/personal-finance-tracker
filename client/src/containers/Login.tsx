@@ -1,3 +1,4 @@
+import { useDispatch } from 'react-redux';
 import React, { useState, useEffect } from 'react';
 
 import '../styles/Login.scss';
@@ -8,16 +9,24 @@ import { ReactComponent as Email } from '../icons/Email.svg';
 import { ReactComponent as Lock } from '../icons/Lock.svg';
 import { ReactComponent as Person } from '../icons/Person.svg';
 import { User } from '../../../server/src/db/models';
+import { userLoggedIn } from '../store/actions/user';
 
-export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
-  toggleIsLoggedIn,
-}) => {
-  const [isRegistered, toggleIsRegistered] = useState(true);
+type AuthResponse = {
+  accountCreated?: boolean;
+  error: boolean;
+  fName?: string;
+  message: string;
+};
+
+export const Login: React.FC = () => {
+  const dispatch = useDispatch();
   const [email, setEmail] = useState('');
-  const [fName, setFName] = useState('');
-  const [password, setPassword] = useState('');
-  const [message, setMessage] = useState({ error: false, value: '' });
   const [isLoading, toggleLoading] = useState(false);
+  const [isRegistered, toggleIsRegistered] = useState(true);
+  const [message, setMessage] = useState({ error: false, value: '' });
+  const [password, setPassword] = useState('');
+  const [registerFName, setregisterFName] = useState('');
+
   const loginUser = async (userData: User, isRegistered: boolean) => {
     if (!isRegistered) setPassword('');
     toggleLoading(true);
@@ -31,13 +40,18 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
       });
       toggleLoading(false);
       if (res.status === 200) {
-        const { accountCreated, error, message } = await res.json();
+        const {
+          accountCreated,
+          error,
+          fName,
+          message,
+        }: AuthResponse = await res.json();
 
         setMessage({ error, value: message });
         if (accountCreated) {
           return toggleIsRegistered(true);
         }
-        if (!error) return toggleIsLoggedIn(true);
+        if (!error && fName) return dispatch(userLoggedIn(fName));
       } else {
         setMessage({ error: true, value: 'Wrong Email or Password' });
       }
@@ -48,14 +62,14 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
 
   useEffect(() => {
     setMessage({ error: false, value: '' });
-  }, [email, password, fName]);
+  }, [email, password, registerFName]);
 
   return (
     <div className="login-container">
       <p className="greetings-paragraph">Hi stranger!</p>
       {!isRegistered && (
         <LabelledField
-          setter={setFName}
+          setter={setregisterFName}
           id="fname"
           type="text"
           label={
@@ -64,7 +78,7 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
               {'First Name'}
             </>
           }
-          value={fName}
+          value={registerFName}
         />
       )}
       <LabelledField
@@ -95,7 +109,9 @@ export const Login: React.FC<{ toggleIsLoggedIn: Function }> = ({
         <InfoMessage error={message.error} value={message.value} />
       )}
       <GenericBtn
-        action={() => loginUser({ fName, email, password }, isRegistered)}
+        action={() =>
+          loginUser({ fName: registerFName, email, password }, isRegistered)
+        }
         id="login-btn"
         isLoading={isLoading}
         value={isRegistered ? 'Login' : 'Sign up'}

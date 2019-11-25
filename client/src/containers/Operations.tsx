@@ -12,9 +12,7 @@ import { SideMenu } from '../components/SideMenu';
 import { UploadDialog } from '../components/Operations/UploadDialog';
 import { UpsertOperationDialog } from '../components/Operations/UpsertOperationDialog';
 
-export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
-  toggleIsLoggedIn,
-}) => {
+export const Operations: React.FC = () => {
   const [addOperationVisible, toggleAddDialog] = useState(false);
   const [isLoading, toggleLoading] = useState(true);
   const [operationList, setOperationList] = useState<OperationRow[]>([]);
@@ -64,7 +62,7 @@ export const Operations: React.FC<{ toggleIsLoggedIn: Function }> = ({
 
   return (
     <div className="main-container">
-      <SideMenu toggleIsLoggedIn={toggleIsLoggedIn} />
+      <SideMenu />
       <div className="operations-container">
         <div className="action-buttons-container">
           <GenericBtn

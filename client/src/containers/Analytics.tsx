@@ -10,9 +10,7 @@ type Charts = {
   treeMapChart: any;
 };
 
-export const Analytics: React.FC<{ toggleIsLoggedIn: Function }> = ({
-  toggleIsLoggedIn,
-}) => {
+export const Analytics: React.FC = () => {
   const [charts, setCharts] = useState<Charts>({
     monthlyBarChart: {},
     treeMapChart: {},
@@ -53,7 +51,7 @@ export const Analytics: React.FC<{ toggleIsLoggedIn: Function }> = ({
 
   return (
     <div className="main-container">
-      <SideMenu toggleIsLoggedIn={toggleIsLoggedIn} />
+      <SideMenu />
       <div className="dashboard-container">
         <MonthlyBarChart
           keys={charts.monthlyBarChart.keys}

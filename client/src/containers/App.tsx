@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
   Redirect,
@@ -11,59 +12,57 @@ import { Analytics } from './Analytics';
 import { LoadingBars } from '../components/LoadingBars';
 import { Login } from './Login';
 import { Operations } from './Operations';
+import { requestUserStatus, receiveUserStatus } from '../store/actions/user';
+import { State } from '../store/reducers/index';
 
 const App: React.FC = () => {
-  const initialIsLoggedIn = async () => {
-    try {
-      const res = await fetch('/login', {
-        method: 'GET',
-      });
-      toggleIsLoading(false);
-      if (res.status === 200) {
-        const {
-          userLoginStatus,
-        }: { userLoginStatus: boolean } = await res.json();
+  const dispatch = useDispatch();
+  const isFetchingStatus = useSelector(
+    (state: State) => state.user.isFetchingStatus,
+  );
+  const isLoggedIn = useSelector((state: State) => state.user.isLoggedIn);
 
-        toggleIsLoggedIn(userLoginStatus);
+  const fetchUserStatus = () => {
+    return async (dispatch: Function) => {
+      dispatch(requestUserStatus());
+      try {
+        const res = await fetch('/login', {
+          method: 'GET',
+        });
+        if (res.status === 200) {
+          const {
+            isLoggedIn,
+            fName,
+          }: { isLoggedIn: boolean; fName: string } = await res.json();
+
+          dispatch(receiveUserStatus(isLoggedIn, fName));
+        } else dispatch(receiveUserStatus(false, ''));
+      } catch (error) {
+        dispatch(receiveUserStatus(false, ''));
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
-    }
+    };
   };
-  const [isLoggedIn, toggleIsLoggedIn] = useState(false);
-  const [isLoading, toggleIsLoading] = useState(true);
 
   useEffect(() => {
-    initialIsLoggedIn();
-  }, []);
+    dispatch(fetchUserStatus());
+  }, [dispatch]);
 
   return (
     <div className="app">
-      {isLoading ? (
+      {isFetchingStatus ? (
         <LoadingBars />
       ) : (
         <Router>
           <Switch>
             <Route exact path="/">
-              {isLoggedIn ? (
-                <Redirect to="/analytics" />
-              ) : (
-                <Login toggleIsLoggedIn={toggleIsLoggedIn} />
-              )}
+              {isLoggedIn ? <Redirect to="/analytics" /> : <Login />}
             </Route>
             <Route exact path="/analytics">
-              {isLoggedIn ? (
-                <Analytics toggleIsLoggedIn={toggleIsLoggedIn} />
-              ) : (
-                <Redirect to="/" />
-              )}
+              {isLoggedIn ? <Analytics /> : <Redirect to="/" />}
             </Route>
             <Route exact path="/transactions">
-              {isLoggedIn ? (
-                <Operations toggleIsLoggedIn={toggleIsLoggedIn} />
-              ) : (
-                <Redirect to="/" />
-              )}
+              {isLoggedIn ? <Operations /> : <Redirect to="/" />}
             </Route>
             <Route path="*">
               <Redirect to="/" />

@@ -1,7 +1,7 @@
 import { Router } from 'express';
 
 import { knex } from '../db/initDatabase';
-import { Category } from '../db/models';
+import { CategoryDB } from '../db/models';
 
 export const categoriesRouter = Router();
 
@@ -11,7 +11,7 @@ export const categoriesRouter = Router();
 // Get all categories
 categoriesRouter.get('/', async (req, res) => {
   if (req.user) {
-    const categories = await knex<Category>('categories')
+    const categories = await knex<CategoryDB>('categories')
       .whereNot('parentCategoryId', 0)
       .orderBy('title');
 
