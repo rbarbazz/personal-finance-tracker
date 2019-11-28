@@ -4,8 +4,15 @@ import fs from 'fs';
 import moment from 'moment';
 import multer from 'multer';
 
-import { knex } from '../db/initDatabase';
-import { OperationRow, Operation, CategoryDB } from '../db/models';
+import { Operation } from '../db/models';
+import {
+  delOperationById,
+  getOperationById,
+  getOperationsByUserId,
+  insertOperations,
+  updateOperationById,
+} from '../controllers/operations';
+import { getChildCategories, getCategoryById } from '../controllers/categories';
 
 export const operationsRouter = Router();
 const upload = multer({ dest: '../../tmp/' });
@@ -13,21 +20,14 @@ const upload = multer({ dest: '../../tmp/' });
 /**
  * Operations
  */
-// Get all operations
+// Get all operations for a user
 operationsRouter.get('/', async (req: any, res) => {
   if (req.user) {
-    const operations: OperationRow[] = await knex<Operation>('operations')
-      .select(
-        'operations.id',
-        'operationDate',
-        'amount',
-        'label',
-        'categories.title as categoryTitle',
-        'categoryId',
-      )
-      .leftJoin('categories', { 'operations.categoryId': 'categories.id' })
-      .where('userId', req.user.id)
-      .orderBy('operationDate', 'desc');
+    const operations = await getOperationsByUserId(req.user.id);
+
+    operations.sort((a, b) => {
+      return +new Date(b.operationDate) - +new Date(a.operationDate);
+    });
 
     res.send({ operations });
   } else {
@@ -42,20 +42,20 @@ operationsRouter.post(
   async (req: any, res) => {
     if (req.user) {
       if (req.files) {
-        await req.files.forEach(async (file: Express.Multer.File) => {
-          const { mimetype, size, path } = file;
+        // CSV file(s) upload
+        const childCategories = await getChildCategories();
 
+        for (const file of req.files) {
+          const { mimetype, size, path } = file;
           if (mimetype !== 'text/csv')
             return res.send({ error: true, message: 'Wrong file type' });
           if (size > 1000000)
             return res.send({ error: true, message: 'File is too large' });
 
-          const operationList: Operation[] = [];
-          const categories = await knex<CategoryDB>('categories').select();
-
+          const operationList: Partial<Operation>[] = [];
           fs.createReadStream(path)
             .pipe(csv())
-            .on('data', data => {
+            .on('data', async data => {
               const { date, amount, label, category: categoryTitle } = data;
 
               let operationDate = moment(
@@ -69,10 +69,14 @@ operationsRouter.post(
               if (isNaN(parsedFloat) || parsedFloat == 0) return;
 
               let categoryId = 1;
-              const found = categories.find(
-                category => category.title === categoryTitle,
+              let parentCategoryId = 0;
+              const selectedCategory = childCategories.find(
+                childCategory => childCategory.title === categoryTitle,
               );
-              if (found && found.id) categoryId = found.id;
+              if (selectedCategory && selectedCategory.id) {
+                categoryId = selectedCategory.id;
+                parentCategoryId = selectedCategory.parentCategoryId;
+              }
 
               if (label.length < 1) return;
               if (label.length > 255) return;
@@ -82,6 +86,7 @@ operationsRouter.post(
                 categoryId,
                 label,
                 operationDate: operationDate.toDate(),
+                parentCategoryId,
                 userId: req.user.id,
               });
             })
@@ -90,12 +95,12 @@ operationsRouter.post(
                 if (err) console.error(err);
               });
               if (operationList.length > 0) {
-                await knex<Operation>('operations').insert(operationList);
+                await insertOperations(operationList);
               }
             });
-        });
-        res.send({ error: false, message: '' });
+        }
       } else {
+        // Single operation creation
         const {
           operationDate: operationDateStr,
           amount,
@@ -112,19 +117,22 @@ operationsRouter.post(
           return res.send({ error: true, message: 'Label is too short' });
         if (label.length > 255)
           return res.send({ error: true, message: 'Label is too long' });
-        if (isNaN(categoryId))
+
+        const category = await getCategoryById(categoryId);
+        if (isNaN(categoryId) || category.length < 1)
           return res.send({ error: true, message: 'Wrong category' });
 
-        await knex<Operation>('operations').insert({
-          operationDate,
+        await insertOperations({
           amount,
-          label,
           categoryId,
+          label,
+          operationDate,
+          parentCategoryId: category[0].parentCategoryId,
           userId: req.user.id,
         });
-
-        return res.send({ error: false, message: '' });
       }
+
+      return res.send({ error: false, message: '' });
     } else {
       return res.status(401).send();
     }
@@ -135,14 +143,10 @@ operationsRouter.post(
 operationsRouter.delete('/:operationId', async (req: any, res) => {
   if (req.user) {
     const { operationId } = req.params;
-    const operation = await knex<Operation>('operations')
-      .where('id', operationId)
-      .first();
+    let operation = await getOperationById(operationId);
 
-    if (operation && operation.userId && operation.userId === req.user.id) {
-      await knex<Operation>('operations')
-        .where('id', operationId)
-        .del();
+    if (operation.length > 0 && operation[0].userId === req.user.id) {
+      await delOperationById(operationId);
     } else {
       return res.status(401).send();
     }
@@ -156,11 +160,9 @@ operationsRouter.delete('/:operationId', async (req: any, res) => {
 operationsRouter.put('/:operationId', async (req: any, res) => {
   if (req.user) {
     const { operationId } = req.params;
-    const operation = await knex<Operation>('operations')
-      .where('id', operationId)
-      .first();
+    const operation = await getOperationById(operationId);
 
-    if (operation && operation.userId && operation.userId === req.user.id) {
+    if (operation.length > 0 && operation[0].userId === req.user.id) {
       const {
         operationDate: operationDateStr,
         amount,
@@ -177,17 +179,18 @@ operationsRouter.put('/:operationId', async (req: any, res) => {
         return res.send({ error: true, message: 'Label is too short' });
       if (label.length > 255)
         return res.send({ error: true, message: 'Label is too long' });
-      if (isNaN(categoryId))
+
+      const category = await getCategoryById(categoryId);
+      if (isNaN(categoryId) || category.length < 1)
         return res.send({ error: true, message: 'Wrong category' });
 
-      await knex<Operation>('operations')
-        .where('id', operationId)
-        .update({
-          operationDate,
-          amount,
-          label,
-          categoryId,
-        });
+      await updateOperationById(operationId, {
+        amount,
+        categoryId,
+        label,
+        operationDate,
+        parentCategoryId: category[0].parentCategoryId,
+      });
 
       return res.send({ error: false, message: '' });
     } else {
@@ -202,18 +205,19 @@ operationsRouter.put('/:operationId', async (req: any, res) => {
 operationsRouter.patch('/:operationId', async (req: any, res) => {
   if (req.user) {
     const { operationId } = req.params;
-    const operation = await knex<Operation>('operations')
-      .where('id', operationId)
-      .first();
+    const operation = await getOperationById(operationId);
 
-    if (operation && operation.userId && operation.userId === req.user.id) {
+    if (operation.length > 0 && operation[0].userId === req.user.id) {
       const { categoryId } = req.body;
 
-      await knex<Operation>('operations')
-        .where('id', operationId)
-        .update({
-          categoryId,
-        });
+      const category = await getCategoryById(categoryId);
+      if (isNaN(categoryId) || category.length < 1)
+        return res.send({ error: true, message: 'Wrong category' });
+
+      await updateOperationById(operationId, {
+        categoryId,
+        parentCategoryId: category[0].parentCategoryId,
+      });
 
       return res.send({ error: false, message: '' });
     } else {

@@ -1,5 +1,5 @@
 import { SelectOption } from '../reducers/operations';
-import { OperationRow } from '../../../../server/src/db/models';
+import { Operation } from '../../../../server/src/db/models';
 
 export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES';
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
@@ -25,7 +25,7 @@ interface RequestOperationsAction {
 
 interface ReceiveOperationsAction {
   type: typeof RECEIVE_OPERATIONS;
-  operations: OperationRow[];
+  operations: Operation[];
 }
 
 interface RequestUpsertAction {
@@ -53,7 +53,7 @@ export const receiveCategories = (categories: SelectOption[]) => ({
 
 const requestOperations = () => ({ type: REQUEST_OPERATIONS });
 
-const receiveOperations = (operations: OperationRow[]) => ({
+const receiveOperations = (operations: Operation[]) => ({
   operations,
   type: RECEIVE_OPERATIONS,
 });
@@ -66,9 +66,7 @@ export const getOperations = () => {
         method: 'GET',
       });
       if (res.status === 200) {
-        const {
-          operations,
-        }: { operations: OperationRow[] } = await res.json();
+        const { operations }: { operations: Operation[] } = await res.json();
 
         dispatch(receiveOperations(operations));
       }

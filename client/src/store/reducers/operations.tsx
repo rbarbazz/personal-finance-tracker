@@ -7,7 +7,7 @@ import {
   REQUEST_UPSERT,
   RESPONSE_UPSERT,
 } from '../actions/operations';
-import { OperationRow } from '../../../../server/src/db/models';
+import { Operation } from '../../../../server/src/db/models';
 import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
 
 export type SelectOption = {
@@ -20,7 +20,7 @@ export type OperationsState = {
   isFetchingCategories: boolean;
   isFetchingOperations: boolean;
   isMakingUpsert: boolean;
-  operations: OperationRow[];
+  operations: Operation[];
 };
 
 const initialState = {
@@ -28,7 +28,7 @@ const initialState = {
   isFetchingCategories: false,
   isFetchingOperations: false,
   isMakingUpsert: false,
-  operations: [] as OperationRow[],
+  operations: [] as Operation[],
 };
 
 export const operations = (

@@ -7,7 +7,7 @@ import '../../styles/UpsertOperationDialog.scss';
 import { GenericBtn } from '../GenericBtn';
 import { InfoMessage } from '../InfoMessage';
 import { LabelledField } from '../LabelledField';
-import { Operation, OperationDB } from '../../../../server/src/db/models';
+import { Operation } from '../../../../server/src/db/models';
 import {
   requestUpsert,
   responseUpsert,
@@ -17,7 +17,7 @@ import { SelectOption } from '../../store/reducers/operations';
 import { State } from '../../store/reducers/index';
 
 export const UpsertOperationDialog: React.FC<{
-  initialOperation?: OperationDB;
+  initialOperation?: Partial<Operation>;
   isEdit?: boolean;
   toggleDialog: Function;
 }> = ({
@@ -37,7 +37,7 @@ export const UpsertOperationDialog: React.FC<{
     (state: State) => state.operations.isMakingUpsert,
   );
   const [operationDate, setDate] = useState(
-    new Date(initialOperation.operationDate).toISOString().slice(0, 10),
+    new Date(initialOperation.operationDate || '').toISOString().slice(0, 10),
   );
   const [amount, setAmount] = useState(initialOperation.amount);
   const [label, setLabel] = useState(initialOperation.label);
@@ -46,7 +46,7 @@ export const UpsertOperationDialog: React.FC<{
   );
   const [message, setMessage] = useState({ error: false, value: '' });
 
-  const upsertOperation = (operation: Operation) => {
+  const upsertOperation = (operation: Partial<Operation>) => {
     return async (dispatch: Function) => {
       dispatch(requestUpsert());
       try {

@@ -27,7 +27,7 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [registerFName, setregisterFName] = useState('');
 
-  const loginUser = async (userData: User, isRegistered: boolean) => {
+  const loginUser = async (userData: Partial<User>, isRegistered: boolean) => {
     if (!isRegistered) setPassword('');
     toggleLoading(true);
     try {

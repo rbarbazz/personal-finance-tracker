@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { useState, useEffect } from 'react';
 
 import '../styles/Operations.scss';
-import { CategoryDB } from '../../../server/src/db/models';
+import { Category } from '../../../server/src/db/models';
 import { GenericBtn } from '../components/GenericBtn';
 import { LoadingBars } from '../components/LoadingBars';
 import { OperationTable } from '../components/Operations/OperationsTable';
@@ -39,12 +39,10 @@ export const Operations: React.FC = () => {
             method: 'GET',
           });
           if (res.status === 200) {
-            const {
-              categories,
-            }: { categories: CategoryDB[] } = await res.json();
+            const { categories }: { categories: Category[] } = await res.json();
 
             const selectCategories = categories.map(
-              ({ id, title }: CategoryDB) => ({
+              ({ id, title }: Category) => ({
                 value: id,
                 label: title,
               }),

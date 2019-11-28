@@ -5,13 +5,13 @@ import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
 import { getOperations } from '../../store/actions/operations';
-import { OperationRow } from '../../../../server/src/db/models';
+import { Operation } from '../../../../server/src/db/models';
 import { State } from '../../store/reducers';
 import { UpsertOperationDialog } from './UpsertOperationDialog';
 import { SelectOption } from '../../store/reducers/operations';
 
 export const OperationTableRow: React.FC<{
-  operation: OperationRow;
+  operation: Operation;
 }> = ({ operation }) => {
   const dispatch = useDispatch();
   const categories = useSelector((state: State) => state.operations.categories);

@@ -1,7 +1,8 @@
 import Knex from 'knex';
 
+import { Category } from './models';
+import { getParentCategories } from '../controllers/categories';
 import { knexConfig } from './knexfile';
-import { CategoryDB } from './models';
 import categoryTitlesJson from './categoryTitles.json';
 
 const categoryTitles: { [index: string]: string[] } = categoryTitlesJson;
@@ -32,24 +33,25 @@ const createCategories = async () => {
     table.integer('parentCategoryId');
   });
 
-  await knex<CategoryDB>('categories').insert(
+  await knex<Category>('categories').insert(
     Object.keys(categoryTitles).map(parentCategoryTitle => ({
       title: parentCategoryTitle,
       parentCategoryId: 0,
     })),
   );
 
-  const parentCategories = await knex<CategoryDB>('categories').select();
-  parentCategories.forEach(async parentCategory => {
+  const parentCategories = await getParentCategories();
+
+  for (const parentCategory of parentCategories) {
     if (categoryTitles[parentCategory.title].length > 0) {
-      await knex<CategoryDB>('categories').insert(
+      await knex<Category>('categories').insert(
         categoryTitles[parentCategory.title].map(childCategory => ({
           title: childCategory,
           parentCategoryId: parentCategory.id,
         })),
       );
     }
-  });
+  }
 };
 
 const createOperations = async () => {
@@ -64,6 +66,7 @@ const createOperations = async () => {
     table.string('label');
     table.integer('categoryId');
     table.integer('userId');
+    table.integer('parentCategoryId');
   });
 };
 

@@ -7,7 +7,7 @@ import bcrypt from 'bcrypt';
 import path from 'path';
 
 import initDatabase, { knex } from './db/initDatabase';
-import { UserDB } from './db/models';
+import { User } from './db/models';
 import { authRouter } from './routes/auth';
 import { operationsRouter } from './routes/operations';
 import { categoriesRouter } from './routes/categories';
@@ -50,7 +50,7 @@ passport.use(
   new LocalStrategy(
     { usernameField: 'email' },
     async (email, password, done) => {
-      const user = await knex<UserDB>('users')
+      const user = await knex<User>('users')
         .where('email', email)
         .first();
 
@@ -63,12 +63,12 @@ passport.use(
   ),
 );
 
-passport.serializeUser((user: UserDB, done) => {
+passport.serializeUser((user: User, done) => {
   done(null, user.id);
 });
 
-passport.deserializeUser(async (id: UserDB['id'], done) => {
-  const user = await knex<UserDB>('users')
+passport.deserializeUser(async (id: User['id'], done) => {
+  const user = await knex<User>('users')
     .where('id', id)
     .first();
   done(null, user);

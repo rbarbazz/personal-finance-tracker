@@ -4,7 +4,7 @@ import passport from 'passport';
 import validator from 'validator';
 
 import { knex } from '../db/initDatabase';
-import { UserDB } from '../db/models';
+import { User } from '../db/models';
 
 export const authRouter = Router();
 
@@ -14,7 +14,7 @@ export const authRouter = Router();
 // Get current login status
 authRouter.get('/login', async (req: any, res) => {
   if (req.user) {
-    const user = await knex<UserDB>('users')
+    const user = await knex<User>('users')
       .where('id', req.user.id)
       .first();
 
@@ -36,7 +36,7 @@ authRouter.post(
   '/login',
   passport.authenticate('local'),
   async (req: any, res) => {
-    const user = await knex<UserDB>('users')
+    const user = await knex<User>('users')
       .where('id', req.user.id)
       .first();
 
@@ -48,7 +48,7 @@ authRouter.post(
 // Register
 authRouter.post('/register', async (req, res) => {
   const { email, fName, password } = req.body;
-  const user = await knex<UserDB>('users')
+  const user = await knex<User>('users')
     .where('email', email)
     .first();
 
@@ -72,7 +72,7 @@ authRouter.post('/register', async (req, res) => {
 
   bcrypt.hash(password, 10, async (error, hash) => {
     if (error) return res.send({ error: true, message: 'An error occurred' });
-    await knex<UserDB>('users').insert({ email, fName, password: hash });
+    await knex<User>('users').insert({ email, fName, password: hash });
 
     res.send({
       accountCreated: true,

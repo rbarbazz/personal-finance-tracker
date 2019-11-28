@@ -1,19 +1,13 @@
 import { Router } from 'express';
 
-import { knex } from '../db/initDatabase';
-import { CategoryDB } from '../db/models';
+import { getChildCategories } from '../controllers/categories';
 
 export const categoriesRouter = Router();
 
-/**
- * Categories
- */
-// Get all categories
+// Get all child categories
 categoriesRouter.get('/', async (req, res) => {
   if (req.user) {
-    const categories = await knex<CategoryDB>('categories')
-      .whereNot('parentCategoryId', 0)
-      .orderBy('title');
+    const categories = await getChildCategories();
 
     res.send({ categories });
   } else {

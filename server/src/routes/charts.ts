@@ -1,7 +1,8 @@
 import { Router } from 'express';
 
 import { knex } from '../db/initDatabase';
-import { Operation, Category, CategoryDB } from '../db/models';
+import { Operation, Category } from '../db/models';
+import { getParentCategories } from '../controllers/categories';
 
 export const chartsRouter = Router();
 
@@ -15,11 +16,8 @@ type MonthlyBarChartData = {
  */
 chartsRouter.get('/monthlybar', async (req: any, res) => {
   if (req.user) {
-    const today = new Date();
     const monthlyBarChart: MonthlyBarChartData = { keys: [], data: [] };
-    const parentCategories: CategoryDB[] = await knex<CategoryDB>('categories')
-      .whereNot('title', 'Uncategorized')
-      .where('parentCategoryId', 0);
+    const parentCategories = await getParentCategories();
     monthlyBarChart.keys = parentCategories.map(
       parentCategory => parentCategory.title,
     );
@@ -43,6 +41,7 @@ chartsRouter.get('/monthlybar', async (req: any, res) => {
     }
 
     // Iterate on the last 6 months
+    const today = new Date();
     for (let i = 2; i >= 0; i--) {
       const from = new Date(today.getFullYear(), today.getMonth() - i - 1, 1);
       const to = new Date(today.getFullYear(), today.getMonth() - i, 0);
