@@ -6,52 +6,55 @@
 ==========================================================================
 */
 
+.side-menu-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.side-menu-item {
+    align-items: center;
+    background-color: $primary-color;
+    border: none;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    font-size: 1.2em;
+    padding: $small-margin ($small-margin + 15px) $small-margin $small-margin;
+    position: relative;
+    text-align: left;
+    text-decoration: none;
+    text-transform: capitalize;
+    transition: background-color, 0.3s;
+
+    &:focus {
+        outline: none;
+    }
+    &:hover {
+        background-color: $primary-color-dark;
+    }
+    &.selected .arrow-left {
+        display: block;
+    }
+    svg {
+        fill: white;
+        height: 28px;
+        width: 28px;
+    }
+    span {
+        margin-left: 15px;
+    }
+}
+.side-menu-items {
+    margin-top: $small-margin;
+}
 .arrow-left {
-    border-bottom: 20px solid transparent;
-    border-right: 20px solid white;
-    border-top: 20px solid transparent;
+    border-bottom: 15px solid transparent;
+    border-right: 15px solid white;
+    border-top: 15px solid transparent;
     display: none;
     height: 0;
     position: absolute;
     right: 0;
-    top: calc(50% - 20px);
+    top: calc(50% - 15px);
     width: 0;
-}
-.side-menu-container {
-    display: flex;
-    flex-direction: column;
-    margin-top: $big-margin;
-
-    .side-menu-item {
-        -webkit-appearance: none;
-        align-items: center;
-        background-color: $primary-color;
-        border: none;
-        color: white;
-        cursor: pointer;
-        display: flex;
-        font-size: 1.5em;
-        padding: $small-margin $big-margin;
-        position: relative;
-        text-align: left;
-        text-decoration: none;
-        text-transform: capitalize;
-        transition: background-color, 0.3s;
-
-        &:focus {
-            outline: none;
-        }
-        &:hover {
-            background-color: $primary-color-dark;
-        }
-        &.selected .arrow-left {
-            display: block;
-        }
-        svg {
-            fill: white;
-            height: 24px;
-            margin-right: 15px;
-            width: 24px;
-        }
-    }
 }

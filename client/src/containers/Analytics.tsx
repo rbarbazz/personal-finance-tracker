@@ -6,7 +6,6 @@ import { fetchMonthlyBar, fetchTreeMap } from '../store/actions/analytics';
 import { GenericBtn } from '../components/GenericBtn';
 import { MonthlyBarChart } from '../components/Analytics/MonthlyBarChart';
 import { ReactComponent as Sync } from '../icons/Sync.svg';
-import { SideMenu } from '../components/SideMenu';
 import { State } from '../store/reducers';
 import { TreeMapChart } from '../components/Analytics/TreeMapChart';
 
@@ -31,32 +30,29 @@ export const Analytics: React.FC = () => {
   }, [dispatch, monthlyBarChart.data.length, treeMapChart.root.children]);
 
   return (
-    <div className="main-container">
-      <SideMenu />
-      <div className="dashboard-main-container">
-        <div className="dashboard-top-container">
-          <GenericBtn
-            action={() => {
-              if (!isFetchingMonthlyBar && !isFetchingTreeMap) {
-                dispatch(fetchMonthlyBar());
-                dispatch(fetchTreeMap());
-              }
-            }}
-            value={
-              <>
-                {'Refresh Charts'}
-                <Sync />
-              </>
+    <div className="dashboard-main-container">
+      <div className="dashboard-top-container">
+        <GenericBtn
+          action={() => {
+            if (!isFetchingMonthlyBar && !isFetchingTreeMap) {
+              dispatch(fetchMonthlyBar());
+              dispatch(fetchTreeMap());
             }
-          />
-        </div>
-        <div className="charts-container">
-          <MonthlyBarChart
-            root={monthlyBarChart}
-            isLoading={isFetchingMonthlyBar}
-          />
-          <TreeMapChart root={treeMapChart} isLoading={isFetchingTreeMap} />
-        </div>
+          }}
+          value={
+            <>
+              {'Refresh Charts'}
+              <Sync />
+            </>
+          }
+        />
+      </div>
+      <div className="charts-container">
+        <MonthlyBarChart
+          root={monthlyBarChart}
+          isLoading={isFetchingMonthlyBar}
+        />
+        <TreeMapChart root={treeMapChart} isLoading={isFetchingTreeMap} />
       </div>
     </div>
   );

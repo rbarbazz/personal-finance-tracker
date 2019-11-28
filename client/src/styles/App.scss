@@ -6,17 +6,16 @@
 ==========================================================================
 */
 
-.app {
+html,
+body {
+    height: 100%;
+}
+#root {
     align-items: center;
     background-color: $primary-color;
     color: $primary-color;
     display: flex;
     font-family: $primary-font-family;
-    justify-content: center;
-    height: 100vh;
-}
-.main-container {
-    display: flex;
     height: 100%;
-    width: 100%;
+    justify-content: center;
 }

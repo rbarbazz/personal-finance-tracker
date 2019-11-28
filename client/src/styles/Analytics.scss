@@ -10,8 +10,8 @@
     background-color: white;
     display: flex;
     flex-direction: column;
+    height: 100%;
     overflow: auto;
-    padding: $big-margin;
     width: 100%;
 }
 .chart-container {
@@ -19,15 +19,14 @@
     width: 100%;
 }
 .charts-container {
-    background-color: white;
     display: flex;
     justify-content: space-between;
-    width: 100%;
+    margin: 0 $big-margin $big-margin;
 }
 .dashboard-top-container {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: $big-margin;
+    margin: $big-margin;
 }
 .chart-title {
     font-size: 1.5em;

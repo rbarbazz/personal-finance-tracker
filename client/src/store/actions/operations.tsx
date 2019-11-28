@@ -1,5 +1,5 @@
 import { SelectOption } from '../reducers/operations';
-import { Operation } from '../../../../server/src/db/models';
+import { Operation, Category } from '../../../../server/src/db/models';
 
 export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES';
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
@@ -50,6 +50,28 @@ export const receiveCategories = (categories: SelectOption[]) => ({
   categories,
   type: RECEIVE_CATEGORIES,
 });
+
+export const getCategories = () => {
+  return async (dispatch: Function) => {
+    dispatch(requestCategories());
+    try {
+      const res = await fetch('/categories', {
+        method: 'GET',
+      });
+      if (res.status === 200) {
+        const { categories }: { categories: Category[] } = await res.json();
+
+        const selectCategories = categories.map(({ id, title }: Category) => ({
+          value: id,
+          label: title,
+        }));
+        dispatch(receiveCategories(selectCategories));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
 
 const requestOperations = () => ({ type: REQUEST_OPERATIONS });
 

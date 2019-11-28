@@ -14,6 +14,7 @@ import { Login } from './Login';
 import { Operations } from './Operations';
 import { requestUserStatus, receiveUserStatus } from '../store/actions/user';
 import { State } from '../store/reducers/index';
+import { SideMenu } from '../components/SideMenu';
 
 const App: React.FC = () => {
   const dispatch = useDispatch();
@@ -35,7 +36,7 @@ const App: React.FC = () => {
               isLoggedIn,
               fName,
             }: { isLoggedIn: boolean; fName: string } = await res.json();
-  
+
             dispatch(receiveUserStatus(isLoggedIn, fName));
           } else dispatch(receiveUserStatus(false, ''));
         } catch (error) {
@@ -48,11 +49,12 @@ const App: React.FC = () => {
   }, [dispatch]);
 
   return (
-    <div className="app">
+    <>
       {isFetchingStatus ? (
         <LoadingBars />
       ) : (
         <Router>
+          {isLoggedIn ? <SideMenu /> : null}
           <Switch>
             <Route exact path="/">
               {isLoggedIn ? <Redirect to="/analytics" /> : <Login />}
@@ -69,7 +71,7 @@ const App: React.FC = () => {
           </Switch>
         </Router>
       )}
-    </div>
+    </>
   );
 };
 

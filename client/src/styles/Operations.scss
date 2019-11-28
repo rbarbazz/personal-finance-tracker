@@ -7,19 +7,16 @@
 */
 
 .operations-container {
-    align-items: center;
     background-color: white;
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    padding: $big-margin;
+    height: 100%;
     width: 100%;
 }
 .action-buttons-container {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: $big-margin;
-    width: 100%;
+    margin: $big-margin $big-margin $big-margin 0;
 
     .generic-btn {
         margin-left: $small-margin;
@@ -27,8 +24,8 @@
 }
 .table-container {
     border: 5px solid $primary-color;
+    margin: 0 $big-margin $big-margin;
     overflow: auto;
-    width: 100%;
 
     .MuiTableCell-root {
         font-family: $primary-font-family;

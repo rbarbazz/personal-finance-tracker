@@ -6,9 +6,36 @@ import TableRow from '@material-ui/core/TableRow';
 
 import { getOperations } from '../../store/actions/operations';
 import { Operation } from '../../../../server/src/db/models';
+import { SelectOption } from '../../store/reducers/operations';
 import { State } from '../../store/reducers';
 import { UpsertOperationDialog } from './UpsertOperationDialog';
-import { SelectOption } from '../../store/reducers/operations';
+
+const updateCategory = async (categoryId: number, operationId: number) => {
+  try {
+    const res = await fetch(`/operations/${operationId}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ categoryId }),
+    });
+    if (res.status === 200) {
+    }
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+const delOperation = async (dispatch: Function, operationId: number) => {
+  try {
+    const res = await fetch(`/operations/${operationId}`, {
+      method: 'DELETE',
+    });
+    if (res.status === 200) dispatch(getOperations());
+  } catch (error) {
+    console.error(error);
+  }
+};
 
 export const OperationTableRow: React.FC<{
   operation: Operation;
@@ -21,35 +48,6 @@ export const OperationTableRow: React.FC<{
   const [selectedCategory, setCategory] = useState<SelectOption | any>(
     categories.find(category => category.value === categoryId),
   );
-
-  const delOperation = async () => {
-    try {
-      const res = await fetch(`/operations/${id}`, {
-        method: 'DELETE',
-      });
-      if (res.status === 200) {
-        dispatch(getOperations());
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const updateCategory = async (categoryId: number) => {
-    try {
-      const res = await fetch(`/operations/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ categoryId }),
-      });
-      if (res.status === 200) {
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <TableRow>
@@ -65,7 +63,7 @@ export const OperationTableRow: React.FC<{
           menuPosition="fixed"
           onChange={selectedOption => {
             setCategory(selectedOption);
-            if (selectedOption) updateCategory(selectedOption.value);
+            if (selectedOption) updateCategory(selectedOption.value, id);
           }}
           options={categories}
           theme={theme => ({
@@ -104,7 +102,7 @@ export const OperationTableRow: React.FC<{
         <button
           className="row-action-btn"
           onClick={() => {
-            delOperation();
+            delOperation(dispatch, id);
           }}
         >
           Delete

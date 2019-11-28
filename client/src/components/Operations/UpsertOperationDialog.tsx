@@ -16,6 +16,44 @@ import {
 import { SelectOption } from '../../store/reducers/operations';
 import { State } from '../../store/reducers/index';
 
+const upsertOperation = (
+  initialOperationId = 0,
+  isEdit: boolean,
+  operation: Partial<Operation>,
+  setMessage: Function,
+  toggleDialog: Function,
+) => {
+  return async (dispatch: Function) => {
+    dispatch(requestUpsert());
+    try {
+      const res = await fetch(
+        `/operations${isEdit ? `/${initialOperationId}` : ''}`,
+        {
+          method: isEdit ? 'PUT' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(operation),
+        },
+      );
+      dispatch(responseUpsert());
+      if (res.status === 200) {
+        const { error, message } = await res.json();
+
+        setMessage({ error, value: message });
+        if (!error) {
+          toggleDialog(false);
+          dispatch(getOperations());
+        }
+      } else {
+        setMessage({ error: true, value: 'User is not logged in' });
+      }
+    } catch (error) {
+      setMessage({ error: true, value: 'An error has occurred' });
+    }
+  };
+};
+
 export const UpsertOperationDialog: React.FC<{
   initialOperation?: Partial<Operation>;
   isEdit?: boolean;
@@ -45,38 +83,6 @@ export const UpsertOperationDialog: React.FC<{
     categories.find(category => category.value === initialOperation.categoryId),
   );
   const [message, setMessage] = useState({ error: false, value: '' });
-
-  const upsertOperation = (operation: Partial<Operation>) => {
-    return async (dispatch: Function) => {
-      dispatch(requestUpsert());
-      try {
-        const res = await fetch(
-          `/operations${isEdit ? `/${initialOperation.id}` : ''}`,
-          {
-            method: isEdit ? 'PUT' : 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(operation),
-          },
-        );
-        dispatch(responseUpsert());
-        if (res.status === 200) {
-          const { error, message } = await res.json();
-
-          setMessage({ error, value: message });
-          if (!error) {
-            toggleDialog(false);
-            dispatch(getOperations());
-          }
-        } else {
-          setMessage({ error: true, value: 'User is not logged in' });
-        }
-      } catch (error) {
-        setMessage({ error: true, value: 'An error has occurred' });
-      }
-    };
-  };
 
   return (
     <Dialog onClose={() => toggleDialog(false)} open>
@@ -132,12 +138,18 @@ export const UpsertOperationDialog: React.FC<{
         <GenericBtn
           action={() => {
             dispatch(
-              upsertOperation({
-                amount,
-                categoryId: selectedCategory ? selectedCategory.value : 1,
-                label,
-                operationDate,
-              }),
+              upsertOperation(
+                initialOperation.id,
+                isEdit,
+                {
+                  amount,
+                  categoryId: selectedCategory ? selectedCategory.value : 1,
+                  label,
+                  operationDate,
+                },
+                setMessage,
+                toggleDialog,
+              ),
             );
           }}
           id="add-operation-btn"
