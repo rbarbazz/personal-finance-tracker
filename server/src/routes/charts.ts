@@ -1,19 +1,16 @@
 import { Router } from 'express';
 
+import { getParentCategories } from '../controllers/categories';
 import { knex } from '../db/initDatabase';
 import { Operation } from '../db/models';
-import { getParentCategories } from '../controllers/categories';
 
 export const chartsRouter = Router();
 
-type MonthlyBarChartData = {
-  keys: string[];
+export type MonthlyBarChartData = {
   data: object[];
+  keys: string[];
 };
 
-/**
- * Charts
- */
 chartsRouter.get('/monthlybar', async (req: any, res) => {
   if (req.user) {
     const monthlyBarChart: MonthlyBarChartData = { keys: [], data: [] };
@@ -56,8 +53,80 @@ chartsRouter.get('/monthlybar', async (req: any, res) => {
   }
 });
 
+export type TreeMapChartNode = {
+  categoryId: number;
+  children?: TreeMapChartNode[];
+  sum?: number;
+  title: string;
+};
+
+export type TreeMapChartRoot = {
+  root: TreeMapChartNode;
+};
+
 chartsRouter.get('/treemap', async (req: any, res) => {
-  return res.send({
-    treeMapChart: { root: { title: 'Expenses', children: [] } },
-  });
+  if (req.user) {
+    const treeMapChart: TreeMapChartRoot = {
+      root: { categoryId: 0, title: 'Expenses', children: [] },
+    };
+    const today = new Date();
+    const from = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+    const to = new Date(today.getFullYear(), today.getMonth() - 1, 0);
+
+    const lastMonthSums: {
+      categoryId: number;
+      parentCategoryId: number;
+      sum: number;
+      title: string;
+    }[] = await knex<Operation>('operations')
+      .select(
+        'categories.id as categoryId',
+        'categories.parentCategoryId',
+        'categories.title',
+      )
+      .sum('operations.amount')
+      .leftJoin('categories', {
+        'operations.categoryId': 'categories.id',
+      })
+      .where('userId', req.user.id)
+      .andWhere('amount', '<', 0)
+      .andWhereBetween('operationDate', [from, to])
+      .andWhereNot('operations.categoryId', 1)
+      .groupBy('categories.id');
+
+    const parentCategories = await getParentCategories();
+    for (const parentCategory of parentCategories) {
+      treeMapChart.root.children!.push({
+        categoryId: parentCategory.id,
+        children: [],
+        title: parentCategory.title,
+      });
+    }
+
+    for (const categorySum of lastMonthSums) {
+      const parentCategoryIndex = treeMapChart.root.children!.findIndex(
+        rootChild => rootChild.categoryId === categorySum.parentCategoryId,
+      );
+      if (
+        treeMapChart.root &&
+        treeMapChart.root.children &&
+        treeMapChart.root.children[parentCategoryIndex] &&
+        treeMapChart.root.children[parentCategoryIndex].children
+      ) {
+        treeMapChart.root.children[parentCategoryIndex].children!.push({
+          categoryId: categorySum.categoryId,
+          title: categorySum.title,
+          sum: Math.abs(categorySum.sum),
+        });
+      }
+    }
+
+    treeMapChart.root.children = treeMapChart.root.children!.filter(
+      parentCategory => parentCategory.children!.length > 0,
+    );
+
+    return res.send({ treeMapChart });
+  } else {
+    return res.status(401).send();
+  }
 });

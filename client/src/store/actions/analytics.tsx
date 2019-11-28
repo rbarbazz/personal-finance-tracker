@@ -1,4 +1,7 @@
-import { MonthlyBarChartRoot, TreeMapChartRoot } from '../reducers/analytics';
+import {
+  MonthlyBarChartData,
+  TreeMapChartRoot,
+} from '../../../../server/src/routes/charts';
 
 export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR';
 export const RECEIVE_MONTHLY_BAR = 'RECEIVE_MONTHLY_BAR';
@@ -11,7 +14,7 @@ interface RequestMonthlyBarAction {
 
 interface ReceiveMonthlyBarAction {
   type: typeof RECEIVE_MONTHLY_BAR;
-  monthlyBarChart: MonthlyBarChartRoot;
+  monthlyBarChart: MonthlyBarChartData;
 }
 
 interface RequestTreeMapAction {
@@ -34,7 +37,7 @@ const requestMonthlyBar = (): AnalyticsActionTypes => ({
 });
 
 const receiveMonthlyBar = (
-  monthlyBarChart: MonthlyBarChartRoot,
+  monthlyBarChart: MonthlyBarChartData,
 ): AnalyticsActionTypes => ({ monthlyBarChart, type: RECEIVE_MONTHLY_BAR });
 
 const requestTreeMap = (): AnalyticsActionTypes => ({

@@ -26,8 +26,9 @@ export const Analytics: React.FC = () => {
 
   useEffect(() => {
     if (monthlyBarChart.data.length < 1) dispatch(fetchMonthlyBar());
-    if (!treeMapChart.root.children) dispatch(fetchTreeMap());
-  }, [dispatch, monthlyBarChart.data.length, treeMapChart.root.children]);
+    if (treeMapChart.root.children && treeMapChart.root.children.length < 1)
+      dispatch(fetchTreeMap());
+  }, []);
 
   return (
     <div className="dashboard-main-container">

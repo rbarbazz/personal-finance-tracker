@@ -6,25 +6,15 @@ import {
   RECEIVE_TREEMAP,
 } from '../actions/analytics';
 import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
-
-export type MonthlyBarChartRoot = {
-  data: object[];
-  keys: string[];
-};
-
-type TreeMapChild = { title: string; sum: number };
-
-export type TreeMapChartRoot = {
-  root: {
-    title: string;
-    children?: { title: string; children: TreeMapChild[] }[];
-  };
-};
+import {
+  MonthlyBarChartData,
+  TreeMapChartRoot,
+} from '../../../../server/src/routes/charts';
 
 export type AnalyticsState = {
   isFetchingMonthlyBar: boolean;
   isFetchingTreeMap: boolean;
-  monthlyBarChart: MonthlyBarChartRoot;
+  monthlyBarChart: MonthlyBarChartData;
   treeMapChart: TreeMapChartRoot;
 };
 
@@ -32,7 +22,7 @@ const initialState: AnalyticsState = {
   isFetchingMonthlyBar: false,
   isFetchingTreeMap: false,
   monthlyBarChart: { data: [], keys: [] },
-  treeMapChart: { root: { title: 'Expenses' } },
+  treeMapChart: { root: { categoryId: 0, title: 'Expenses', children: [] } },
 };
 
 export const analytics = (

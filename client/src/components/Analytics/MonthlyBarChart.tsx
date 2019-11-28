@@ -2,10 +2,10 @@ import { ResponsiveBar } from '@nivo/bar';
 import React from 'react';
 
 import { LoadingBars } from '../LoadingBars';
-import { MonthlyBarChartRoot } from '../../store/reducers/analytics';
+import { MonthlyBarChartData } from '../../../../server/src/routes/charts';
 
 export const MonthlyBarChart: React.FC<{
-  root: MonthlyBarChartRoot;
+  root: MonthlyBarChartData;
   isLoading: boolean;
 }> = ({ root, isLoading }) => {
   const { data, keys } = root;
