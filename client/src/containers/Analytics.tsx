@@ -8,6 +8,7 @@ import { MonthlyBarChart } from '../components/Analytics/MonthlyBarChart';
 import { ReactComponent as Sync } from '../icons/Sync.svg';
 import { State } from '../store/reducers';
 import { TreeMapChart } from '../components/Analytics/TreeMapChart';
+import { ActionBar } from '../components/ActionBar';
 
 export const Analytics: React.FC = () => {
   const dispatch = useDispatch();
@@ -26,13 +27,12 @@ export const Analytics: React.FC = () => {
 
   useEffect(() => {
     if (monthlyBarChart.data.length < 1) dispatch(fetchMonthlyBar());
-    if (treeMapChart.root.children && treeMapChart.root.children.length < 1)
-      dispatch(fetchTreeMap());
-  }, []);
+    if (treeMapChart.children!.length < 1) dispatch(fetchTreeMap());
+  });
 
   return (
     <div className="dashboard-main-container">
-      <div className="dashboard-top-container">
+      <ActionBar>
         <GenericBtn
           action={() => {
             if (!isFetchingMonthlyBar && !isFetchingTreeMap) {
@@ -42,12 +42,13 @@ export const Analytics: React.FC = () => {
           }}
           value={
             <>
-              {'Refresh Charts'}
+              {'Refresh'}
               <Sync />
             </>
           }
         />
-      </div>
+      </ActionBar>
+      <h2 className="section-title">Analytics</h2>
       <div className="charts-container">
         <MonthlyBarChart
           root={monthlyBarChart}

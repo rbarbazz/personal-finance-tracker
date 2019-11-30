@@ -7,7 +7,7 @@
 */
 
 .dashboard-main-container {
-    background-color: white;
+    background-color: $secondary-bg-color;
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -23,31 +23,26 @@
     justify-content: space-between;
     margin: 0 $big-margin $big-margin;
 }
-.dashboard-top-container {
-    display: flex;
-    justify-content: flex-end;
-    margin: $big-margin;
-}
-.chart-title {
-    font-size: 1.5em;
-    margin: $small-margin 0 $big-margin;
-}
 .chart-wrapper {
-    align-items: center;
+    background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    border-radius: 10px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     max-width: 1200px;
-    padding: $small-margin $big-margin $big-margin;
+    padding: $big-margin;
     transition: box-shadow 0.2s;
-    width: calc(50% - (#{$big-margin} * 3));
+    width: calc(50% - (#{$big-margin} * 2.5));
 
     &:hover {
         box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
             0 3px 10px 0 rgba(0, 0, 0, 0.19);
     }
+}
+.chart-title {
+    color: $primary-bg-color;
+    font-size: 1.2em;
+    margin: 0 0 $big-margin;
 }
 .chart-error-message {
     font-weight: 600;

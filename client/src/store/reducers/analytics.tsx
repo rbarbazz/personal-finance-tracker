@@ -8,21 +8,21 @@ import {
 import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
 import {
   MonthlyBarChartData,
-  TreeMapChartRoot,
+  TreeMapChartNode,
 } from '../../../../server/src/routes/charts';
 
 export type AnalyticsState = {
   isFetchingMonthlyBar: boolean;
   isFetchingTreeMap: boolean;
   monthlyBarChart: MonthlyBarChartData;
-  treeMapChart: TreeMapChartRoot;
+  treeMapChart: TreeMapChartNode;
 };
 
 const initialState: AnalyticsState = {
   isFetchingMonthlyBar: false,
   isFetchingTreeMap: false,
   monthlyBarChart: { data: [], keys: [] },
-  treeMapChart: { root: { categoryId: 0, title: 'Expenses', children: [] } },
+  treeMapChart: { categoryId: 0, title: 'Expenses', children: [] },
 };
 
 export const analytics = (

@@ -25,7 +25,7 @@ export const OperationTable: React.FC = () => {
           </TableRow>
         </TableHead>
         <TableBody>
-          {operations.map((row) => (
+          {operations.map(row => (
             <OperationTableRow key={`row${row.id}`} operation={row} />
           ))}
         </TableBody>

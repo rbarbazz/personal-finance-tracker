@@ -22,28 +22,29 @@ export const MonthlyBarChart: React.FC<{
                 axisBottom={{
                   legend: 'Month',
                   legendPosition: 'middle',
-                  legendOffset: 40,
+                  legendOffset: 45,
                 }}
                 axisLeft={{
-                  legend: 'Expense',
+                  legend: 'Expenses',
                   legendPosition: 'middle',
                   legendOffset: -55,
                 }}
                 colors={[
-                  '#790035',
-                  '#931537',
-                  '#ac2a37',
-                  '#c34034',
-                  '#d8572f',
-                  '#e87026',
-                  '#f68a19',
+                  '#007944',
+                  '#31843a',
+                  '#518e2e',
+                  '#70961d',
+                  '#919e04',
+                  '#b4a300',
+                  '#d9a600',
                   '#ffa600',
                 ]}
                 data={data}
                 indexBy="month"
                 keys={keys}
                 labelSkipHeight={15}
-                margin={{ top: 0, right: 20, bottom: 50, left: 60 }}
+                labelTextColor="white"
+                margin={{ top: 0, right: 0, bottom: 50, left: 60 }}
                 padding={0.3}
                 theme={{
                   axis: {
@@ -64,7 +65,6 @@ export const MonthlyBarChart: React.FC<{
                   },
                   labels: {
                     text: {
-                      fill: 'red',
                       fontFamily: '"Nunito", sans-serif',
                       fontSize: 14,
                     },

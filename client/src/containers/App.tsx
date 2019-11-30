@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
@@ -16,37 +16,41 @@ import { requestUserStatus, receiveUserStatus } from '../store/actions/user';
 import { State } from '../store/reducers/index';
 import { SideMenu } from '../components/SideMenu';
 
+const fetchUserStatus = () => {
+  return async (dispatch: Function) => {
+    dispatch(requestUserStatus());
+    try {
+      const res = await fetch('/login', {
+        method: 'GET',
+      });
+      if (res.status === 200) {
+        const {
+          isLoggedIn,
+          fName,
+        }: { isLoggedIn: boolean; fName: string } = await res.json();
+
+        dispatch(receiveUserStatus(isLoggedIn, fName));
+      } else dispatch(receiveUserStatus(false, ''));
+    } catch (error) {
+      dispatch(receiveUserStatus(false, ''));
+      console.error(error);
+    }
+  };
+};
+
 const App: React.FC = () => {
   const dispatch = useDispatch();
+  const getInitialUserStatus = useCallback(() => {
+    dispatch(fetchUserStatus());
+  }, [dispatch]);
   const isFetchingStatus = useSelector(
     (state: State) => state.user.isFetchingStatus,
   );
   const isLoggedIn = useSelector((state: State) => state.user.isLoggedIn);
 
   useEffect(() => {
-    const fetchUserStatus = () => {
-      return async (dispatch: Function) => {
-        dispatch(requestUserStatus());
-        try {
-          const res = await fetch('/login', {
-            method: 'GET',
-          });
-          if (res.status === 200) {
-            const {
-              isLoggedIn,
-              fName,
-            }: { isLoggedIn: boolean; fName: string } = await res.json();
-
-            dispatch(receiveUserStatus(isLoggedIn, fName));
-          } else dispatch(receiveUserStatus(false, ''));
-        } catch (error) {
-          dispatch(receiveUserStatus(false, ''));
-          console.error(error);
-        }
-      };
-    };
-    dispatch(fetchUserStatus());
-  }, [dispatch]);
+    getInitialUserStatus();
+  }, [getInitialUserStatus]);
 
   return (
     <>

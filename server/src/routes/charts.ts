@@ -38,14 +38,13 @@ chartsRouter.get('/monthlybar', async (req: any, res) => {
         .andWhereBetween('operationDate', [from, to])
         .groupBy('categories.title');
 
-      if (currentMonthSums.length > 0)
-        monthlyBarChart.data.push({
-          ...currentMonthSums.reduce((acc, cur) => {
-            acc[cur.title] = Math.abs(cur.sum);
-            return acc;
-          }, {}),
-          month,
-        });
+      monthlyBarChart.data.push({
+        ...currentMonthSums.reduce((acc, cur) => {
+          acc[cur.title] = Math.abs(cur.sum);
+          return acc;
+        }, {}),
+        month,
+      });
     }
     return res.send({ monthlyBarChart });
   } else {
@@ -60,14 +59,12 @@ export type TreeMapChartNode = {
   title: string;
 };
 
-export type TreeMapChartRoot = {
-  root: TreeMapChartNode;
-};
-
 chartsRouter.get('/treemap', async (req: any, res) => {
   if (req.user) {
-    const treeMapChart: TreeMapChartRoot = {
-      root: { categoryId: 0, title: 'Expenses', children: [] },
+    const treeMapChart: TreeMapChartNode = {
+      categoryId: 0,
+      title: 'Expenses',
+      children: [],
     };
     const today = new Date();
     const from = new Date(today.getFullYear(), today.getMonth() - 2, 1);
@@ -96,7 +93,7 @@ chartsRouter.get('/treemap', async (req: any, res) => {
 
     const parentCategories = await getParentCategories();
     for (const parentCategory of parentCategories) {
-      treeMapChart.root.children!.push({
+      treeMapChart.children!.push({
         categoryId: parentCategory.id,
         children: [],
         title: parentCategory.title,
@@ -104,26 +101,21 @@ chartsRouter.get('/treemap', async (req: any, res) => {
     }
 
     for (const categorySum of lastMonthSums) {
-      const parentCategoryIndex = treeMapChart.root.children!.findIndex(
+      const parentCategoryIndex = treeMapChart.children!.findIndex(
         rootChild => rootChild.categoryId === categorySum.parentCategoryId,
       );
       if (
-        treeMapChart.root &&
-        treeMapChart.root.children &&
-        treeMapChart.root.children[parentCategoryIndex] &&
-        treeMapChart.root.children[parentCategoryIndex].children
+        treeMapChart.children &&
+        treeMapChart.children[parentCategoryIndex] &&
+        treeMapChart.children[parentCategoryIndex].children
       ) {
-        treeMapChart.root.children[parentCategoryIndex].children!.push({
+        treeMapChart.children[parentCategoryIndex].children!.push({
           categoryId: categorySum.categoryId,
           title: categorySum.title,
           sum: Math.abs(categorySum.sum),
         });
       }
     }
-
-    treeMapChart.root.children = treeMapChart.root.children!.filter(
-      parentCategory => parentCategory.children!.length > 0,
-    );
 
     return res.send({ treeMapChart });
   } else {

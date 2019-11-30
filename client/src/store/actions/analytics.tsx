@@ -1,6 +1,6 @@
 import {
   MonthlyBarChartData,
-  TreeMapChartRoot,
+  TreeMapChartNode,
 } from '../../../../server/src/routes/charts';
 
 export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR';
@@ -23,7 +23,7 @@ interface RequestTreeMapAction {
 
 interface ReceiveTreeMapAction {
   type: typeof RECEIVE_TREEMAP;
-  treeMapChart: TreeMapChartRoot;
+  treeMapChart: TreeMapChartNode;
 }
 
 export type AnalyticsActionTypes =
@@ -45,7 +45,7 @@ const requestTreeMap = (): AnalyticsActionTypes => ({
 });
 
 const receiveTreeMap = (
-  treeMapChart: TreeMapChartRoot,
+  treeMapChart: TreeMapChartNode,
 ): AnalyticsActionTypes => ({ treeMapChart, type: RECEIVE_TREEMAP });
 
 export const fetchMonthlyBar = () => {

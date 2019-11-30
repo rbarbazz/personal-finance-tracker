@@ -7,25 +7,17 @@
 */
 
 .operations-container {
-    background-color: white;
+    background-color: $secondary-bg-color;
     display: flex;
     flex-direction: column;
     height: 100%;
     width: 100%;
 }
-.action-buttons-container {
-    display: flex;
-    justify-content: flex-end;
-    margin: $big-margin $big-margin $big-margin 0;
-
-    .generic-btn {
-        margin-left: $small-margin;
-    }
-}
 .table-container {
-    border: 5px solid $primary-color;
-    margin: 0 $big-margin $big-margin;
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     overflow: auto;
+    margin: 0 $big-margin $big-margin;
 
     .MuiTableCell-root {
         font-family: $primary-font-family;

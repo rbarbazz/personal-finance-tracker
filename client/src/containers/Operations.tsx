@@ -11,6 +11,7 @@ import { ReactComponent as FileAdd } from '../icons/FileAdd.svg';
 import { State } from '../store/reducers';
 import { UploadDialog } from '../components/Operations/UploadDialog';
 import { UpsertOperationDialog } from '../components/Operations/UpsertOperationDialog';
+import { ActionBar } from '../components/ActionBar';
 
 export const Operations: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,36 +32,35 @@ export const Operations: React.FC = () => {
 
   return (
     <div className="operations-container">
+      <ActionBar>
+        <GenericBtn
+          action={() => toggleUpload(true)}
+          value={
+            <>
+              {'Upload file'}
+              <FileAdd />
+            </>
+          }
+        />
+        {uploadVisible && <UploadDialog toggleUpload={toggleUpload} />}
+        <GenericBtn
+          action={() => toggleAddDialog(true)}
+          value={
+            <>
+              {'Add Operation'}
+              <Add />
+            </>
+          }
+        />
+        {addOperationVisible && (
+          <UpsertOperationDialog toggleDialog={toggleAddDialog} />
+        )}
+      </ActionBar>
+      <h2 className="section-title">Operations</h2>
       {isFetchingCategories || isFetchingOperations ? (
         <LoadingBars />
       ) : (
-        <>
-          <div className="action-buttons-container">
-            <GenericBtn
-              action={() => toggleUpload(true)}
-              value={
-                <>
-                  {'Upload file'}
-                  <FileAdd />
-                </>
-              }
-            />
-            {uploadVisible && <UploadDialog toggleUpload={toggleUpload} />}
-            <GenericBtn
-              action={() => toggleAddDialog(true)}
-              value={
-                <>
-                  {'Add Operation'}
-                  <Add />
-                </>
-              }
-            />
-            {addOperationVisible && (
-              <UpsertOperationDialog toggleDialog={toggleAddDialog} />
-            )}
-          </div>
-          <OperationTable />
-        </>
+        <OperationTable />
       )}
     </div>
   );

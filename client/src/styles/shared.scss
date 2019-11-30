@@ -1,9 +1,15 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito:400,700&display=swap');
 
 $primary-font-family: 'Nunito', sans-serif;
+
 $primary-color: #007944;
 $primary-color-dark: #00542f;
 $primary-color-light: #00ed85;
+
+$primary-bg-color: #282828;
+$secondary-bg-color: #f5f5f5;
+
+$disabled-color: #686868;
 
 $big-margin: 40px;
 $small-margin: $big-margin / 2;

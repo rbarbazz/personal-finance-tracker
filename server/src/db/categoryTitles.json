@@ -23,7 +23,7 @@
     "Home Maintenance",
     "Home Security",
     "Homegoods",
-    "Housing Other",
+    "Housing/Other",
     "Mortage",
     "Property Tax",
     "Rent",
@@ -37,25 +37,25 @@
     "Hobbies",
     "Holidays",
     "Music",
-    "Other Entertainment Expenses",
+    "Entertainment/Other",
     "Sports",
     "Subscriptions Services"
   ],
-  "Gifts/Donations": [
+  "Gifts & Donations": [
     "Birthday",
     "Charity",
     "Church",
-    "Other Gifts/Donations",
+    "Gifts & Donations/Other",
     "Political Party"
   ],
   "Healthcare": [
     "Dental Care",
     "Medical Care",
     "Medications",
-    "Other Specialty Care",
+    "Healthcare/Other",
     "Vision Care"
   ],
-  "Miscellaneous": ["Unusual Non-Recurring Expenses"],
+  "Miscellaneous": ["Unusual Expenses"],
   "Personal Care": ["Beauty Products", "Haircuts", "Massage/Spa", "Nail Salon"],
   "Pets": ["Pet Sitter", "Pets Food", "Pets Toys", "Veterinary Care"],
   "Savings": [
@@ -63,16 +63,16 @@
     "Investing Fund",
     "Home Fund",
     "College Fund",
-    "Other Savings"
+    "Savings/Other"
   ],
-  "Taxes": ["Accountant Fees", "Income Tax", "Other Taxes"],
+  "Taxes": ["Accountant Fees", "Income Tax", "Taxes/Other"],
   "Transport": [
     "Insurance",
     "Parking",
     "Public Transit",
     "Registration",
     "Taxis/Ubers",
-    "Transport Other",
+    "Transport/Other",
     "Vehicule Fuel",
     "Vehicule Loan",
     "Vehicule Payment",

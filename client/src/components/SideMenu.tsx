@@ -4,6 +4,7 @@ import React from 'react';
 
 import '../styles/SideMenu.scss';
 import { ReactComponent as Chart } from '../icons/Chart.svg';
+import { ReactComponent as Home } from '../icons/Home.svg';
 import { ReactComponent as Logout } from '../icons/Logout.svg';
 import { ReactComponent as PriceTag } from '../icons/PriceTag.svg';
 import { userLoggedOut } from '../store/actions/user';
@@ -29,6 +30,9 @@ export const SideMenu: React.FC = () => {
   return (
     <div className="side-menu-container">
       <div className="side-menu-items">
+        <Link className="side-menu-item brand-logo" to="/">
+          <Home />
+        </Link>
         {[
           { title: 'analytics', icon: <Chart /> },
           { title: 'transactions', icon: <PriceTag /> },
@@ -41,13 +45,11 @@ export const SideMenu: React.FC = () => {
             to={`/${item.title}`}
           >
             {item.icon}
-            <span>{item.title}</span>
             <div className="arrow-left"></div>
           </Link>
         ))}
         <div className="side-menu-item" onClick={() => logout(dispatch)}>
           <Logout />
-          <span>Log Out</span>
         </div>
       </div>
     </div>
