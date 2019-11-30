@@ -1,6 +1,7 @@
 import { ResponsiveBar } from '@nivo/bar';
 import React from 'react';
 
+import { chartTheme } from '../../containers/Analytics';
 import { LoadingBars } from '../LoadingBars';
 import { MonthlyBarChartData } from '../../../../server/src/routes/charts';
 
@@ -46,31 +47,7 @@ export const MonthlyBarChart: React.FC<{
                 labelTextColor="white"
                 margin={{ top: 0, right: 0, bottom: 50, left: 60 }}
                 padding={0.3}
-                theme={{
-                  axis: {
-                    ticks: {
-                      text: {
-                        fill: 'black',
-                        fontFamily: '"Nunito", sans-serif',
-                        fontSize: 14,
-                      },
-                    },
-                    legend: {
-                      text: {
-                        fontFamily: '"Nunito", sans-serif',
-                        fontSize: 14,
-                        fontWeight: 600,
-                      },
-                    },
-                  },
-                  labels: {
-                    text: {
-                      fontFamily: '"Nunito", sans-serif',
-                      fontSize: 14,
-                    },
-                  },
-                  tooltip: { container: { color: 'black' } },
-                }}
+                theme={chartTheme}
               />
             ) : (
               <p className="chart-error-message">

@@ -1,17 +1,22 @@
 import {
   AnalyticsActionTypes,
+  RECEIVE_BUDGET_LINE,
   RECEIVE_MONTHLY_BAR,
+  RECEIVE_TREEMAP,
+  REQUEST_BUDGET_LINE,
   REQUEST_MONTHLY_BAR,
   REQUEST_TREEMAP,
-  RECEIVE_TREEMAP,
 } from '../actions/analytics';
 import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
 import {
+  BudgetLineChartNode,
   MonthlyBarChartData,
   TreeMapChartNode,
 } from '../../../../server/src/routes/charts';
 
 export type AnalyticsState = {
+  budgetLineChart: BudgetLineChartNode[];
+  isFetchingBudgetLine: boolean;
   isFetchingMonthlyBar: boolean;
   isFetchingTreeMap: boolean;
   monthlyBarChart: MonthlyBarChartData;
@@ -19,6 +24,8 @@ export type AnalyticsState = {
 };
 
 const initialState: AnalyticsState = {
+  budgetLineChart: [] as BudgetLineChartNode[],
+  isFetchingBudgetLine: false,
   isFetchingMonthlyBar: false,
   isFetchingTreeMap: false,
   monthlyBarChart: { data: [], keys: [] },
@@ -45,6 +52,14 @@ export const analytics = (
         ...state,
         treeMapChart: action.treeMapChart,
         isFetchingTreeMap: false,
+      };
+    case REQUEST_BUDGET_LINE:
+      return { ...state, isFetchingBudgetLine: true };
+    case RECEIVE_BUDGET_LINE:
+      return {
+        ...state,
+        budgetLineChart: action.budgetLineChart,
+        isFetchingBudgetLine: false,
       };
     case USER_LOGGED_OUT:
       return initialState;

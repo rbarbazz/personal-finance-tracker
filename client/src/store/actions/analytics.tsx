@@ -1,4 +1,5 @@
 import {
+  BudgetLineChartNode,
   MonthlyBarChartData,
   TreeMapChartNode,
 } from '../../../../server/src/routes/charts';
@@ -7,6 +8,8 @@ export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR';
 export const RECEIVE_MONTHLY_BAR = 'RECEIVE_MONTHLY_BAR';
 export const REQUEST_TREEMAP = 'REQUEST_TREEMAP';
 export const RECEIVE_TREEMAP = 'RECEIVE_TREEMAP';
+export const REQUEST_BUDGET_LINE = 'REQUEST_BUDGET_LINE';
+export const RECEIVE_BUDGET_LINE = 'RECEIVE_BUDGET_LINE';
 
 interface RequestMonthlyBarAction {
   type: typeof REQUEST_MONTHLY_BAR;
@@ -26,11 +29,22 @@ interface ReceiveTreeMapAction {
   treeMapChart: TreeMapChartNode;
 }
 
+interface RequestBudgetLineAction {
+  type: typeof REQUEST_BUDGET_LINE;
+}
+
+interface ReceiveBudgetLineAction {
+  type: typeof RECEIVE_BUDGET_LINE;
+  budgetLineChart: BudgetLineChartNode[];
+}
+
 export type AnalyticsActionTypes =
   | RequestMonthlyBarAction
   | ReceiveMonthlyBarAction
   | RequestTreeMapAction
-  | ReceiveTreeMapAction;
+  | ReceiveTreeMapAction
+  | RequestBudgetLineAction
+  | ReceiveBudgetLineAction;
 
 const requestMonthlyBar = (): AnalyticsActionTypes => ({
   type: REQUEST_MONTHLY_BAR,
@@ -47,6 +61,14 @@ const requestTreeMap = (): AnalyticsActionTypes => ({
 const receiveTreeMap = (
   treeMapChart: TreeMapChartNode,
 ): AnalyticsActionTypes => ({ treeMapChart, type: RECEIVE_TREEMAP });
+
+const requestBudgetLine = (): AnalyticsActionTypes => ({
+  type: REQUEST_BUDGET_LINE,
+});
+
+const receiveBudgetLine = (
+  budgetLineChart: BudgetLineChartNode[],
+): AnalyticsActionTypes => ({ budgetLineChart, type: RECEIVE_BUDGET_LINE });
 
 export const fetchMonthlyBar = () => {
   return async (dispatch: Function) => {
@@ -77,6 +99,24 @@ export const fetchTreeMap = () => {
         const { treeMapChart } = await res.json();
 
         dispatch(receiveTreeMap(treeMapChart));
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};
+
+export const fetchBudgetLine = () => {
+  return async (dispatch: Function) => {
+    dispatch(requestBudgetLine());
+    try {
+      const res = await fetch('/charts/budgetline', {
+        method: 'GET',
+      });
+      if (res.status === 200) {
+        const { budgetLineChart } = await res.json();
+
+        dispatch(receiveBudgetLine(budgetLineChart));
       }
     } catch (error) {
       console.error(error);

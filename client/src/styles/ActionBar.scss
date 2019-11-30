@@ -12,8 +12,8 @@
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: flex-end;
-    margin-bottom: $big-margin;
     padding: 10px $big-margin;
+    z-index: 1;
 }
 .actions-container {
     align-items: center;

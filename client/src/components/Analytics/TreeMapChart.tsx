@@ -1,6 +1,7 @@
-import React from 'react';
 import { ResponsiveTreeMap } from '@nivo/treemap';
+import React from 'react';
 
+import { chartTheme } from '../../containers/Analytics';
 import { LoadingBars } from '../LoadingBars';
 import { TreeMapChartNode } from '../../../../server/src/routes/charts';
 
@@ -23,24 +24,7 @@ export const TreeMapChart: React.FC<{
               innerPadding={9}
               labelSkipSize={12}
               labelTextColor="white"
-              theme={{
-                axis: {
-                  ticks: {
-                    text: {
-                      fill: 'black',
-                      fontFamily: '"Nunito", sans-serif',
-                      fontSize: 14,
-                    },
-                  },
-                },
-                labels: {
-                  text: {
-                    fontFamily: '"Nunito", sans-serif',
-                    fontSize: 14,
-                  },
-                },
-                tooltip: { container: { color: 'black' } },
-              }}
+              theme={chartTheme}
               margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
               outerPadding={9}
               root={root}

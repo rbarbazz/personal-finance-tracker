@@ -122,3 +122,39 @@ chartsRouter.get('/treemap', async (req: any, res) => {
     return res.status(401).send();
   }
 });
+
+export type BudgetLineChartNode = {
+  id: string;
+  data: { x: string; y: number }[];
+};
+
+chartsRouter.get('/budgetline', async (req: any, res) => {
+  if (req.user) {
+    const budgetLineChart: BudgetLineChartNode[] = [
+      { id: 'Expenses', data: [] },
+    ];
+
+    const today = new Date();
+    for (let i = 5; i >= 0; i--) {
+      const from = new Date(today.getFullYear(), today.getMonth() - i - 1, 1);
+      const to = new Date(today.getFullYear(), today.getMonth() - i, 0);
+      const month = from.toLocaleString('default', { month: 'long' });
+
+      const monthTotalExpenses = await knex<Operation>('operations')
+        .sum('amount')
+        .where('userId', req.user.id)
+        .andWhere('amount', '<', 0)
+        .andWhereBetween('operationDate', [from, to])
+        .first();
+
+      budgetLineChart[0].data.push({
+        x: month,
+        y: monthTotalExpenses ? Math.abs(monthTotalExpenses.sum) : 0,
+      });
+    }
+
+    return res.send({ budgetLineChart });
+  } else {
+    return res.status(401).send();
+  }
+});
