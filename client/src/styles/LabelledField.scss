@@ -34,6 +34,7 @@
         border: hsl(0, 0%, 80%) solid 1px;
         color: $primary-color;
         font-family: $primary-font-family;
+        line-height: 1;
         min-width: 300px;
         padding: 15px;
     }
@@ -42,5 +43,8 @@
     }
     &:hover {
         border-color: hsl(0, 0%, 70%);
+    }
+    &:disabled {
+        border-color: white;
     }
 }

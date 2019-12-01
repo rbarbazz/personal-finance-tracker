@@ -1,0 +1,75 @@
+@import 'shared.scss';
+
+/*
+==========================================================================
+   Budget container
+==========================================================================
+*/
+
+.budget-container {
+    background-color: $secondary-bg-color;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.budgets-content-container {
+    overflow: auto;
+}
+.budget-categories-container {
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    margin: 0 $big-margin $big-margin;
+    max-width: 500px;
+}
+.budget-category-item {
+    align-items: center;
+    border-bottom: rgba(0, 0, 0, 0.12) solid 1px;
+    color: $primary-bg-color;
+    display: flex;
+    font-size: 18px;
+    font-weight: 600;
+    justify-content: space-between;
+    padding: ($small-margin / 2) $small-margin;
+
+    > div {
+        align-items: center;
+        display: flex;
+    }
+    .generic-input {
+        color: $primary-bg-color;
+        font-weight: 600;
+        min-width: initial;
+        text-align: right;
+        width: 100px;
+
+        &:disabled {
+            color: $disabled-color;
+        }
+    }
+}
+.budget-action-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-left: $small-margin;
+    width: 40px;
+}
+.budget-category-action {
+    -webkit-appearance: none;
+    background-color: white;
+    border: none;
+    border-bottom: 2px solid white;
+    color: $primary-color;
+    cursor: pointer;
+    font-family: $primary-font-family;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0;
+
+    &:hover {
+        border-bottom: 2px solid $primary-color;
+    }
+    &:focus {
+        outline: none;
+    }
+}

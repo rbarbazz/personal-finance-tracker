@@ -23,3 +23,11 @@ export interface Category {
   parentCategoryId: number;
   title: string;
 }
+
+export interface Budget {
+  amount: number;
+  categoryId: number;
+  categoryTitle?: string;
+  id: number;
+  userId: number;
+}

@@ -52,3 +52,12 @@
 .category-select {
     color: $primary-color;
 }
+.date-chip {
+    background-color: $primary-color;
+    color: white;
+    border-radius: 16px;
+    padding: 5px 12px;
+}
+.amount-cell {
+    font-weight: 600;
+}

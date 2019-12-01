@@ -70,8 +70,22 @@ const createOperations = async () => {
   });
 };
 
+const createBudgets = async () => {
+  if (await knex.schema.hasTable('budgets')) {
+    return;
+  }
+
+  await knex.schema.createTable('budgets', table => {
+    table.increments();
+    table.float('amount');
+    table.integer('categoryId');
+    table.integer('userId');
+  });
+};
+
 export default () => {
   createUsers();
   createCategories();
   createOperations();
+  createBudgets();
 };

@@ -15,6 +15,7 @@ import { Operations } from './Operations';
 import { requestUserStatus, receiveUserStatus } from '../store/actions/user';
 import { State } from '../store/reducers/index';
 import { SideMenu } from '../components/SideMenu';
+import { Budget } from './Budget';
 
 const fetchUserStatus = () => {
   return async (dispatch: Function) => {
@@ -65,6 +66,9 @@ const App: React.FC = () => {
             </Route>
             <Route exact path="/analytics">
               {isLoggedIn ? <Analytics /> : <Redirect to="/" />}
+            </Route>
+            <Route exact path="/budget">
+              {isLoggedIn ? <Budget /> : <Redirect to="/" />}
             </Route>
             <Route exact path="/transactions">
               {isLoggedIn ? <Operations /> : <Redirect to="/" />}

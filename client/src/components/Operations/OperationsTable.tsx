@@ -13,23 +13,21 @@ export const OperationTable: React.FC = () => {
   const operations = useSelector((state: State) => state.operations.operations);
 
   return (
-    <div className="table-container">
-      <Table stickyHeader aria-label="simple table">
-        <TableHead>
-          <TableRow>
-            <TableCell>Date</TableCell>
-            <TableCell>Amount</TableCell>
-            <TableCell>Label</TableCell>
-            <TableCell>Category</TableCell>
-            <TableCell>Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {operations.map(row => (
-            <OperationTableRow key={`row${row.id}`} operation={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </div>
+    <Table stickyHeader aria-label="simple table">
+      <TableHead>
+        <TableRow>
+          <TableCell>Date</TableCell>
+          <TableCell>Amount</TableCell>
+          <TableCell>Label</TableCell>
+          <TableCell>Category</TableCell>
+          <TableCell>Actions</TableCell>
+        </TableRow>
+      </TableHead>
+      <TableBody>
+        {operations.map(row => (
+          <OperationTableRow key={`row${row.id}`} operation={row} />
+        ))}
+      </TableBody>
+    </Table>
   );
 };

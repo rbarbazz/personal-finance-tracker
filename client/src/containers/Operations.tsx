@@ -1,7 +1,8 @@
 import { useDispatch, useSelector } from 'react-redux';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 
 import '../styles/Operations.scss';
+import { ActionBar } from '../components/ActionBar';
 import { GenericBtn } from '../components/GenericBtn';
 import { getOperations, getCategories } from '../store/actions/operations';
 import { LoadingBars } from '../components/LoadingBars';
@@ -11,24 +12,25 @@ import { ReactComponent as FileAdd } from '../icons/FileAdd.svg';
 import { State } from '../store/reducers';
 import { UploadDialog } from '../components/Operations/UploadDialog';
 import { UpsertOperationDialog } from '../components/Operations/UpsertOperationDialog';
-import { ActionBar } from '../components/ActionBar';
 
 export const Operations: React.FC = () => {
   const dispatch = useDispatch();
+  const getInitialOperations = useCallback(() => {
+    dispatch(getCategories());
+    dispatch(getOperations());
+  }, [dispatch]);
   const isFetchingCategories = useSelector(
     (state: State) => state.operations.isFetchingCategories,
   );
   const isFetchingOperations = useSelector(
     (state: State) => state.operations.isFetchingOperations,
   );
-  const operations = useSelector((state: State) => state.operations.operations);
   const [addOperationVisible, toggleAddDialog] = useState(false);
   const [uploadVisible, toggleUpload] = useState(false);
 
   useEffect(() => {
-    if (operations.length < 1) dispatch(getCategories());
-    dispatch(getOperations());
-  }, [dispatch, operations.length]);
+    getInitialOperations();
+  }, [getInitialOperations]);
 
   return (
     <div className="operations-container">
@@ -57,11 +59,14 @@ export const Operations: React.FC = () => {
         )}
       </ActionBar>
       <h2 className="section-title">Operations</h2>
-      {isFetchingCategories || isFetchingOperations ? (
-        <LoadingBars />
-      ) : (
-        <OperationTable />
-      )}
+      <p className="section-subtitle">Update and import operations</p>
+      <div className="table-container">
+        {isFetchingCategories || isFetchingOperations ? (
+          <LoadingBars />
+        ) : (
+          <OperationTable />
+        )}
+      </div>
     </div>
   );
 };

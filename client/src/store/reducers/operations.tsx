@@ -41,7 +41,9 @@ export const operations = (
     case RECEIVE_CATEGORIES:
       return {
         ...state,
-        categories: action.categories,
+        categories: action.categories.sort((a, b) =>
+          a.label > b.label ? 1 : -1,
+        ),
         isFetchingCategories: false,
       };
     case REQUEST_OPERATIONS:

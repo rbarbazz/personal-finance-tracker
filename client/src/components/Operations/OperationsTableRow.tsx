@@ -52,9 +52,11 @@ export const OperationTableRow: React.FC<{
   return (
     <TableRow>
       <TableCell component="th" scope="row">
-        {dateLocale}
+        <span className="date-chip">{dateLocale}</span>
       </TableCell>
-      <TableCell>{amount}</TableCell>
+      <TableCell>
+        <span className="amount-cell">{amount}</span>
+      </TableCell>
       <TableCell>{label}</TableCell>
       <TableCell style={{ minWidth: 200, maxWidth: 200 }}>
         <Select

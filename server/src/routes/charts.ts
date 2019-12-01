@@ -67,8 +67,8 @@ chartsRouter.get('/treemap', async (req: any, res) => {
       children: [],
     };
     const today = new Date();
-    const from = new Date(today.getFullYear(), today.getMonth() - 2, 1);
-    const to = new Date(today.getFullYear(), today.getMonth() - 1, 0);
+    const from = new Date(today.getFullYear(), today.getMonth() - 1, 1);
+    const to = new Date(today.getFullYear(), today.getMonth(), 0);
 
     const lastMonthSums: {
       categoryId: number;

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import React from 'react';
 
 import '../styles/SideMenu.scss';
+import { ReactComponent as Calculator } from '../icons/Calculator.svg';
 import { ReactComponent as Chart } from '../icons/Chart.svg';
 import { ReactComponent as Home } from '../icons/Home.svg';
 import { ReactComponent as Logout } from '../icons/Logout.svg';
@@ -35,6 +36,7 @@ export const SideMenu: React.FC = () => {
         </Link>
         {[
           { title: 'analytics', icon: <Chart /> },
+          { title: 'budget', icon: <Calculator /> },
           { title: 'transactions', icon: <PriceTag /> },
         ].map(item => (
           <Link

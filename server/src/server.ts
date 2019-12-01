@@ -1,17 +1,18 @@
-import express from 'express';
-import session from 'express-session';
+import bcrypt from 'bcrypt';
 import bodyParser from 'body-parser';
+import express from 'express';
 import passport from 'passport';
 import passportLocal from 'passport-local';
-import bcrypt from 'bcrypt';
 import path from 'path';
+import session from 'express-session';
 
-import initDatabase, { knex } from './db/initDatabase';
-import { User } from './db/models';
 import { authRouter } from './routes/auth';
-import { operationsRouter } from './routes/operations';
+import { budgetsRouter } from './routes/budgets';
 import { categoriesRouter } from './routes/categories';
 import { chartsRouter } from './routes/charts';
+import { operationsRouter } from './routes/operations';
+import { User } from './db/models';
+import initDatabase, { knex } from './db/initDatabase';
 
 /**
  * Create DB and the tables if they are not present
@@ -37,9 +38,10 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', authRouter);
-app.use('/operations', operationsRouter);
+app.use('/budgets', budgetsRouter);
 app.use('/categories', categoriesRouter);
 app.use('/charts', chartsRouter);
+app.use('/operations', operationsRouter);
 
 /**
  * Passport middleware

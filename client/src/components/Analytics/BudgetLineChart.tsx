@@ -40,7 +40,7 @@ export const BudgetLineChart: React.FC<{
                   translateY: -30,
                 },
               ]}
-              margin={{ top: 30, right: 30, bottom: 50, left: 60 }}
+              margin={{ top: 30, right: 40, bottom: 50, left: 60 }}
               theme={chartTheme}
               useMesh
             />

@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 import '../styles/Analytics.scss';
 import {
@@ -50,6 +50,11 @@ export const chartTheme = {
 
 export const Analytics: React.FC = () => {
   const dispatch = useDispatch();
+  const getInitialCharts = useCallback(() => {
+    dispatch(fetchMonthlyBar());
+    dispatch(fetchBudgetLine());
+    dispatch(fetchTreeMap());
+  }, [dispatch]);
   const monthlyBarChart = useSelector(
     (state: State) => state.analytics.monthlyBarChart,
   );
@@ -70,10 +75,8 @@ export const Analytics: React.FC = () => {
   );
 
   useEffect(() => {
-    if (monthlyBarChart.data.length < 1) dispatch(fetchMonthlyBar());
-    if (budgetLineChart.length < 1) dispatch(fetchBudgetLine());
-    if (treeMapChart.children!.length < 1) dispatch(fetchTreeMap());
-  }, []);
+    getInitialCharts();
+  }, [getInitialCharts]);
 
   return (
     <div className="dashboard-main-container">
@@ -100,6 +103,9 @@ export const Analytics: React.FC = () => {
       </ActionBar>
       <div className="analytics-content-container">
         <h2 className="section-title">Analytics</h2>
+        <p className="section-subtitle">
+          Get insights on your personal finances
+        </p>
         <div className="charts-container">
           <MonthlyBarChart
             root={monthlyBarChart}

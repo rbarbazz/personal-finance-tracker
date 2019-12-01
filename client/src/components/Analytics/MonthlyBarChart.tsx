@@ -45,7 +45,7 @@ export const MonthlyBarChart: React.FC<{
                 keys={keys}
                 labelSkipHeight={15}
                 labelTextColor="white"
-                margin={{ top: 0, right: 0, bottom: 50, left: 60 }}
+                margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
                 padding={0.3}
                 theme={chartTheme}
               />
