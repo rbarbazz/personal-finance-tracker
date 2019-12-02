@@ -2,7 +2,7 @@ import { Router } from 'express';
 
 import { getParentCategories } from '../controllers/categories';
 import { knex } from '../db/initDatabase';
-import { Operation } from '../db/models';
+import { Operation, Budget } from '../db/models';
 
 export const chartsRouter = Router();
 
@@ -132,6 +132,7 @@ chartsRouter.get('/budgetline', async (req: any, res) => {
   if (req.user) {
     const budgetLineChart: BudgetLineChartNode[] = [
       { id: 'Expenses', data: [] },
+      { id: 'Budget', data: [] },
     ];
 
     const today = new Date();
@@ -147,9 +148,18 @@ chartsRouter.get('/budgetline', async (req: any, res) => {
         .andWhereBetween('operationDate', [from, to])
         .first();
 
+      const totalBudgets = await knex<Budget>('budgets')
+        .sum('amount')
+        .where('userId', req.user.id)
+        .first();
+
       budgetLineChart[0].data.push({
         x: month,
         y: monthTotalExpenses ? Math.abs(monthTotalExpenses.sum) : 0,
+      });
+      budgetLineChart[1].data.push({
+        x: month,
+        y: totalBudgets ? Math.abs(totalBudgets.sum) : 0,
       });
     }
 

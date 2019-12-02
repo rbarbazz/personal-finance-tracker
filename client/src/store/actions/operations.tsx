@@ -1,5 +1,6 @@
 import { SelectOption } from '../reducers/operations';
 import { Operation, Category } from '../../../../server/src/db/models';
+import { logout } from '../../components/SideMenu';
 
 export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES';
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
@@ -66,7 +67,7 @@ export const getCategories = () => {
           label: title,
         }));
         dispatch(receiveCategories(selectCategories));
-      }
+      } else dispatch(logout());
     } catch (error) {
       console.error(error);
     }
@@ -91,7 +92,7 @@ export const getOperations = () => {
         const { operations }: { operations: Operation[] } = await res.json();
 
         dispatch(receiveOperations(operations));
-      }
+      } else dispatch(logout());
     } catch (error) {
       console.error(error);
     }

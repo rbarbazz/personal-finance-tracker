@@ -28,8 +28,8 @@ export const BudgetLineChart: React.FC<{
                 legendPosition: 'middle',
                 legendOffset: -55,
               }}
+              colors={['#007944', '#003579']}
               data={root}
-              colors={['#007944']}
               legends={[
                 {
                   anchor: 'top-right',

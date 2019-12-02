@@ -33,7 +33,6 @@ const fetchUserStatus = () => {
         dispatch(receiveUserStatus(isLoggedIn, fName));
       } else dispatch(receiveUserStatus(false, ''));
     } catch (error) {
-      dispatch(receiveUserStatus(false, ''));
       console.error(error);
     }
   };

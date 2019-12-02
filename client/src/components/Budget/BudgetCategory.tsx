@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 
-import { LabelledField } from '../LabelledField';
-import { useDispatch } from 'react-redux';
 import { getBudgets } from '../../store/actions/budgets';
+import { LabelledField } from '../LabelledField';
+import { logout } from '../SideMenu';
 import { TableRow, TableCell } from '@material-ui/core';
+import { useDispatch } from 'react-redux';
 
 const updateBudgetAmount = (categoryBudget: number, categoryId: number) => {
   return async (dispatch: Function) => {
@@ -22,7 +23,7 @@ const updateBudgetAmount = (categoryBudget: number, categoryId: number) => {
           dispatch(getBudgets());
         }
       } else {
-        console.error('User not logged in');
+        dispatch(logout());
       }
     } catch (error) {
       console.error(error);

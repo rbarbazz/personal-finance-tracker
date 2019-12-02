@@ -48,15 +48,11 @@ export const Login: React.FC = () => {
         }: AuthResponse = await res.json();
 
         setMessage({ error, value: message });
-        if (accountCreated) {
-          return toggleIsRegistered(true);
-        }
+        if (accountCreated) return toggleIsRegistered(true);
         if (!error && fName) return dispatch(userLoggedIn(fName));
-      } else {
-        setMessage({ error: true, value: 'Wrong Email or Password' });
-      }
+      } else setMessage({ error: true, value: 'Wrong Email or Password' });
     } catch (error) {
-      setMessage({ error: true, value: 'An error has occurred' });
+      console.error(error);
     }
   };
 

@@ -6,17 +6,15 @@ import '../../styles/UploadDialog.scss';
 import { GenericBtn } from '../GenericBtn';
 import { getOperations } from '../../store/actions/operations';
 import { InfoMessage } from '../InfoMessage';
+import { logout } from '../SideMenu';
 
-export const UploadDialog: React.FC<{
-  toggleUpload: Function;
-}> = ({ toggleUpload }) => {
-  const dispatch = useDispatch();
-  const [isLoading, toggleLoading] = useState(false);
-  const [message, setMessage] = useState({ error: false, value: '' });
-  const [fileCount, setFileCount] = useState(0);
-  const fileInput = useRef<HTMLInputElement>(null);
-
-  const uploadFiles = async (files: FileList) => {
+const uploadFiles = (
+  files: FileList,
+  setMessage: Function,
+  toggleLoading: Function,
+  toggleUpload: Function,
+) => {
+  return async (dispatch: Function) => {
     if (files.length < 1)
       return setMessage({
         error: true,
@@ -42,13 +40,21 @@ export const UploadDialog: React.FC<{
           toggleUpload(false);
           dispatch(getOperations());
         }
-      } else {
-        setMessage({ error: true, value: 'User is not logged in' });
-      }
+      } else dispatch(logout());
     } catch (error) {
       setMessage({ error: true, value: 'An error has occurred' });
     }
   };
+};
+
+export const UploadDialog: React.FC<{
+  toggleUpload: Function;
+}> = ({ toggleUpload }) => {
+  const dispatch = useDispatch();
+  const [isLoading, toggleLoading] = useState(false);
+  const [message, setMessage] = useState({ error: false, value: '' });
+  const [fileCount, setFileCount] = useState(0);
+  const fileInput = useRef<HTMLInputElement>(null);
 
   return (
     <Dialog onClose={() => toggleUpload(false)} open>
@@ -101,7 +107,14 @@ export const UploadDialog: React.FC<{
         <GenericBtn
           action={() => {
             if (fileInput && fileInput.current && fileInput.current.files)
-              uploadFiles(fileInput.current.files);
+              dispatch(
+                uploadFiles(
+                  fileInput.current.files,
+                  setMessage,
+                  toggleLoading,
+                  toggleUpload,
+                ),
+              );
           }}
           id="upload-csv-btn"
           isLoading={isLoading}

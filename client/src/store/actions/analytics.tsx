@@ -3,6 +3,7 @@ import {
   MonthlyBarChartData,
   TreeMapChartNode,
 } from '../../../../server/src/routes/charts';
+import { logout } from '../../components/SideMenu';
 
 export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR';
 export const RECEIVE_MONTHLY_BAR = 'RECEIVE_MONTHLY_BAR';
@@ -81,7 +82,7 @@ export const fetchMonthlyBar = () => {
         const { monthlyBarChart } = await res.json();
 
         dispatch(receiveMonthlyBar(monthlyBarChart));
-      }
+      } else dispatch(logout());
     } catch (error) {
       console.error(error);
     }
@@ -99,7 +100,7 @@ export const fetchTreeMap = () => {
         const { treeMapChart } = await res.json();
 
         dispatch(receiveTreeMap(treeMapChart));
-      }
+      } else dispatch(logout());
     } catch (error) {
       console.error(error);
     }
@@ -117,7 +118,7 @@ export const fetchBudgetLine = () => {
         const { budgetLineChart } = await res.json();
 
         dispatch(receiveBudgetLine(budgetLineChart));
-      }
+      } else dispatch(logout());
     } catch (error) {
       console.error(error);
     }

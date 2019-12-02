@@ -10,18 +10,20 @@ import { ReactComponent as Logout } from '../icons/Logout.svg';
 import { ReactComponent as PriceTag } from '../icons/PriceTag.svg';
 import { userLoggedOut } from '../store/actions/user';
 
-const logout = async (dispatch: Function) => {
-  try {
-    const res = await fetch('/logout', {
-      method: 'GET',
-    });
-    if (res.status === 200) {
-      dispatch(userLoggedOut());
+export const logout = () => {
+  return async (dispatch: Function) => {
+    try {
+      const res = await fetch('/logout', {
+        method: 'GET',
+      });
+      if (res.status === 200) {
+        dispatch(userLoggedOut());
+      }
       window.location.reload();
+    } catch (error) {
+      console.error(error);
     }
-  } catch (error) {
-    console.error(error);
-  }
+  };
 };
 
 export const SideMenu: React.FC = () => {
@@ -50,7 +52,7 @@ export const SideMenu: React.FC = () => {
             <div className="arrow-left"></div>
           </Link>
         ))}
-        <div className="side-menu-item" onClick={() => logout(dispatch)}>
+        <div className="side-menu-item" onClick={() => dispatch(logout())}>
           <Logout />
         </div>
       </div>

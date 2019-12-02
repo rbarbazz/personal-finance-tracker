@@ -4,15 +4,16 @@ import React, { useState } from 'react';
 import Select from 'react-select';
 
 import '../../styles/UpsertOperationDialog.scss';
-import { GenericBtn } from '../GenericBtn';
-import { InfoMessage } from '../InfoMessage';
-import { LabelledField } from '../LabelledField';
-import { Operation } from '../../../../server/src/db/models';
 import {
   requestUpsert,
   responseUpsert,
   getOperations,
 } from '../../store/actions/operations';
+import { GenericBtn } from '../GenericBtn';
+import { InfoMessage } from '../InfoMessage';
+import { LabelledField } from '../LabelledField';
+import { logout } from '../SideMenu';
+import { Operation } from '../../../../server/src/db/models';
 import { SelectOption } from '../../store/reducers/operations';
 import { State } from '../../store/reducers/index';
 
@@ -45,9 +46,7 @@ const upsertOperation = (
           toggleDialog(false);
           dispatch(getOperations());
         }
-      } else {
-        setMessage({ error: true, value: 'User is not logged in' });
-      }
+      } else dispatch(logout());
     } catch (error) {
       setMessage({ error: true, value: 'An error has occurred' });
     }

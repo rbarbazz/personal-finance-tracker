@@ -1,4 +1,5 @@
 import { BudgetCategory } from '../../../../server/src/routes/budgets';
+import { logout } from '../../components/SideMenu';
 
 export const REQUEST_BUDGETS = 'REQUEST_BUDGETS';
 export const RECEIVE_BUDGETS = 'RECEIVE_BUDGETS';
@@ -32,7 +33,7 @@ export const getBudgets = () => {
         const { budgets } = await res.json();
 
         dispatch(receiveBudgets(budgets));
-      }
+      } else dispatch(logout());
     } catch (error) {
       console.error(error);
     }
