@@ -1,0 +1,15 @@
+@import 'shared.scss';
+
+/*
+==========================================================================
+   Profile container
+==========================================================================
+*/
+
+.profile-container {
+    background-color: $secondary-bg-color;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}

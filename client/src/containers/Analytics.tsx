@@ -46,6 +46,11 @@ export const chartTheme = {
   tooltip: { container: { color: 'black' } },
 };
 
+const loadingAnimation = {
+  webKitAnimation: 'rotate-center 2s linear infinite',
+  animation: 'rotate-center 2s linear infinite',
+};
+
 export const Analytics: React.FC = () => {
   const dispatch = useDispatch();
   const getInitialCharts = useCallback(() => {
@@ -71,6 +76,8 @@ export const Analytics: React.FC = () => {
   const isFetchingBudgetLine = useSelector(
     (state: State) => state.analytics.isFetchingBudgetLine,
   );
+  const isFetchingCharts =
+    isFetchingMonthlyBar || isFetchingBudgetLine || isFetchingTreeMap;
 
   useEffect(() => {
     getInitialCharts();
@@ -81,11 +88,7 @@ export const Analytics: React.FC = () => {
       <ActionBar>
         <GenericBtn
           action={() => {
-            if (
-              !isFetchingMonthlyBar &&
-              !isFetchingBudgetLine &&
-              !isFetchingTreeMap
-            ) {
+            if (!isFetchingCharts) {
               dispatch(fetchMonthlyBar());
               dispatch(fetchBudgetLine());
               dispatch(fetchTreeMap());
@@ -94,7 +97,7 @@ export const Analytics: React.FC = () => {
           value={
             <>
               {'Refresh'}
-              <Sync />
+              <Sync style={isFetchingCharts ? loadingAnimation : {}} />
             </>
           }
         />

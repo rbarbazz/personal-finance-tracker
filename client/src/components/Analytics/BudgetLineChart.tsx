@@ -21,26 +21,33 @@ export const BudgetLineChart: React.FC<{
               axisBottom={{
                 legend: 'Month',
                 legendPosition: 'middle',
-                legendOffset: 45,
+                legendOffset: 40,
               }}
               axisLeft={{
                 legend: 'Amount',
                 legendPosition: 'middle',
                 legendOffset: -55,
               }}
-              colors={['#007944', '#003579']}
+              colors={['#ffa600', '#790800', '#007944']}
               data={root}
               legends={[
                 {
-                  anchor: 'top-right',
-                  direction: 'column',
-                  itemWidth: 80,
+                  anchor: 'bottom',
+                  direction: 'row',
                   itemHeight: 20,
+                  itemsSpacing: 20,
+                  itemWidth: 80,
                   symbolShape: 'circle',
-                  translateY: -30,
+                  translateY: 70,
                 },
               ]}
-              margin={{ top: 30, right: 40, bottom: 50, left: 60 }}
+              margin={{ top: 5, right: 40, bottom: 70, left: 60 }}
+              pointBorderColor={{ from: 'serieColor' }}
+              pointBorderWidth={2}
+              pointColor="white"
+              pointLabel="y"
+              pointLabelYOffset={-10}
+              pointSize={8}
               theme={chartTheme}
               useMesh
             />

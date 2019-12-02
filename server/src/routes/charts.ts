@@ -131,8 +131,9 @@ export type BudgetLineChartNode = {
 chartsRouter.get('/budgetline', async (req: any, res) => {
   if (req.user) {
     const budgetLineChart: BudgetLineChartNode[] = [
-      { id: 'Expenses', data: [] },
       { id: 'Budget', data: [] },
+      { id: 'Expenses', data: [] },
+      { id: 'Incomes', data: [] },
     ];
 
     const today = new Date();
@@ -141,25 +142,34 @@ chartsRouter.get('/budgetline', async (req: any, res) => {
       const to = new Date(today.getFullYear(), today.getMonth() - i, 0);
       const month = from.toLocaleString('default', { month: 'long' });
 
+      const totalBudgets = await knex<Budget>('budgets')
+        .sum('amount')
+        .where('userId', req.user.id)
+        .first();
       const monthTotalExpenses = await knex<Operation>('operations')
         .sum('amount')
         .where('userId', req.user.id)
         .andWhere('amount', '<', 0)
         .andWhereBetween('operationDate', [from, to])
         .first();
-
-      const totalBudgets = await knex<Budget>('budgets')
+      const monthTotalIncomes = await knex<Operation>('operations')
         .sum('amount')
         .where('userId', req.user.id)
+        .andWhere('amount', '>', 0)
+        .andWhereBetween('operationDate', [from, to])
         .first();
 
       budgetLineChart[0].data.push({
         x: month,
-        y: monthTotalExpenses ? Math.abs(monthTotalExpenses.sum) : 0,
+        y: totalBudgets ? Math.abs(totalBudgets.sum) : 0,
       });
       budgetLineChart[1].data.push({
         x: month,
-        y: totalBudgets ? Math.abs(totalBudgets.sum) : 0,
+        y: monthTotalExpenses ? Math.abs(monthTotalExpenses.sum) : 0,
+      });
+      budgetLineChart[2].data.push({
+        x: month,
+        y: monthTotalIncomes ? Math.abs(monthTotalIncomes.sum) : 0,
       });
     }
 

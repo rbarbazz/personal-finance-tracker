@@ -3,11 +3,12 @@ import { useDispatch } from 'react-redux';
 import React from 'react';
 
 import '../styles/SideMenu.scss';
-import { ReactComponent as Calculator } from '../icons/Calculator.svg';
-import { ReactComponent as Chart } from '../icons/Chart.svg';
-import { ReactComponent as Home } from '../icons/Home.svg';
-import { ReactComponent as Logout } from '../icons/Logout.svg';
-import { ReactComponent as PriceTag } from '../icons/PriceTag.svg';
+import { ReactComponent as CalculatorIcon } from '../icons/Calculator.svg';
+import { ReactComponent as ChartIcon } from '../icons/Chart.svg';
+import { ReactComponent as HomeIcon } from '../icons/Home.svg';
+import { ReactComponent as LogoutIcon } from '../icons/Logout.svg';
+import { ReactComponent as PersonIcon } from '../icons/Person.svg';
+import { ReactComponent as PriceTagIcon } from '../icons/PriceTag.svg';
 import { userLoggedOut } from '../store/actions/user';
 
 export const logout = () => {
@@ -34,12 +35,13 @@ export const SideMenu: React.FC = () => {
     <div className="side-menu-container">
       <div className="side-menu-items">
         <Link className="side-menu-item brand-logo" to="/">
-          <Home />
+          <HomeIcon />
         </Link>
         {[
-          { title: 'analytics', icon: <Chart /> },
-          { title: 'budget', icon: <Calculator /> },
-          { title: 'transactions', icon: <PriceTag /> },
+          { title: 'analytics', icon: <ChartIcon /> },
+          { title: 'budget', icon: <CalculatorIcon /> },
+          { title: 'transactions', icon: <PriceTagIcon /> },
+          { title: 'profile', icon: <PersonIcon /> },
         ].map(item => (
           <Link
             className={`side-menu-item${
@@ -53,7 +55,7 @@ export const SideMenu: React.FC = () => {
           </Link>
         ))}
         <div className="side-menu-item" onClick={() => dispatch(logout())}>
-          <Logout />
+          <LogoutIcon />
         </div>
       </div>
     </div>
