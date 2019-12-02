@@ -21,9 +21,9 @@ export const Budget: React.FC = () => {
   return (
     <div className="budget-container">
       <ActionBar />
-      <div className="budgets-content-container">
-        <h2 className="section-title">Budget</h2>
-        <p className="section-subtitle">Set your monthly goals</p>
+      <h2 className="section-title">Budget</h2>
+      <p className="section-subtitle">Set your monthly goals</p>
+      <div className="budget-content-container">
         <div className="budget-categories-container">
           {budgets.map(budgetCategory => (
             <BudgetCategory
@@ -32,6 +32,12 @@ export const Budget: React.FC = () => {
               initialValue={budgetCategory.amount}
             />
           ))}
+        </div>
+        <div className="total-container">
+          <h3 className="total-title">Total</h3>
+          <div className="total-amount">
+            {budgets.reduce((a, b) => a + b.amount, 0)}
+          </div>
         </div>
       </div>
     </div>

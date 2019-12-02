@@ -2,7 +2,7 @@
 
 /*
 ==========================================================================
-   Budget container
+Budget container
 ==========================================================================
 */
 
@@ -13,14 +13,19 @@
     height: 100%;
     width: 100%;
 }
-.budgets-content-container {
-    overflow: auto;
+.budget-content-container {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    height: 100%;
+    margin: 0 $big-margin $big-margin;
 }
 .budget-categories-container {
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    margin: 0 $big-margin $big-margin;
-    max-width: 500px;
+    height: 100%;
+    overflow: auto;
+    width: calc(50% - (#{$big-margin} * 0.5));
 }
 .budget-category-item {
     align-items: center;
@@ -72,4 +77,21 @@
     &:focus {
         outline: none;
     }
+}
+.total-container {
+    background-color: white;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    overflow: auto;
+    padding: $big-margin;
+    width: calc(50% - (#{$big-margin} * 2.5));
+}
+.total-title {
+    color: $primary-bg-color;
+    font-size: 1.2em;
+    margin: 0 0 $big-margin;
+}
+.total-amount {
+    color: $primary-bg-color;
+    font-size: 3em;
+    text-align: center;
 }
