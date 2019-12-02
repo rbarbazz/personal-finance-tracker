@@ -1,3 +1,4 @@
+import { ResponsivePie } from '@nivo/pie';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useCallback } from 'react';
 
@@ -6,6 +7,14 @@ import { ActionBar } from '../components/ActionBar';
 import { BudgetCategory } from '../components/Budget/BudgetCategory';
 import { State } from '../store/reducers';
 import { getBudgets } from '../store/actions/budgets';
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@material-ui/core';
+import { chartTheme } from './Analytics';
 
 export const Budget: React.FC = () => {
   const dispatch = useDispatch();
@@ -25,18 +34,64 @@ export const Budget: React.FC = () => {
       <p className="section-subtitle">Set your monthly goals</p>
       <div className="budget-content-container">
         <div className="budget-categories-container">
-          {budgets.map(budgetCategory => (
-            <BudgetCategory
-              key={`budget-category-${budgetCategory.categoryId}`}
-              title={budgetCategory.title}
-              initialValue={budgetCategory.amount}
-            />
-          ))}
+          <Table stickyHeader aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell>Category</TableCell>
+                <TableCell align="right">Amount</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {budgets.map(budgetCategory => (
+                <BudgetCategory
+                  categoryId={budgetCategory.categoryId}
+                  key={`budget-category-${budgetCategory.categoryId}`}
+                  title={budgetCategory.title}
+                  initialValue={budgetCategory.amount}
+                />
+              ))}
+            </TableBody>
+          </Table>
         </div>
-        <div className="total-container">
-          <h3 className="total-title">Total</h3>
-          <div className="total-amount">
-            {budgets.reduce((a, b) => a + b.amount, 0)}
+        <div className="budget-right-col">
+          <div className="total-container">
+            <h3 className="total-title">Total</h3>
+            <div className="total-amount">
+              {`$ ${budgets.reduce((a, b) => a + b.amount, 0)}`}
+            </div>
+          </div>
+          <div className="budget-pie-chart-container">
+            <ResponsivePie
+              colors={[
+                '#007944',
+                '#ffa600',
+                '#31843a',
+                '#d9a600',
+                '#518e2e',
+                '#b4a300',
+                '#70961d',
+                '#919e04',
+              ]}
+              cornerRadius={3}
+              data={budgets
+                .filter(budget => budget.amount > 0)
+                .map(budget => {
+                  const { amount, title } = budget;
+
+                  return {
+                    id: title,
+                    label: title,
+                    value: amount,
+                  };
+                })}
+              enableRadialLabels={false}
+              innerRadius={0.5}
+              margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+              padAngle={1}
+              sliceLabel="id"
+              slicesLabelsTextColor="white"
+              theme={chartTheme}
+            />
           </div>
         </div>
       </div>

@@ -51,8 +51,8 @@ export const OperationTableRow: React.FC<{
 
   return (
     <TableRow>
-      <TableCell component="th" scope="row">
-        <span className="date-chip">{dateLocale}</span>
+      <TableCell>
+        <span className="generic-chip">{dateLocale}</span>
       </TableCell>
       <TableCell>
         <span className="amount-cell">{amount}</span>
@@ -81,7 +81,7 @@ export const OperationTableRow: React.FC<{
       </TableCell>
       <TableCell>
         <button
-          className="row-action-btn"
+          className="generic-row-action-btn"
           onClick={() => {
             toggleEditDialog(true);
           }}
@@ -102,7 +102,7 @@ export const OperationTableRow: React.FC<{
           />
         )}
         <button
-          className="row-action-btn"
+          className="generic-row-action-btn"
           onClick={() => {
             delOperation(dispatch, id);
           }}

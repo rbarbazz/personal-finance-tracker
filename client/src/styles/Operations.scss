@@ -27,36 +27,12 @@
             font-weight: 600;
         }
     }
-}
-.row-action-btn {
-    -webkit-appearance: none;
-    background-color: white;
-    border: none;
-    color: $primary-color;
-    cursor: pointer;
-    font-family: $primary-font-family;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 0;
-
-    &:last-child {
+    .generic-row-action-btn:last-child {
         margin-left: $small-margin;
-    }
-    &:hover {
-        border-bottom: 2px solid $primary-color;
-    }
-    &:focus {
-        outline: none;
     }
 }
 .category-select {
     color: $primary-color;
-}
-.date-chip {
-    background-color: $primary-color;
-    color: white;
-    border-radius: 16px;
-    padding: 5px 12px;
 }
 .amount-cell {
     font-weight: 600;

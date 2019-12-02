@@ -28,3 +28,27 @@ body {
     margin: 0 $big-margin $big-margin;
     font-weight: 600;
 }
+.generic-chip {
+    background-color: $primary-color;
+    color: white;
+    border-radius: 16px;
+    padding: 5px 12px;
+}
+.generic-row-action-btn {
+    -webkit-appearance: none;
+    background-color: white;
+    border: none;
+    color: $primary-color;
+    cursor: pointer;
+    font-family: $primary-font-family;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 0;
+
+    &:hover {
+        border-bottom: 2px solid $primary-color;
+    }
+    &:focus {
+        outline: none;
+    }
+}

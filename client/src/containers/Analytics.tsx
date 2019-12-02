@@ -19,7 +19,6 @@ export const chartTheme = {
   axis: {
     ticks: {
       text: {
-        fill: 'black',
         fontFamily: '"Nunito", sans-serif',
         fontSize: 14,
       },
@@ -40,7 +39,6 @@ export const chartTheme = {
   },
   legends: {
     text: {
-      fill: 'black',
       fontFamily: '"Nunito", sans-serif',
       fontSize: 14,
     },

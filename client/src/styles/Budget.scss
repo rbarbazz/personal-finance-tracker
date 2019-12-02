@@ -16,6 +16,7 @@ Budget container
 .budget-content-container {
     align-items: flex-start;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     height: 100%;
     margin: 0 $big-margin $big-margin;
@@ -26,72 +27,61 @@ Budget container
     height: 100%;
     overflow: auto;
     width: calc(50% - (#{$big-margin} * 0.5));
-}
-.budget-category-item {
-    align-items: center;
-    border-bottom: rgba(0, 0, 0, 0.12) solid 1px;
-    color: $primary-bg-color;
-    display: flex;
-    font-size: 18px;
-    font-weight: 600;
-    justify-content: space-between;
-    padding: ($small-margin / 2) $small-margin;
 
-    > div {
-        align-items: center;
-        display: flex;
+    .MuiTableCell-root {
+        font-family: $primary-font-family;
+        font-size: 18px;
+
+        &.MuiTableCell-head {
+            font-weight: 600;
+        }
     }
     .generic-input {
         color: $primary-bg-color;
         font-weight: 600;
+        max-width: 150px;
         min-width: initial;
         text-align: right;
-        width: 100px;
 
         &:disabled {
             color: $disabled-color;
         }
     }
 }
-.budget-action-wrapper {
+.category-amount-container {
+    align-items: center;
     display: flex;
-    justify-content: center;
-    margin-left: $small-margin;
-    width: 40px;
+    justify-content: flex-end;
 }
-.budget-category-action {
-    -webkit-appearance: none;
-    background-color: white;
-    border: none;
-    border-bottom: 2px solid white;
-    color: $primary-color;
-    cursor: pointer;
-    font-family: $primary-font-family;
-    font-size: 16px;
-    font-weight: 600;
-    padding: 0;
-
-    &:hover {
-        border-bottom: 2px solid $primary-color;
-    }
-    &:focus {
-        outline: none;
-    }
+.action-button-wrapper {
+    margin-left: 15px;
+    width: 36px;
 }
-.total-container {
+.budget-right-col {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: calc(50% - #{$big-margin});
+}
+.total-container,
+.budget-pie-chart-container {
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    overflow: auto;
     padding: $big-margin;
-    width: calc(50% - (#{$big-margin} * 2.5));
+}
+.budget-pie-chart-container {
+    height: 100%;
+    margin-top: $big-margin;
 }
 .total-title {
     color: $primary-bg-color;
-    font-size: 1.2em;
+    font-size: 1.5em;
     margin: 0 0 $big-margin;
+    text-align: center;
 }
 .total-amount {
     color: $primary-bg-color;
     font-size: 3em;
+    font-weight: 600;
     text-align: center;
 }
