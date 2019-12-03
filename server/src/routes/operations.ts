@@ -17,6 +17,12 @@ import { getChildCategories, getCategoryById } from '../controllers/categories';
 export const operationsRouter = Router();
 const upload = multer({ dest: '../../tmp/' });
 
+declare module 'papaparse' {
+  interface ParseConfig {
+    delimitersToGuess?: string[];
+  }
+}
+
 /**
  * Operations
  */
@@ -59,7 +65,6 @@ operationsRouter.post(
 
         const csvStream = fs.createReadStream(path);
         Papa.parse(csvStream, {
-          header: true,
           complete: results => {
             return res.send({
               error: false,
@@ -68,6 +73,8 @@ operationsRouter.post(
               path,
             });
           },
+          delimitersToGuess: [';', ','],
+          header: true,
         });
       }
     } else {
@@ -98,7 +105,6 @@ operationsRouter.post('/', async (req: any, res) => {
 
       const csvStream = fs.createReadStream(path);
       Papa.parse(csvStream, {
-        header: true,
         complete: async results => {
           for (const data of results.data) {
             let operationDate = moment(
@@ -140,6 +146,8 @@ operationsRouter.post('/', async (req: any, res) => {
             await insertOperations(operationList);
           }
         },
+        delimitersToGuess: [';', ','],
+        header: true,
       });
     } else {
       // Single operation creation

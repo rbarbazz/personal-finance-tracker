@@ -1,8 +1,17 @@
 {
   "Uncategorized": [],
+  "Allowance": [
+    "Allowance/Other",
+    "Freelance Earnings",
+    "Pension",
+    "Rent Assistance",
+    "Salary",
+    "Craigslist Sales",
+    "Unemployment Benefit"
+  ],
   "Child Expenses": [
     "After School Activities",
-    "Allowance",
+    "Family Allowance",
     "Baby Expenses",
     "Child Support",
     "Childcare",
@@ -13,7 +22,13 @@
   ],
   "Clothes": ["New Clothes", "Uniform/Work Clothes"],
   "Debts": ["Credit Card Debt", "Loan Repayment"],
-  "Food": ["Coffee Shops", "Groceries", "Restaurants", "Work Meals"],
+  "Food": [
+    "Coffee Shops",
+    "Delivery Food",
+    "Groceries",
+    "Restaurants",
+    "Work Meals"
+  ],
   "Housing": [
     "Furnitures",
     "Garden",
@@ -50,12 +65,13 @@
   ],
   "Healthcare": [
     "Dental Care",
+    "Healtcare Refund",
     "Medical Care",
     "Medications",
     "Healthcare/Other",
     "Vision Care"
   ],
-  "Miscellaneous": ["Unusual Expenses"],
+  "Miscellaneous": ["General Refund", "Unusual Expenses", "Unusual Incomes"],
   "Personal Care": ["Beauty Products", "Haircuts", "Massage/Spa", "Nail Salon"],
   "Pets": ["Pet Sitter", "Pets Food", "Pets Toys", "Veterinary Care"],
   "Savings": [
@@ -70,12 +86,13 @@
     "Insurance",
     "Parking",
     "Public Transit",
-    "Registration",
     "Taxis/Ubers",
     "Transport/Other",
     "Vehicule Fuel",
     "Vehicule Loan",
     "Vehicule Payment",
+    "Vehicule Registration",
+    "Vehicule Rentals",
     "Vehicule Repairs"
   ],
   "Utilities": [
