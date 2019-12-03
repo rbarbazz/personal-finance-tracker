@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import csv from 'csv-parser';
+import Papa from 'papaparse';
 import fs from 'fs';
 import moment from 'moment';
 import multer from 'multer';
@@ -57,20 +57,18 @@ operationsRouter.post(
         if (size > 1000000)
           return res.send({ error: true, message: 'File is too large' });
 
-        fs.createReadStream(path)
-          .pipe(csv())
-          .on('headers', (headers: string[]) => {
+        const csvStream = fs.createReadStream(path);
+        Papa.parse(csvStream, {
+          header: true,
+          complete: results => {
             return res.send({
               error: false,
               message: 'Now please match columns',
-              headers,
+              headers: results.meta.fields,
+              path,
             });
-          })
-          .on('end', async () => {
-            fs.unlink(path, err => {
-              if (err) console.error(err);
-            });
-          });
+          },
+        });
       }
     } else {
       return res.status(401).send();
@@ -78,111 +76,109 @@ operationsRouter.post(
   },
 );
 
-// Add an operation
-operationsRouter.post(
-  '/',
-  upload.array('csvFiles', 1),
-  async (req: any, res) => {
-    if (req.user) {
-      if (req.files) {
-        // CSV file(s) upload
-        const childCategories = await getChildCategories();
+// Add operation(s)
+operationsRouter.post('/', async (req: any, res) => {
+  if (req.user) {
+    if (req.body.path) {
+      // CSV file(s) upload
+      const { colMatches, path } = req.body;
+      let {
+        amount = 'amount',
+        category = 'category',
+        date = 'date',
+        label = 'label',
+      } = colMatches;
+      if (amount === '') amount = 'amount';
+      if (date === '') date = 'date';
+      if (label === '') label = 'label';
+      if (category === '') category = 'category';
 
-        if (req.files.length !== 1) return;
+      const childCategories = await getChildCategories();
+      const operationList: Partial<Operation>[] = [];
 
-        const file = req.files[0];
-        const { mimetype, size, path } = file;
-
-        if (mimetype !== 'text/csv')
-          return res.send({ error: true, message: 'Wrong file type' });
-        if (size > 1000000)
-          return res.send({ error: true, message: 'File is too large' });
-
-        const operationList: Partial<Operation>[] = [];
-        fs.createReadStream(path)
-          .pipe(csv())
-          .on('data', async data => {
-            const { date, amount, label, category: categoryTitle } = data;
-
+      const csvStream = fs.createReadStream(path);
+      Papa.parse(csvStream, {
+        header: true,
+        complete: async results => {
+          for (const data of results.data) {
             let operationDate = moment(
-              date,
+              data[date],
               ['YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY', 'DD/MM/YYYY'],
               true,
             );
             if (!operationDate.isValid()) return;
 
-            const parsedFloat = parseFloat(amount.replace(',', '.'));
+            const parsedFloat = parseFloat(data[amount].replace(',', '.'));
             if (isNaN(parsedFloat) || parsedFloat == 0) return;
 
             let categoryId = 1;
             let parentCategoryId = 0;
             const selectedCategory = childCategories.find(
-              childCategory => childCategory.title === categoryTitle,
+              childCategory => childCategory.title === data[category],
             );
             if (selectedCategory && selectedCategory.id) {
               categoryId = selectedCategory.id;
               parentCategoryId = selectedCategory.parentCategoryId;
             }
 
-            if (label.length < 1) return;
-            if (label.length > 255) return;
+            if (data[label].length < 1) return;
+            if (data[label].length > 255) return;
 
             operationList.push({
               amount: parsedFloat,
               categoryId,
-              label,
+              label: data[label],
               operationDate: operationDate.toDate(),
               parentCategoryId,
               userId: req.user.id,
             });
-          })
-          .on('end', async () => {
-            fs.unlink(path, err => {
-              if (err) console.error(err);
-            });
-            if (operationList.length > 0) {
-              await insertOperations(operationList);
-            }
+          }
+          fs.unlink(path, err => {
+            if (err) console.error(err);
           });
-      } else {
-        // Single operation creation
-        const {
-          operationDate: operationDateStr,
-          amount,
-          label,
-          categoryId,
-        } = req.body;
-        const operationDate = new Date(operationDateStr);
-
-        if (isNaN(operationDate.getDate()))
-          return res.send({ error: true, message: 'Wrong date' });
-        if (isNaN(amount) || amount == 0)
-          return res.send({ error: true, message: 'Wrong amount' });
-        if (label.length < 1)
-          return res.send({ error: true, message: 'Label is too short' });
-        if (label.length > 255)
-          return res.send({ error: true, message: 'Label is too long' });
-
-        const category = await getCategoryById(categoryId);
-        if (isNaN(categoryId) || category.length < 1)
-          return res.send({ error: true, message: 'Wrong category' });
-
-        await insertOperations({
-          amount,
-          categoryId,
-          label,
-          operationDate,
-          parentCategoryId: category[0].parentCategoryId,
-          userId: req.user.id,
-        });
-      }
-
-      return res.send({ error: false, message: '' });
+          if (operationList.length > 0) {
+            await insertOperations(operationList);
+          }
+        },
+      });
     } else {
-      return res.status(401).send();
+      // Single operation creation
+      const {
+        operationDate: operationDateStr,
+        amount,
+        label,
+        categoryId,
+      } = req.body;
+      const operationDate = new Date(operationDateStr);
+
+      if (isNaN(operationDate.getDate()))
+        return res.send({ error: true, message: 'Wrong date' });
+      if (isNaN(amount) || amount == 0)
+        return res.send({ error: true, message: 'Wrong amount' });
+      if (label.length < 1)
+        return res.send({ error: true, message: 'Label is too short' });
+      if (label.length > 255)
+        return res.send({ error: true, message: 'Label is too long' });
+
+      const category = await getCategoryById(categoryId);
+      if (isNaN(categoryId) || category.length < 1)
+        return res.send({ error: true, message: 'Wrong category' });
+
+      await insertOperations({
+        amount,
+        categoryId,
+        label,
+        operationDate,
+        parentCategoryId: category[0].parentCategoryId,
+        userId: req.user.id,
+      });
     }
-  },
-);
+
+    return res.send({ error: false, message: '' });
+  } else {
+    return res.status(401).send();
+  }
+});
 
 // Delete an operation
 operationsRouter.delete('/:operationId', async (req: any, res) => {

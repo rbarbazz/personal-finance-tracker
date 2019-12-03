@@ -7,55 +7,7 @@ import { GenericBtn } from '../GenericBtn';
 import { getOperations } from '../../store/actions/operations';
 import { InfoMessage } from '../InfoMessage';
 import { logout } from '../SideMenu';
-
-const uploadFiles = (
-  files: FileList,
-  hasReadCol: boolean,
-  setColList: Function,
-  setMessage: Function,
-  toggleLoading: Function,
-  toggleUpload: Function,
-) => {
-  return async (dispatch: Function) => {
-    if (files.length < 1)
-      return setMessage({
-        error: true,
-        value: 'Please select a file',
-      });
-    toggleLoading(true);
-
-    const data = new FormData();
-
-    data.append('csvFiles', files[0], files[0].name);
-    try {
-      const res = await fetch(
-        `/operations${hasReadCol ? '' : '/read-csv-col'}`,
-        {
-          method: 'POST',
-          body: data,
-        },
-      );
-      toggleLoading(false);
-      if (res.status === 200) {
-        const jsonDecoded = await res.json();
-        const { error, message } = jsonDecoded;
-
-        setMessage({ error, value: message });
-        if (!hasReadCol) {
-          const { headers } = jsonDecoded;
-
-          return setColList(headers);
-        }
-        if (!error) {
-          toggleUpload(false);
-          dispatch(getOperations());
-        }
-      } else dispatch(logout());
-    } catch (error) {
-      setMessage({ error: true, value: 'An error has occurred' });
-    }
-  };
-};
+import { UploadCategoryMatch } from './UploadCategoryMatch';
 
 export const UploadDialog: React.FC<{
   toggleUpload: Function;
@@ -64,8 +16,8 @@ export const UploadDialog: React.FC<{
   const [isLoading, toggleLoading] = useState(false);
   const [message, setMessage] = useState({ error: false, value: '' });
   const [fileName, setFileName] = useState('');
-  const [colList, setColList] = useState([] as string[]);
-  const [colMatches, setColMatches] = useState({
+  const [headers, setHeaders] = useState([] as string[]);
+  const [colMatches, setColMatches] = useState<{ [index: string]: string }>({
     amount: '',
     category: '',
     date: '',
@@ -73,12 +25,94 @@ export const UploadDialog: React.FC<{
   });
   const fileInput = useRef<HTMLInputElement>(null);
 
+  const uploadFile = (files: FileList) => {
+    return async (dispatch: Function) => {
+      if (files.length < 1)
+        return setMessage({
+          error: true,
+          value: 'Please select a file',
+        });
+      toggleLoading(true);
+
+      const data = new FormData();
+
+      data.append('csvFiles', files[0], files[0].name);
+
+      try {
+        const res = await fetch('/operations/read-csv-col', {
+          method: 'POST',
+          body: data,
+        });
+        toggleLoading(false);
+        if (res.status === 200) {
+          const { error, message, headers, path } = await res.json();
+
+          for (const header of headers) {
+            const found = Object.keys(colMatches).find(
+              colName => colName === header,
+            );
+            if (found) setColMatches(prev => ({ ...prev, [found]: found }));
+          }
+          setHeaders(headers);
+          setFileName(path);
+          setMessage({ error, value: message });
+        } else dispatch(logout());
+      } catch (error) {
+        setMessage({ error: true, value: 'An error has occurred' });
+      }
+    };
+  };
+
+  const sendMatchedCols = () => {
+    return async (dispatch: Function) => {
+      const { amount, date, label } = colMatches;
+      if (!amount || !date || !label)
+        return setMessage({
+          error: true,
+          value: 'Please match at least amount, date and label',
+        });
+      toggleLoading(true);
+
+      try {
+        const res = await fetch('/operations', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ colMatches, path: fileName }),
+        });
+        toggleLoading(false);
+        if (res.status === 200) {
+          const { error, message } = await res.json();
+
+          setMessage({ error, value: message });
+          if (!error) {
+            toggleUpload(false);
+            dispatch(getOperations());
+          }
+        } else dispatch(logout());
+      } catch (error) {
+        setMessage({ error: true, value: 'An error has occurred' });
+      }
+    };
+  };
+
   return (
     <Dialog onClose={() => toggleUpload(false)} open>
       <div className="upload-dialog">
         <h3 className="upload-title">Import Transactions</h3>
-        {colList.length > 0 ? (
-          <div className="col-match-container"></div>
+        {headers.length > 0 ? (
+          <div className="col-match-container">
+            {['amount', 'category', 'date', 'label'].map(colName => (
+              <UploadCategoryMatch
+                colName={colName}
+                headers={headers}
+                key={colName}
+                setColMatches={setColMatches}
+                value={colMatches[colName]}
+              />
+            ))}
+          </div>
         ) : (
           <>
             <ul className="upload-explanations">
@@ -126,21 +160,18 @@ export const UploadDialog: React.FC<{
         )}
         <GenericBtn
           action={() => {
-            if (fileInput && fileInput.current && fileInput.current.files)
-              dispatch(
-                uploadFiles(
-                  fileInput.current.files,
-                  colList.length > 0,
-                  setColList,
-                  setMessage,
-                  toggleLoading,
-                  toggleUpload,
-                ),
-              );
+            if (
+              headers.length < 1 &&
+              fileInput &&
+              fileInput.current &&
+              fileInput.current.files
+            )
+              dispatch(uploadFile(fileInput.current.files));
+            else if (headers.length > 0) dispatch(sendMatchedCols());
           }}
           id="upload-csv-btn"
           isLoading={isLoading}
-          value={colList.length > 0 ? 'Upload' : 'Match Columns'}
+          value={headers.length > 0 ? 'Upload' : 'Match Columns'}
         />
       </div>
     </Dialog>

@@ -64,3 +64,26 @@
     padding: $small-margin;
     text-align: center;
 }
+.col-match-container {
+    margin: $small-margin 0;
+}
+.upload-category-container {
+    align-items: center;
+    display: flex;
+    font-family: $primary-font-family;
+    justify-content: space-between;
+    margin-bottom: $small-margin;
+
+    svg {
+        height: 30px;
+        width: 30px;
+    }
+    .col-name-wrapper {
+        display: flex;
+        width: 90px;
+    }
+    .generic-chip {
+        margin: 0;
+        text-transform: capitalize;
+    }
+}
