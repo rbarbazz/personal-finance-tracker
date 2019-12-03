@@ -40,70 +40,110 @@ operationsRouter.get('/', async (req: any, res) => {
   }
 });
 
+// Read columns for a CSV file
+operationsRouter.post(
+  '/read-csv-col',
+  upload.array('csvFiles', 1),
+  async (req: any, res) => {
+    if (req.user) {
+      if (req.files) {
+        if (req.files.length !== 1) return;
+
+        const file = req.files[0];
+        const { mimetype, size, path } = file;
+
+        if (mimetype !== 'text/csv')
+          return res.send({ error: true, message: 'Wrong file type' });
+        if (size > 1000000)
+          return res.send({ error: true, message: 'File is too large' });
+
+        fs.createReadStream(path)
+          .pipe(csv())
+          .on('headers', (headers: string[]) => {
+            return res.send({
+              error: false,
+              message: 'Now please match columns',
+              headers,
+            });
+          })
+          .on('end', async () => {
+            fs.unlink(path, err => {
+              if (err) console.error(err);
+            });
+          });
+      }
+    } else {
+      return res.status(401).send();
+    }
+  },
+);
+
 // Add an operation
 operationsRouter.post(
   '/',
-  upload.array('csvFiles', 10),
+  upload.array('csvFiles', 1),
   async (req: any, res) => {
     if (req.user) {
       if (req.files) {
         // CSV file(s) upload
         const childCategories = await getChildCategories();
 
-        for (const file of req.files) {
-          const { mimetype, size, path } = file;
-          if (mimetype !== 'text/csv')
-            return res.send({ error: true, message: 'Wrong file type' });
-          if (size > 1000000)
-            return res.send({ error: true, message: 'File is too large' });
+        if (req.files.length !== 1) return;
 
-          const operationList: Partial<Operation>[] = [];
-          fs.createReadStream(path)
-            .pipe(csv())
-            .on('data', async data => {
-              const { date, amount, label, category: categoryTitle } = data;
+        const file = req.files[0];
+        const { mimetype, size, path } = file;
 
-              let operationDate = moment(
-                date,
-                ['YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY', 'DD/MM/YYYY'],
-                true,
-              );
-              if (!operationDate.isValid()) return;
+        if (mimetype !== 'text/csv')
+          return res.send({ error: true, message: 'Wrong file type' });
+        if (size > 1000000)
+          return res.send({ error: true, message: 'File is too large' });
 
-              const parsedFloat = parseFloat(amount.replace(',', '.'));
-              if (isNaN(parsedFloat) || parsedFloat == 0) return;
+        const operationList: Partial<Operation>[] = [];
+        fs.createReadStream(path)
+          .pipe(csv())
+          .on('data', async data => {
+            const { date, amount, label, category: categoryTitle } = data;
 
-              let categoryId = 1;
-              let parentCategoryId = 0;
-              const selectedCategory = childCategories.find(
-                childCategory => childCategory.title === categoryTitle,
-              );
-              if (selectedCategory && selectedCategory.id) {
-                categoryId = selectedCategory.id;
-                parentCategoryId = selectedCategory.parentCategoryId;
-              }
+            let operationDate = moment(
+              date,
+              ['YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY', 'DD/MM/YYYY'],
+              true,
+            );
+            if (!operationDate.isValid()) return;
 
-              if (label.length < 1) return;
-              if (label.length > 255) return;
+            const parsedFloat = parseFloat(amount.replace(',', '.'));
+            if (isNaN(parsedFloat) || parsedFloat == 0) return;
 
-              operationList.push({
-                amount: parsedFloat,
-                categoryId,
-                label,
-                operationDate: operationDate.toDate(),
-                parentCategoryId,
-                userId: req.user.id,
-              });
-            })
-            .on('end', async () => {
-              fs.unlink(path, err => {
-                if (err) console.error(err);
-              });
-              if (operationList.length > 0) {
-                await insertOperations(operationList);
-              }
+            let categoryId = 1;
+            let parentCategoryId = 0;
+            const selectedCategory = childCategories.find(
+              childCategory => childCategory.title === categoryTitle,
+            );
+            if (selectedCategory && selectedCategory.id) {
+              categoryId = selectedCategory.id;
+              parentCategoryId = selectedCategory.parentCategoryId;
+            }
+
+            if (label.length < 1) return;
+            if (label.length > 255) return;
+
+            operationList.push({
+              amount: parsedFloat,
+              categoryId,
+              label,
+              operationDate: operationDate.toDate(),
+              parentCategoryId,
+              userId: req.user.id,
             });
-        }
+          })
+          .on('end', async () => {
+            fs.unlink(path, err => {
+              if (err) console.error(err);
+            });
+            if (operationList.length > 0) {
+              await insertOperations(operationList);
+            }
+          });
       } else {
         // Single operation creation
         const {
