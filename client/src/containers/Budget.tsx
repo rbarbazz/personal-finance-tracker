@@ -14,7 +14,7 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
-import { chartTheme } from './Analytics';
+import { chartTheme, chartColorPalette } from './Analytics';
 
 export const Budget: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +31,10 @@ export const Budget: React.FC = () => {
     <div className="budget-container">
       <ActionBar />
       <h2 className="section-title">Budget</h2>
-      <p className="section-subtitle">Set your monthly goals</p>
+      <p className="section-subtitle">
+        Set your monthly goals by category. You can use "Uncategorized" to match
+        the total goal you want to achieve.
+      </p>
       <div className="budget-content-container">
         <div className="budget-categories-container">
           <Table stickyHeader aria-label="simple table">
@@ -62,16 +65,7 @@ export const Budget: React.FC = () => {
           </div>
           <div className="budget-pie-chart-container">
             <ResponsivePie
-              colors={[
-                '#007944',
-                '#ffa600',
-                '#31843a',
-                '#d9a600',
-                '#518e2e',
-                '#b4a300',
-                '#70961d',
-                '#919e04',
-              ]}
+              colors={chartColorPalette}
               cornerRadius={3}
               data={budgets
                 .filter(budget => budget.amount > 0)

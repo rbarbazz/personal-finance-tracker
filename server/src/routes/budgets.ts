@@ -26,12 +26,11 @@ budgetsRouter.get('/', async (req: any, res) => {
     const budgets: BudgetCategory[] = [];
 
     for (const parentCategory of parentCategories) {
-      if (parentCategory.id !== 1)
-        budgets.push({
-          amount: 0,
-          categoryId: parentCategory.id,
-          title: parentCategory.title,
-        });
+      budgets.push({
+        amount: 0,
+        categoryId: parentCategory.id,
+        title: parentCategory.title,
+      });
     }
     for (const userBudget of userBudgets) {
       const index = budgets.findIndex(

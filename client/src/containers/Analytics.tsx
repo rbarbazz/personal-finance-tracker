@@ -46,6 +46,21 @@ export const chartTheme = {
   tooltip: { container: { color: 'black' } },
 };
 
+export const chartColorPalette = [
+  '#5F4690',
+  '#1D6996',
+  '#38A6A5',
+  '#0F8554',
+  '#73AF48',
+  '#EDAD08',
+  '#E17C05',
+  '#CC503E',
+  '#94346E',
+  '#6F4070',
+  '#994E95',
+  '#666666',
+];
+
 const loadingAnimation = {
   webKitAnimation: 'rotate-center 2s linear infinite',
   animation: 'rotate-center 2s linear infinite',

@@ -2,14 +2,11 @@ import { Router } from 'express';
 
 import { getParentCategories } from '../controllers/categories';
 import { knex } from '../db/initDatabase';
+import { MonthlyBarChartData } from '../../../client/src/components/Analytics/MonthlyBarChart';
 import { Operation, Budget } from '../db/models';
+import { BudgetLineChartData } from '../../../client/src/components/Analytics/BudgetLineChart';
 
 export const chartsRouter = Router();
-
-export type MonthlyBarChartData = {
-  data: object[];
-  keys: string[];
-};
 
 chartsRouter.get('/monthlybar', async (req: any, res) => {
   if (req.user) {
@@ -123,14 +120,9 @@ chartsRouter.get('/treemap', async (req: any, res) => {
   }
 });
 
-export type BudgetLineChartNode = {
-  id: string;
-  data: { x: string; y: number }[];
-};
-
 chartsRouter.get('/budgetline', async (req: any, res) => {
   if (req.user) {
-    const budgetLineChart: BudgetLineChartNode[] = [
+    const budgetLineChart: BudgetLineChartData = [
       { id: 'Budget', data: [] },
       { id: 'Expenses', data: [] },
       { id: 'Incomes', data: [] },

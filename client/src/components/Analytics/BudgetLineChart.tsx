@@ -1,13 +1,14 @@
-import { ResponsiveLine } from '@nivo/line';
+import { ResponsiveLine, LineSerieData } from '@nivo/line';
 import React from 'react';
 
-import { BudgetLineChartNode } from '../../../../server/src/routes/charts';
-import { chartTheme } from '../../containers/Analytics';
+import { chartTheme, chartColorPalette } from '../../containers/Analytics';
 import { LoadingBars } from '../LoadingBars';
+
+export type BudgetLineChartData = LineSerieData[];
 
 export const BudgetLineChart: React.FC<{
   isLoading: boolean;
-  root: BudgetLineChartNode[];
+  root: LineSerieData[];
 }> = ({ isLoading, root }) => (
   <div className="chart-wrapper" id="budgetlinechart">
     {isLoading ? (
@@ -28,7 +29,11 @@ export const BudgetLineChart: React.FC<{
                 legendPosition: 'middle',
                 legendOffset: -55,
               }}
-              colors={['#ffa600', '#790800', '#007944']}
+              colors={[
+                chartColorPalette[5],
+                chartColorPalette[7],
+                chartColorPalette[3],
+              ]}
               data={root}
               legends={[
                 {

@@ -1,9 +1,7 @@
-import {
-  BudgetLineChartNode,
-  MonthlyBarChartData,
-  TreeMapChartNode,
-} from '../../../../server/src/routes/charts';
+import { BudgetLineChartData } from '../../components/Analytics/BudgetLineChart';
 import { logout } from '../../components/SideMenu';
+import { MonthlyBarChartData } from '../../components/Analytics/MonthlyBarChart';
+import { TreeMapChartNode } from '../../../../server/src/routes/charts';
 
 export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR';
 export const RECEIVE_MONTHLY_BAR = 'RECEIVE_MONTHLY_BAR';
@@ -36,7 +34,7 @@ interface RequestBudgetLineAction {
 
 interface ReceiveBudgetLineAction {
   type: typeof RECEIVE_BUDGET_LINE;
-  budgetLineChart: BudgetLineChartNode[];
+  budgetLineChart: BudgetLineChartData;
 }
 
 export type AnalyticsActionTypes =
@@ -68,7 +66,7 @@ const requestBudgetLine = (): AnalyticsActionTypes => ({
 });
 
 const receiveBudgetLine = (
-  budgetLineChart: BudgetLineChartNode[],
+  budgetLineChart: BudgetLineChartData,
 ): AnalyticsActionTypes => ({ budgetLineChart, type: RECEIVE_BUDGET_LINE });
 
 export const fetchMonthlyBar = () => {
