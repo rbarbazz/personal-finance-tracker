@@ -29,18 +29,9 @@
     margin: 0 $big-margin;
 }
 .chart-wrapper {
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: $big-margin;
-    transition: box-shadow 0.2s;
-
-    &:hover {
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
-            0 3px 10px 0 rgba(0, 0, 0, 0.19);
-    }
 }
 .chart-title {
     color: $primary-bg-color;
@@ -62,7 +53,7 @@
 }
 #budgetlinechart,
 #treemapchart,
-.text-card {
+.text-card-containter {
     margin-bottom: $big-margin;
 }
 #treemapchart {
@@ -74,29 +65,16 @@
 ==========================================================================
 */
 
-.text-card {
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding: $big-margin;
-    width: 100%;
-
-    &:hover {
-        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.2),
-            0 3px 10px 0 rgba(0, 0, 0, 0.19);
-    }
-}
-.text-card-items-wrapper {
-    align-items: center;
+.text-card-containter {
     display: flex;
     justify-content: space-between;
+    width: 100%;
 }
 .text-card-item {
     align-items: center;
     display: flex;
     flex-direction: column;
+    width: calc(33% - (#{$big-margin} * 2.5));
 }
 .text-card-title {
     color: $primary-bg-color;

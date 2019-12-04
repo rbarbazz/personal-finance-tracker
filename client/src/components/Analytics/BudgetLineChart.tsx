@@ -10,7 +10,7 @@ export const BudgetLineChart: React.FC<{
   isLoading: boolean;
   root: BudgetLineChartData;
 }> = ({ isLoading, root }) => (
-  <div className="chart-wrapper" id="budgetlinechart">
+  <div className="chart-wrapper generic-card" id="budgetlinechart">
     {isLoading ? (
       <LoadingBars />
     ) : (
@@ -30,10 +30,10 @@ export const BudgetLineChart: React.FC<{
                 legendOffset: -55,
               }}
               colors={[
-                chartColorPalette[1],
-                chartColorPalette[3],
-                chartColorPalette[7],
                 chartColorPalette[5],
+                chartColorPalette[1],
+                chartColorPalette[7],
+                chartColorPalette[3],
               ]}
               data={root}
               legends={[

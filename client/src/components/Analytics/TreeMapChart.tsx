@@ -9,7 +9,7 @@ export const TreeMapChart: React.FC<{
   root: TreeMapChartNode;
   isLoading: boolean;
 }> = ({ root, isLoading }) => (
-  <div className="chart-wrapper" id="treemapchart">
+  <div className="chart-wrapper generic-card" id="treemapchart">
     {isLoading ? (
       <LoadingBars />
     ) : (

@@ -15,7 +15,7 @@ export const MonthlyBarChart: React.FC<{
 }> = ({ root, isLoading }) => {
   const { data, keys } = root;
   return (
-    <div className="chart-wrapper" id="monthlybarchart">
+    <div className="chart-wrapper generic-card" id="monthlybarchart">
       {isLoading ? (
         <LoadingBars />
       ) : (

@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, useCallback, useState } from 'react';
+import React, { useEffect, useCallback } from 'react';
 
 import '../styles/Analytics.scss';
 import {
@@ -8,13 +8,13 @@ import {
   fetchTreeMap,
 } from '../store/actions/analytics';
 import { ActionBar } from '../components/ActionBar';
+import { Averages } from '../components/Analytics/Averages';
 import { BudgetLineChart } from '../components/Analytics/BudgetLineChart';
 import { GenericBtn } from '../components/GenericBtn';
 import { MonthlyBarChart } from '../components/Analytics/MonthlyBarChart';
 import { ReactComponent as Sync } from '../icons/Sync.svg';
 import { State } from '../store/reducers';
 import { TreeMapChart } from '../components/Analytics/TreeMapChart';
-import { Averages, ListAverages } from '../components/Analytics/Averages';
 
 export const chartTheme = {
   axis: {
@@ -67,9 +67,6 @@ const loadingAnimation = {
   animation: 'rotate-center 2s linear infinite',
 };
 
-const average = (array: number[]) =>
-  (array.reduce((a, b) => a + b) / array.length).toFixed(2);
-
 export const Analytics: React.FC = () => {
   const dispatch = useDispatch();
   const getInitialCharts = useCallback(() => {
@@ -97,53 +94,10 @@ export const Analytics: React.FC = () => {
   );
   const isFetchingCharts =
     isFetchingMonthlyBar || isFetchingBudgetLine || isFetchingTreeMap;
-  const [averages, updateAverages] = useState([] as ListAverages);
 
   useEffect(() => {
     getInitialCharts();
   }, [getInitialCharts]);
-
-  useEffect(() => {
-    if (budgetLineChart[1] && budgetLineChart[1].data)
-      updateAverages(prev => [
-        ...prev,
-        {
-          amount: average(
-            Array.from(budgetLineChart[1].data, elem => {
-              if (elem.y) return +elem.y;
-              else return 0;
-            }),
-          ),
-          title: String(budgetLineChart[1].id),
-        },
-      ]);
-    if (budgetLineChart[2] && budgetLineChart[2].data)
-      updateAverages(prev => [
-        ...prev,
-        {
-          amount: average(
-            Array.from(budgetLineChart[2].data, elem => {
-              if (elem.y) return +elem.y;
-              else return 0;
-            }),
-          ),
-          title: String(budgetLineChart[2].id),
-        },
-      ]);
-    if (budgetLineChart[0] && budgetLineChart[0].data)
-      updateAverages(prev => [
-        ...prev,
-        {
-          amount: average(
-            Array.from(budgetLineChart[0].data, elem => {
-              if (elem.y) return +elem.y;
-              else return 0;
-            }),
-          ),
-          title: String(budgetLineChart[0].id),
-        },
-      ]);
-  }, [budgetLineChart]);
 
   return (
     <div className="dashboard-main-container">
@@ -176,7 +130,9 @@ export const Analytics: React.FC = () => {
             root={budgetLineChart}
             isLoading={isFetchingBudgetLine}
           />
-          {averages.length > 0 && <Averages averages={averages} />}
+          {budgetLineChart.length > 0 && (
+            <Averages budgetLineChart={budgetLineChart} />
+          )}
           <TreeMapChart root={treeMapChart} isLoading={isFetchingTreeMap} />
         </div>
       </div>
