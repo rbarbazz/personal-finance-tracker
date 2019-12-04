@@ -123,9 +123,10 @@ chartsRouter.get('/treemap', async (req: any, res) => {
 chartsRouter.get('/budgetline', async (req: any, res) => {
   if (req.user) {
     const budgetLineChart: BudgetLineChartData = [
-      { id: 'Budget', data: [] },
-      { id: 'Expenses', data: [] },
+      { id: 'Savings', data: [] },
       { id: 'Incomes', data: [] },
+      { id: 'Expenses', data: [] },
+      { id: 'Budget', data: [] },
     ];
 
     const today = new Date();
@@ -151,17 +152,26 @@ chartsRouter.get('/budgetline', async (req: any, res) => {
         .andWhereBetween('operationDate', [from, to])
         .first();
 
-      budgetLineChart[0].data.push({
+      budgetLineChart[3].data.push({
         x: month,
         y: totalBudgets ? Math.abs(totalBudgets.sum) : 0,
       });
-      budgetLineChart[1].data.push({
+      budgetLineChart[2].data.push({
         x: month,
         y: monthTotalExpenses ? Math.abs(monthTotalExpenses.sum) : 0,
       });
-      budgetLineChart[2].data.push({
+      budgetLineChart[1].data.push({
         x: month,
         y: monthTotalIncomes ? Math.abs(monthTotalIncomes.sum) : 0,
+      });
+
+      const monthlySavings =
+        monthTotalExpenses && monthTotalIncomes
+          ? Math.abs(monthTotalIncomes.sum) - Math.abs(monthTotalExpenses.sum)
+          : 0;
+      budgetLineChart[0].data.push({
+        x: month,
+        y: monthlySavings > 0 ? monthlySavings.toFixed(2) : 0,
       });
     }
 

@@ -32,8 +32,8 @@ export const Budget: React.FC = () => {
       <ActionBar />
       <h2 className="section-title">Budget</h2>
       <p className="section-subtitle">
-        Set your monthly goals by category. You can use "Uncategorized" to match
-        the total goal you want to achieve.
+        Set your monthly goals by category. You can use the "Uncategorized"
+        category to match the total goal you want to achieve.
       </p>
       <div className="budget-content-container">
         <div className="budget-categories-container">

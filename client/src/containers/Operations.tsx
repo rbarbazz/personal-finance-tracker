@@ -1,3 +1,4 @@
+import { CSVLink } from 'react-csv';
 import { useDispatch, useSelector } from 'react-redux';
 import React, { useState, useEffect, useCallback } from 'react';
 
@@ -7,8 +8,9 @@ import { GenericBtn } from '../components/GenericBtn';
 import { getOperations, getCategories } from '../store/actions/operations';
 import { LoadingBars } from '../components/LoadingBars';
 import { OperationTable } from '../components/Operations/OperationsTable';
-import { ReactComponent as Add } from '../icons/Add.svg';
-import { ReactComponent as FileAdd } from '../icons/FileAdd.svg';
+import { ReactComponent as AddIcon } from '../icons/Add.svg';
+import { ReactComponent as ArchiveIcon } from '../icons/Archive.svg';
+import { ReactComponent as FileAddIcon } from '../icons/FileAdd.svg';
 import { State } from '../store/reducers';
 import { UploadDialog } from '../components/Operations/UploadDialog';
 import { UpsertOperationDialog } from '../components/Operations/UpsertOperationDialog';
@@ -25,6 +27,7 @@ export const Operations: React.FC = () => {
   const isFetchingOperations = useSelector(
     (state: State) => state.operations.isFetchingOperations,
   );
+  const operations = useSelector((state: State) => state.operations.operations);
   const [addOperationVisible, toggleAddDialog] = useState(false);
   const [uploadVisible, toggleUpload] = useState(false);
 
@@ -36,30 +39,57 @@ export const Operations: React.FC = () => {
     <div className="operations-container">
       <ActionBar>
         <GenericBtn
+          action={() => toggleAddDialog(true)}
+          value={
+            <>
+              {'Add'}
+              <AddIcon />
+            </>
+          }
+        />
+        <GenericBtn
           action={() => toggleUpload(true)}
           value={
             <>
-              {'Upload file'}
-              <FileAdd />
+              {'Import'}
+              <FileAddIcon />
             </>
           }
         />
         {uploadVisible && <UploadDialog toggleUpload={toggleUpload} />}
-        <GenericBtn
-          action={() => toggleAddDialog(true)}
-          value={
-            <>
-              {'Add Operation'}
-              <Add />
-            </>
-          }
-        />
+        <CSVLink
+          data={operations.map(operation => {
+            const { amount, categoryTitle, label, operationDate } = operation;
+
+            return {
+              amount,
+              categoryTitle,
+              label,
+              operationDate: new Date(operationDate)
+                .toISOString()
+                .substring(0, 10),
+            };
+          })}
+          filename="operations-export.csv"
+          separator=";"
+          target="_blank"
+        >
+          <GenericBtn
+            action={() => {}}
+            value={
+              <>
+                {'Export'}
+                <ArchiveIcon />
+              </>
+            }
+          />
+        </CSVLink>
         {addOperationVisible && (
           <UpsertOperationDialog toggleDialog={toggleAddDialog} />
         )}
       </ActionBar>
       <h2 className="section-title">Operations</h2>
-      <p className="section-subtitle">Update and import operations</p>
+      <p className="section-subtitle">Add, delete and edit operations.</p>
       <div className="table-container">
         {isFetchingCategories || isFetchingOperations ? (
           <LoadingBars />

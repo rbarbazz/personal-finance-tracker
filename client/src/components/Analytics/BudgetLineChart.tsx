@@ -8,7 +8,7 @@ export type BudgetLineChartData = LineSerieData[];
 
 export const BudgetLineChart: React.FC<{
   isLoading: boolean;
-  root: LineSerieData[];
+  root: BudgetLineChartData;
 }> = ({ isLoading, root }) => (
   <div className="chart-wrapper" id="budgetlinechart">
     {isLoading ? (
@@ -30,9 +30,10 @@ export const BudgetLineChart: React.FC<{
                 legendOffset: -55,
               }}
               colors={[
-                chartColorPalette[5],
-                chartColorPalette[7],
+                chartColorPalette[1],
                 chartColorPalette[3],
+                chartColorPalette[7],
+                chartColorPalette[5],
               ]}
               data={root}
               legends={[
