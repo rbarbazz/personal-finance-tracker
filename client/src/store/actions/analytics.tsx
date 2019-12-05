@@ -1,7 +1,7 @@
 import { BudgetLineChartData } from '../../components/Analytics/BudgetLineChart';
 import { logout } from '../../components/SideMenu';
 import { MonthlyBarChartData } from '../../components/Analytics/MonthlyBarChart';
-import { TreeMapChartNode } from '../../../../server/src/routes/charts';
+import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 
 export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR';
 export const RECEIVE_MONTHLY_BAR = 'RECEIVE_MONTHLY_BAR';
@@ -73,7 +73,7 @@ export const fetchMonthlyBar = () => {
   return async (dispatch: Function) => {
     dispatch(requestMonthlyBar());
     try {
-      const res = await fetch('/charts/monthlybar', {
+      const res = await fetch('/analytics/monthlybar', {
         method: 'GET',
       });
       if (res.status === 200) {
@@ -91,7 +91,7 @@ export const fetchTreeMap = () => {
   return async (dispatch: Function) => {
     dispatch(requestTreeMap());
     try {
-      const res = await fetch('/charts/treemap', {
+      const res = await fetch('/analytics/treemap', {
         method: 'GET',
       });
       if (res.status === 200) {
@@ -109,7 +109,7 @@ export const fetchBudgetLine = () => {
   return async (dispatch: Function) => {
     dispatch(requestBudgetLine());
     try {
-      const res = await fetch('/charts/budgetline', {
+      const res = await fetch('/analytics/budgetline', {
         method: 'GET',
       });
       if (res.status === 200) {

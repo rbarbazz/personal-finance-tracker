@@ -38,6 +38,7 @@ export const MonthlyBarChart: React.FC<{
                 data={data}
                 indexBy="month"
                 keys={keys}
+                label={d => `$ ${d.value}`}
                 labelSkipHeight={15}
                 labelTextColor="white"
                 margin={{ top: 10, right: 0, bottom: 50, left: 60 }}

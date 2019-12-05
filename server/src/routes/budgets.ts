@@ -1,10 +1,10 @@
 import { Router } from 'express';
 
 import {
-  getBudgetsByUserId,
+  getAllBudgets,
   insertBudgets,
   getBudgetByCategory,
-  updateBudgetById,
+  updateBudget,
 } from '../controllers/budgets';
 import {
   getParentCategories,
@@ -21,7 +21,7 @@ export type BudgetCategory = {
 
 budgetsRouter.get('/', async (req: any, res) => {
   if (req.user) {
-    const userBudgets = await getBudgetsByUserId(req.user.id);
+    const userBudgets = await getAllBudgets(req.user.id);
     const parentCategories = await getParentCategories();
     const budgets: BudgetCategory[] = [];
 
@@ -58,7 +58,7 @@ budgetsRouter.post('/', async (req: any, res) => {
     const existingBudget = await getBudgetByCategory(categoryId, req.user.id);
 
     if (existingBudget.length > 0)
-      await updateBudgetById(existingBudget[0].id, { amount });
+      await updateBudget(existingBudget[0].id, { amount });
     else await insertBudgets({ amount, categoryId, userId: req.user.id });
 
     return res.send({ error: false, message: '' });

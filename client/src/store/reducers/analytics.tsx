@@ -9,7 +9,7 @@ import {
 } from '../actions/analytics';
 import { BudgetLineChartData } from '../../components/Analytics/BudgetLineChart';
 import { MonthlyBarChartData } from '../../components/Analytics/MonthlyBarChart';
-import { TreeMapChartNode } from '../../../../server/src/routes/charts';
+import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
 
 export type AnalyticsState = {

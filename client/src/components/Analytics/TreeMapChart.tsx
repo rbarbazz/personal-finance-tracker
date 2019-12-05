@@ -3,7 +3,7 @@ import React from 'react';
 
 import { chartTheme, chartColorPalette } from '../../containers/Analytics';
 import { LoadingBars } from '../LoadingBars';
-import { TreeMapChartNode } from '../../../../server/src/routes/charts';
+import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 
 export const TreeMapChart: React.FC<{
   root: TreeMapChartNode;

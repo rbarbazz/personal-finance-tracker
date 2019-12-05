@@ -16,14 +16,24 @@
     display: flex;
     font-family: $primary-font-family;
     justify-content: center;
-    padding: 15px;
+    padding: 18px;
     transition: background-color, 0.3s;
 
+    .loading-spinner {
+        border-color: $primary-color-dark;
+        border-top-color: white;
+        border-width: 3px;
+        height: 12px;
+        width: 12px;
+    }
     &:hover {
         background-color: $primary-color-dark;
     }
     &:focus {
         outline: none;
+    }
+    &:disabled {
+        background-color: $primary-color;
     }
     svg {
         fill: white;

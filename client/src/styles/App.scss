@@ -18,6 +18,11 @@ body {
     font-family: $primary-font-family;
     height: 100%;
     justify-content: center;
+
+    > .loading-spinner {
+        border-color: $primary-color-dark;
+        border-top-color: white;
+    }
 }
 .section-title {
     color: $primary-bg-color;

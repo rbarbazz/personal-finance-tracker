@@ -6,11 +6,11 @@ import multer from 'multer';
 
 import { Operation } from '../db/models';
 import {
-  delOperationById,
-  getOperationById,
-  getOperationsByUserId,
+  delOperation,
+  getOperation,
+  getOperations,
   insertOperations,
-  updateOperationById,
+  updateOperation,
 } from '../controllers/operations';
 import { getChildCategories, getCategoryById } from '../controllers/categories';
 
@@ -29,7 +29,7 @@ declare module 'papaparse' {
 // Get all operations for a user
 operationsRouter.get('/', async (req: any, res) => {
   if (req.user) {
-    const operations = await getOperationsByUserId(req.user.id);
+    const operations = await getOperations(req.user.id);
 
     operations.sort((a, b) => {
       const ret = +new Date(b.operationDate) - +new Date(a.operationDate);
@@ -192,10 +192,10 @@ operationsRouter.post('/', async (req: any, res) => {
 operationsRouter.delete('/:operationId', async (req: any, res) => {
   if (req.user) {
     const { operationId } = req.params;
-    let operation = await getOperationById(operationId);
+    let operation = await getOperation(operationId);
 
     if (operation.length > 0 && operation[0].userId === req.user.id) {
-      await delOperationById(operationId);
+      await delOperation(operationId);
     } else {
       return res.status(401).send();
     }
@@ -209,7 +209,7 @@ operationsRouter.delete('/:operationId', async (req: any, res) => {
 operationsRouter.put('/:operationId', async (req: any, res) => {
   if (req.user) {
     const { operationId } = req.params;
-    const operation = await getOperationById(operationId);
+    const operation = await getOperation(operationId);
 
     if (operation.length > 0 && operation[0].userId === req.user.id) {
       const {
@@ -233,7 +233,7 @@ operationsRouter.put('/:operationId', async (req: any, res) => {
       if (isNaN(categoryId) || category.length < 1)
         return res.send({ error: true, message: 'Wrong category' });
 
-      await updateOperationById(operationId, {
+      await updateOperation(operationId, {
         amount,
         categoryId,
         label,
@@ -254,7 +254,7 @@ operationsRouter.put('/:operationId', async (req: any, res) => {
 operationsRouter.patch('/:operationId', async (req: any, res) => {
   if (req.user) {
     const { operationId } = req.params;
-    const operation = await getOperationById(operationId);
+    const operation = await getOperation(operationId);
 
     if (operation.length > 0 && operation[0].userId === req.user.id) {
       const { categoryId } = req.body;
@@ -263,7 +263,7 @@ operationsRouter.patch('/:operationId', async (req: any, res) => {
       if (isNaN(categoryId) || category.length < 1)
         return res.send({ error: true, message: 'Wrong category' });
 
-      await updateOperationById(operationId, {
+      await updateOperation(operationId, {
         categoryId,
         parentCategoryId: category[0].parentCategoryId,
       });

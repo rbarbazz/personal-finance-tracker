@@ -56,6 +56,11 @@ export const BudgetLineChart: React.FC<{
               pointSize={8}
               theme={chartTheme}
               useMesh
+              yScale={{
+                type: 'linear',
+                min: 'auto',
+                max: 'auto',
+              }}
             />
           ) : (
             <p className="chart-error-message">

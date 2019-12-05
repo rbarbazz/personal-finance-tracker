@@ -9,7 +9,7 @@ import session from 'express-session';
 import { authRouter } from './routes/auth';
 import { budgetsRouter } from './routes/budgets';
 import { categoriesRouter } from './routes/categories';
-import { chartsRouter } from './routes/charts';
+import { analyticsRouter } from './routes/analytics';
 import { operationsRouter } from './routes/operations';
 import { User } from './db/models';
 import initDatabase, { knex } from './db/initDatabase';
@@ -38,9 +38,9 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use('/', authRouter);
+app.use('/analytics', analyticsRouter);
 app.use('/budgets', budgetsRouter);
 app.use('/categories', categoriesRouter);
-app.use('/charts', chartsRouter);
 app.use('/operations', operationsRouter);
 
 /**
