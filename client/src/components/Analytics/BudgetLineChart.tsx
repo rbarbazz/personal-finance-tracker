@@ -1,10 +1,13 @@
-import { ResponsiveLine, LineSerieData } from '@nivo/line';
+import { ResponsiveLine } from '@nivo/line';
 import React from 'react';
 
 import { chartTheme, chartColorPalette } from '../../containers/Analytics';
 import { LoadingBars } from '../LoadingBars';
 
-export type BudgetLineChartData = LineSerieData[];
+export type BudgetLineChartData = {
+  id: string;
+  data: { x: string; y: number }[];
+}[];
 
 export const BudgetLineChart: React.FC<{
   isLoading: boolean;

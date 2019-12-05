@@ -59,29 +59,37 @@ export const getMonthlyExpensesSumsForChildren = async (
     .andWhereNot('categories.parentCategoryId', 0)
     .groupBy('categories.id');
 
-export const getMonthlyExpensesSum = async (
+export const getMonthlyExpensesSums = async (
   from: Date,
   to: Date,
   userId: number,
-) =>
+): Promise<{ x: string; y: number }[]> =>
   await knex<Operation>('operations')
-    .sum('amount')
+    .select(
+      knex.raw("to_char(operation_date, 'FMMonth') as x"),
+      knex.raw('abs(sum(amount)) as y'),
+    )
     .where('userId', userId)
     .andWhere('amount', '<', 0)
     .andWhereBetween('operationDate', [from, to])
-    .first();
+    .groupBy('x')
+    .orderByRaw('min(operation_date)');
 
-export const getMonthlyIncomesSum = async (
+export const getMonthlyIncomesSums = async (
   from: Date,
   to: Date,
   userId: number,
-) =>
+): Promise<{ x: string; y: number }[]> =>
   await knex<Operation>('operations')
-    .sum('amount')
+    .select(
+      knex.raw("to_char(operation_date, 'FMMonth') as x"),
+      knex.raw('sum(amount) as y'),
+    )
     .where('userId', userId)
     .andWhere('amount', '>', 0)
     .andWhereBetween('operationDate', [from, to])
-    .first();
+    .groupBy('x')
+    .orderByRaw('min(operation_date)');
 
 export const insertOperations = async (
   operations: Partial<Operation> | Partial<Operation>[],

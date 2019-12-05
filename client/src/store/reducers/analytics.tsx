@@ -13,6 +13,7 @@ import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
 
 export type AnalyticsState = {
+  averages: { amount: string; title: string }[];
   budgetLineChart: BudgetLineChartData;
   isFetchingBudgetLine: boolean;
   isFetchingMonthlyBar: boolean;
@@ -22,6 +23,11 @@ export type AnalyticsState = {
 };
 
 const initialState: AnalyticsState = {
+  averages: [
+    { amount: '0', title: 'Incomes' },
+    { amount: '0', title: 'Expenses' },
+    { amount: '0', title: 'Savings' },
+  ],
   budgetLineChart: [] as BudgetLineChartData,
   isFetchingBudgetLine: false,
   isFetchingMonthlyBar: false,
@@ -29,6 +35,9 @@ const initialState: AnalyticsState = {
   monthlyBarChart: { data: [], keys: [] },
   treeMapChart: { categoryId: 0, title: 'Expenses', children: [] },
 };
+
+const average = (array: { x: string; y: number }[]) =>
+  (array.reduce((a, b) => a + b.y, 0) / array.length).toFixed(2);
 
 export const analytics = (
   state = initialState,
@@ -56,6 +65,14 @@ export const analytics = (
     case RECEIVE_BUDGET_LINE:
       return {
         ...state,
+        averages: [
+          { amount: average(action.budgetLineChart[3].data), title: 'Incomes' },
+          {
+            amount: average(action.budgetLineChart[2].data),
+            title: 'Expenses',
+          },
+          { amount: average(action.budgetLineChart[1].data), title: 'Savings' },
+        ],
         budgetLineChart: action.budgetLineChart,
         isFetchingBudgetLine: false,
       };

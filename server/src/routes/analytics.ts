@@ -1,10 +1,10 @@
 import { Router } from 'express';
 
 import {
-  getMonthlyExpensesSum,
+  getMonthlyExpensesSums,
   getMonthlyExpensesSumsForChildren,
   getMonthlyExpensesSumsForParents,
-  getMonthlyIncomesSum,
+  getMonthlyIncomesSums,
 } from '../controllers/operations';
 import { BudgetLineChartData } from '../../../client/src/components/Analytics/BudgetLineChart';
 import { getAllBudgetsSum } from '../controllers/budgets';
@@ -115,42 +115,55 @@ analyticsRouter.get('/budgetline', async (req: any, res) => {
       { id: 'Expenses', data: [] },
       { id: 'Incomes', data: [] },
     ];
-
     const today = new Date();
+    const from = new Date(today.getFullYear(), today.getMonth() - 6, 1);
+    const to = new Date(today.getFullYear(), today.getMonth(), 0);
+
+    const totalBudgets = await getAllBudgetsSum(req.user.id);
+    const monthlyExpensesSums = await getMonthlyExpensesSums(
+      from,
+      to,
+      req.user.id,
+    );
+    const monthlyIncomesSums = await getMonthlyIncomesSums(
+      from,
+      to,
+      req.user.id,
+    );
+
+    // Temporary until monthly budgets are implemented
     for (let i = 5; i >= 0; i--) {
-      const from = new Date(today.getFullYear(), today.getMonth() - i - 1, 1);
-      const to = new Date(today.getFullYear(), today.getMonth() - i, 0);
-      const month = from.toLocaleString('default', { month: 'long' });
-
-      const totalBudgets = await getAllBudgetsSum(req.user.id);
-      const monthExpensesSum = await getMonthlyExpensesSum(
-        from,
-        to,
-        req.user.id,
-      );
-      const monthIncomesSum = await getMonthlyIncomesSum(from, to, req.user.id);
-
-      const monthlySavings =
-        monthExpensesSum && monthIncomesSum
-          ? Math.abs(monthIncomesSum.sum) - Math.abs(monthExpensesSum.sum)
-          : 0;
-
+      const currMonth = new Date(
+        today.getFullYear(),
+        today.getMonth() - i - 1,
+        1,
+      ).toLocaleString('default', { month: 'long' });
       budgetLineChart[0].data.push({
-        x: month,
+        x: currMonth,
         y: totalBudgets ? Math.abs(totalBudgets.sum) : 0,
       });
-      budgetLineChart[1].data.push({
-        x: month,
-        y: monthlySavings.toFixed(2),
-      });
-      budgetLineChart[2].data.push({
-        x: month,
-        y: monthExpensesSum ? Math.abs(monthExpensesSum.sum) : 0,
-      });
-      budgetLineChart[3].data.push({
-        x: month,
-        y: monthIncomesSum ? Math.abs(monthIncomesSum.sum) : 0,
-      });
+    }
+
+    if (monthlyExpensesSums) budgetLineChart[2].data = monthlyExpensesSums;
+    if (monthlyIncomesSums) budgetLineChart[3].data = monthlyIncomesSums;
+    for (let i = 0; i < 6; i++) {
+      let monthlyExpenses = 0,
+        monthlyIncomes = 0,
+        month = '';
+
+      if (monthlyExpensesSums && monthlyExpensesSums[i]) {
+        month = monthlyExpensesSums[i].x;
+        monthlyExpenses = monthlyExpensesSums[i].y;
+      }
+      if (monthlyIncomesSums && monthlyIncomesSums[i]) {
+        month = monthlyIncomesSums[i].x;
+        monthlyIncomes = monthlyIncomesSums[i].y;
+      }
+      if (month !== '')
+        budgetLineChart[1].data.push({
+          x: month,
+          y: +(monthlyIncomes - monthlyExpenses).toFixed(2),
+        });
     }
 
     return res.send({ budgetLineChart });

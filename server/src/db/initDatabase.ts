@@ -15,7 +15,7 @@ const createUsers = async () => {
 
   await knex.schema.createTable('users', table => {
     table.increments();
-    table.string('fName');
+    table.string('f_name');
     table.string('email');
     table.string('password');
     table.timestamps(true, true);
@@ -30,7 +30,7 @@ const createCategories = async () => {
   await knex.schema.createTable('categories', table => {
     table.increments();
     table.string('title');
-    table.integer('parentCategoryId');
+    table.integer('parent_category_id');
   });
 
   await knex<Category>('categories').insert(
@@ -61,12 +61,12 @@ const createOperations = async () => {
 
   await knex.schema.createTable('operations', table => {
     table.increments();
-    table.date('operationDate');
+    table.date('operation_date');
     table.float('amount');
     table.string('label');
-    table.integer('categoryId');
-    table.integer('userId');
-    table.integer('parentCategoryId');
+    table.integer('category_id');
+    table.integer('user_id');
+    table.integer('parent_category_id');
   });
 };
 
@@ -78,8 +78,8 @@ const createBudgets = async () => {
   await knex.schema.createTable('budgets', table => {
     table.increments();
     table.float('amount');
-    table.integer('categoryId');
-    table.integer('userId');
+    table.integer('category_id');
+    table.integer('user_id');
   });
 };
 

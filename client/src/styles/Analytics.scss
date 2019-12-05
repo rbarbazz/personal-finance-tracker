@@ -73,6 +73,7 @@
     align-items: center;
     display: flex;
     flex-direction: column;
+    height: 123px;
     width: calc(33% - (#{$big-margin} * 2.5));
 }
 .text-card-title {

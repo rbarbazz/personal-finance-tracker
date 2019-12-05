@@ -12,7 +12,7 @@ import { Averages } from '../components/Analytics/Averages';
 import { BudgetLineChart } from '../components/Analytics/BudgetLineChart';
 import { GenericBtn } from '../components/GenericBtn';
 import { MonthlyBarChart } from '../components/Analytics/MonthlyBarChart';
-import { ReactComponent as Sync } from '../icons/Sync.svg';
+import { ReactComponent as SyncIcon } from '../icons/Sync.svg';
 import { State } from '../store/reducers';
 import { TreeMapChart } from '../components/Analytics/TreeMapChart';
 
@@ -89,6 +89,7 @@ export const Analytics: React.FC = () => {
   const budgetLineChart = useSelector(
     (state: State) => state.analytics.budgetLineChart,
   );
+  const averages = useSelector((state: State) => state.analytics.averages);
   const isFetchingBudgetLine = useSelector(
     (state: State) => state.analytics.isFetchingBudgetLine,
   );
@@ -113,7 +114,7 @@ export const Analytics: React.FC = () => {
           value={
             <>
               {'Refresh'}
-              <Sync style={isFetchingCharts ? loadingAnimation : {}} />
+              <SyncIcon style={isFetchingCharts ? loadingAnimation : {}} />
             </>
           }
         />
@@ -123,17 +124,15 @@ export const Analytics: React.FC = () => {
         <p className="section-subtitle">Your personal finances at a glance.</p>
         <div className="charts-container">
           <MonthlyBarChart
-            root={monthlyBarChart}
             isLoading={isFetchingMonthlyBar}
+            root={monthlyBarChart}
           />
           <BudgetLineChart
-            root={budgetLineChart}
             isLoading={isFetchingBudgetLine}
+            root={budgetLineChart}
           />
-          {budgetLineChart.length > 0 && (
-            <Averages budgetLineChart={budgetLineChart} />
-          )}
-          <TreeMapChart root={treeMapChart} isLoading={isFetchingTreeMap} />
+          <Averages averages={averages} isLoading={isFetchingBudgetLine} />
+          <TreeMapChart isLoading={isFetchingTreeMap} root={treeMapChart} />
         </div>
       </div>
     </div>

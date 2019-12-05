@@ -1,10 +1,10 @@
 export interface User {
-  created_at: Date;
+  createdAt: Date;
   email: string;
   fName: string;
   id: number;
   password: string;
-  updated_at: Date;
+  updatedAt: Date;
 }
 
 export interface Operation {
