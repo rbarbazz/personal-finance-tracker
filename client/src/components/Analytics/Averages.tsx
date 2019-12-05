@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { LoadingBars } from '../LoadingBars';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 export const Averages: React.FC<{
   averages: { amount: string; title: string }[];
@@ -10,7 +10,7 @@ export const Averages: React.FC<{
     {averages.map(average => (
       <div key={average.title} className="text-card-item generic-card">
         {isLoading ? (
-          <LoadingBars />
+          <LoadingSpinner />
         ) : (
           <>
             <div className="text-card-amount">{`$ ${average.amount}`}</div>

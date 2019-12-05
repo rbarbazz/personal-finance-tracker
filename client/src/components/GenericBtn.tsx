@@ -1,7 +1,7 @@
 import React from 'react';
 
 import '../styles/GenericBtn.scss';
-import { LoadingBars } from './LoadingBars';
+import { LoadingSpinner } from './LoadingSpinner';
 
 export const GenericBtn: React.FC<{
   action: Function;
@@ -15,6 +15,6 @@ export const GenericBtn: React.FC<{
     id={id || ''}
     onClick={() => action()}
   >
-    {isLoading ? <LoadingBars /> : value}
+    {isLoading ? <LoadingSpinner /> : value}
   </button>
 );

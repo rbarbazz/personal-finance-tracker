@@ -2,7 +2,7 @@ import { Data, BarProps, ResponsiveBar } from '@nivo/bar';
 import React from 'react';
 
 import { chartTheme, chartColorPalette } from '../../containers/Analytics';
-import { LoadingBars } from '../LoadingBars';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 export type MonthlyBarChartData = {
   data: Data['data'];
@@ -17,7 +17,7 @@ export const MonthlyBarChart: React.FC<{
   return (
     <div className="chart-wrapper generic-card" id="monthlybarchart">
       {isLoading ? (
-        <LoadingBars />
+        <LoadingSpinner />
       ) : (
         <>
           <h3 className="chart-title">Expenses Monthly Repartition</h3>

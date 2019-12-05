@@ -21,9 +21,16 @@
     height: 100%;
     margin: 0 $big-margin $big-margin;
 }
+
+/*
+   Categories table
+==========================================================================
+*/
+
 .budget-categories-container {
     background-color: white;
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    display: flex;
     height: 100%;
     overflow: auto;
     width: calc(50% - (#{$big-margin} * 0.5));
@@ -58,6 +65,12 @@
     margin-left: 15px;
     width: 36px;
 }
+
+/*
+   Right column
+==========================================================================
+*/
+
 .budget-right-col {
     display: flex;
     flex-direction: column;
@@ -66,12 +79,13 @@
 }
 .total-container,
 .budget-pie-chart-container {
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    padding: $big-margin;
+    display: flex;
+    flex-direction: column;
+}
+.total-container {
+    min-height: 123px;
 }
 .budget-pie-chart-container {
-    height: 100%;
     margin-top: $big-margin;
 }
 .total-title {

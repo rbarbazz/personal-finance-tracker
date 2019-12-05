@@ -9,7 +9,7 @@ import {
 
 import '../styles/App.scss';
 import { Analytics } from './Analytics';
-import { LoadingBars } from '../components/LoadingBars';
+import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Login } from './Login';
 import { Operations } from './Operations';
 import { requestUserStatus, receiveUserStatus } from '../store/actions/user';
@@ -56,7 +56,7 @@ const App: React.FC = () => {
   return (
     <>
       {isFetchingStatus ? (
-        <LoadingBars />
+        <LoadingSpinner />
       ) : (
         <Router>
           {isLoggedIn ? <SideMenu /> : null}

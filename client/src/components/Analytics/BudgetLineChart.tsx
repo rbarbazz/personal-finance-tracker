@@ -2,7 +2,7 @@ import { ResponsiveLine } from '@nivo/line';
 import React from 'react';
 
 import { chartTheme, chartColorPalette } from '../../containers/Analytics';
-import { LoadingBars } from '../LoadingBars';
+import { LoadingSpinner } from '../LoadingSpinner';
 
 export type BudgetLineChartData = {
   id: string;
@@ -15,7 +15,7 @@ export const BudgetLineChart: React.FC<{
 }> = ({ isLoading, root }) => (
   <div className="chart-wrapper generic-card" id="budgetlinechart">
     {isLoading ? (
-      <LoadingBars />
+      <LoadingSpinner />
     ) : (
       <>
         <h3 className="chart-title">Budget Monthly Trend</h3>

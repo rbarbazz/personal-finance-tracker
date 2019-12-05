@@ -6,7 +6,7 @@ import '../styles/Operations.scss';
 import { ActionBar } from '../components/ActionBar';
 import { GenericBtn } from '../components/GenericBtn';
 import { getOperations, getCategories } from '../store/actions/operations';
-import { LoadingBars } from '../components/LoadingBars';
+import { LoadingSpinner } from '../components/LoadingSpinner';
 import { OperationTable } from '../components/Operations/OperationsTable';
 import { ReactComponent as AddIcon } from '../icons/Add.svg';
 import { ReactComponent as ArchiveIcon } from '../icons/Archive.svg';
@@ -89,10 +89,10 @@ export const Operations: React.FC = () => {
         )}
       </ActionBar>
       <h2 className="section-title">Operations</h2>
-      <p className="section-subtitle">Add, delete and edit operations.</p>
+      <p className="section-subtitle">Add, edit and delete operations.</p>
       <div className="table-container">
         {isFetchingCategories || isFetchingOperations ? (
-          <LoadingBars />
+          <LoadingSpinner />
         ) : (
           <OperationTable />
         )}
