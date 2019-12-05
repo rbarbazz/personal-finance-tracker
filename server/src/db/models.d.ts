@@ -26,6 +26,7 @@ export interface Category {
 
 export interface Budget {
   amount: number;
+  budgetDate: Date;
   categoryId: number;
   categoryTitle?: string;
   id: number;

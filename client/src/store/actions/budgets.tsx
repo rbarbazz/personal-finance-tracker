@@ -22,13 +22,16 @@ export const receiveBudgets = (budgets: BudgetCategory[]) => ({
   type: RECEIVE_BUDGETS,
 });
 
-export const getBudgets = () => {
+export const getBudgets = (selectedMonth: Date) => {
   return async (dispatch: Function) => {
     dispatch(requestBudgets());
     try {
-      const res = await fetch('/budgets', {
-        method: 'GET',
-      });
+      const res = await fetch(
+        `/budgets?selectedMonth=${selectedMonth.getMonth()}&selectedYear=${selectedMonth.getFullYear()}`,
+        {
+          method: 'GET',
+        },
+      );
       if (res.status === 200) {
         const { budgets } = await res.json();
 

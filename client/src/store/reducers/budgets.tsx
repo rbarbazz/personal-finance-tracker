@@ -8,11 +8,13 @@ import { BudgetCategory } from '../../../../server/src/routes/budgets';
 export type BudgetsState = {
   budgets: BudgetCategory[];
   isFetchingBudgets: boolean;
+  selectedMonth: Date;
 };
 
 const initialState = {
   budgets: [] as BudgetCategory[],
   isFetchingBudgets: false,
+  selectedMonth: new Date(),
 };
 
 export const budgets = (state = initialState, action: BudgetsActionTypes) => {

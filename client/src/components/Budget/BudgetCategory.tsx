@@ -4,9 +4,14 @@ import { getBudgets } from '../../store/actions/budgets';
 import { LabelledField } from '../LabelledField';
 import { logout } from '../SideMenu';
 import { TableRow, TableCell } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from '../../store/reducers';
 
-const updateBudgetAmount = (categoryBudget: number, categoryId: number) => {
+const updateBudgetAmount = (
+  categoryBudget: number,
+  categoryId: number,
+  selectedMonth: Date,
+) => {
   return async (dispatch: Function) => {
     try {
       const res = await fetch('/budgets', {
@@ -14,13 +19,18 @@ const updateBudgetAmount = (categoryBudget: number, categoryId: number) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ amount: categoryBudget, categoryId }),
+        body: JSON.stringify({
+          amount: categoryBudget,
+          categoryId,
+          selectedMonth: selectedMonth.getMonth(),
+          selectedYear: selectedMonth.getFullYear(),
+        }),
       });
       if (res.status === 200) {
         const { error } = await res.json();
 
         if (!error) {
-          dispatch(getBudgets());
+          dispatch(getBudgets(selectedMonth));
         }
       } else {
         dispatch(logout());
@@ -39,6 +49,9 @@ export const BudgetCategory: React.FC<{
   const dispatch = useDispatch();
   const [categoryBudget, setCategoryBudget] = useState(initialValue);
   const [isEditing, toggleIsEditing] = useState(false);
+  const selectedMonth = useSelector(
+    (state: State) => state.budgets.selectedMonth,
+  );
 
   return (
     <TableRow>
@@ -58,7 +71,13 @@ export const BudgetCategory: React.FC<{
               className="generic-row-action-btn"
               onClick={() => {
                 if (isEditing)
-                  dispatch(updateBudgetAmount(categoryBudget, categoryId));
+                  dispatch(
+                    updateBudgetAmount(
+                      categoryBudget,
+                      categoryId,
+                      selectedMonth,
+                    ),
+                  );
                 toggleIsEditing(prevState => !prevState);
               }}
             >

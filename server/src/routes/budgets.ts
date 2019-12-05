@@ -21,7 +21,11 @@ export type BudgetCategory = {
 
 budgetsRouter.get('/', async (req: any, res) => {
   if (req.user) {
-    const userBudgets = await getAllBudgets(req.user.id);
+    let { selectedMonth, selectedYear } = req.query;
+    const from = new Date(selectedYear, selectedMonth, 1);
+    const to = new Date(selectedYear, selectedMonth, 0);
+
+    const userBudgets = await getAllBudgets(from, to, req.user.id);
     const parentCategories = await getParentCategories();
     const budgets: BudgetCategory[] = [];
 
@@ -47,7 +51,7 @@ budgetsRouter.get('/', async (req: any, res) => {
 
 budgetsRouter.post('/', async (req: any, res) => {
   if (req.user) {
-    const { categoryId } = req.body;
+    const { categoryId, selectedMonth, selectedYear } = req.body;
     let { amount } = req.body;
 
     const category = await getCategoryById(categoryId);
@@ -57,9 +61,17 @@ budgetsRouter.post('/', async (req: any, res) => {
 
     const existingBudget = await getBudgetByCategory(categoryId, req.user.id);
 
+    const budgetDate = new Date(selectedYear, selectedMonth, 1);
+
     if (existingBudget.length > 0)
-      await updateBudget(existingBudget[0].id, { amount });
-    else await insertBudgets({ amount, categoryId, userId: req.user.id });
+      await updateBudget(existingBudget[0].id, { amount, budgetDate });
+    else
+      await insertBudgets({
+        amount,
+        budgetDate,
+        categoryId,
+        userId: req.user.id,
+      });
 
     return res.send({ error: false, message: '' });
   } else {

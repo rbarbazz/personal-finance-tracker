@@ -19,9 +19,10 @@ import { LoadingSpinner } from '../components/LoadingSpinner';
 
 export const Budget: React.FC = () => {
   const dispatch = useDispatch();
-  const getInitialBudgets = useCallback(() => {
-    dispatch(getBudgets());
-  }, [dispatch]);
+  const getInitialBudgets = useCallback(
+    () => dispatch(getBudgets(new Date())),
+    [dispatch],
+  );
   const budgets = useSelector((state: State) => state.budgets.budgets);
   const isFetchingBudgets = useSelector(
     (state: State) => state.budgets.isFetchingBudgets,

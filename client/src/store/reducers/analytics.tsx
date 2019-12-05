@@ -36,8 +36,11 @@ const initialState: AnalyticsState = {
   treeMapChart: { categoryId: 0, title: 'Expenses', children: [] },
 };
 
-const average = (array: { x: string; y: number }[]) =>
-  (array.reduce((a, b) => a + b.y, 0) / array.length).toFixed(2);
+const average = (array: { x: string; y: number }[]) => {
+  if (array.length > 0)
+    return (array.reduce((a, b) => a + b.y, 0) / array.length).toFixed(2);
+  else return '0';
+};
 
 export const analytics = (
   state = initialState,

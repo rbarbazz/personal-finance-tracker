@@ -7,7 +7,7 @@ import {
   getMonthlyIncomesSums,
 } from '../controllers/operations';
 import { BudgetLineChartData } from '../../../client/src/components/Analytics/BudgetLineChart';
-import { getAllBudgetsSum } from '../controllers/budgets';
+import { getMonthlyBudgetsSums } from '../controllers/budgets';
 import { getParentCategories } from '../controllers/categories';
 import { MonthlyBarChartData } from '../../../client/src/components/Analytics/MonthlyBarChart';
 
@@ -119,7 +119,6 @@ analyticsRouter.get('/budgetline', async (req: any, res) => {
     const from = new Date(today.getFullYear(), today.getMonth() - 6, 1);
     const to = new Date(today.getFullYear(), today.getMonth(), 0);
 
-    const totalBudgets = await getAllBudgetsSum(req.user.id);
     const monthlyExpensesSums = await getMonthlyExpensesSums(
       from,
       to,
@@ -130,20 +129,13 @@ analyticsRouter.get('/budgetline', async (req: any, res) => {
       to,
       req.user.id,
     );
+    const monthlyBudgetsSums = await getMonthlyBudgetsSums(
+      from,
+      to,
+      req.user.id,
+    );
 
-    // Temporary until monthly budgets are implemented
-    for (let i = 5; i >= 0; i--) {
-      const currMonth = new Date(
-        today.getFullYear(),
-        today.getMonth() - i - 1,
-        1,
-      ).toLocaleString('default', { month: 'long' });
-      budgetLineChart[0].data.push({
-        x: currMonth,
-        y: totalBudgets ? Math.abs(totalBudgets.sum) : 0,
-      });
-    }
-
+    if (monthlyBudgetsSums) budgetLineChart[0].data = monthlyBudgetsSums;
     if (monthlyExpensesSums) budgetLineChart[2].data = monthlyExpensesSums;
     if (monthlyIncomesSums) budgetLineChart[3].data = monthlyIncomesSums;
     for (let i = 0; i < 6; i++) {
