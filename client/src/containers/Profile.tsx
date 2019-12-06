@@ -4,6 +4,7 @@ import React from 'react';
 import '../styles/Profile.scss';
 import { ActionBar } from '../components/ActionBar';
 import { State } from '../store/reducers';
+import { SectionHeader } from '../components/SectionHeader';
 
 export const Profile: React.FC = () => {
   const fName = useSelector((state: State) => state.user.fName);
@@ -11,10 +12,10 @@ export const Profile: React.FC = () => {
   return (
     <div className="profile-container">
       <ActionBar />
-      <h2 className="section-title">{`Welcome back, ${fName}`}</h2>
-      <p className="section-subtitle">
-        Soon you will be able to update your info here
-      </p>
+      <SectionHeader
+        subtitle="Soon you will be able to update your info here."
+        title={`Welcome back, ${fName}`}
+      />
     </div>
   );
 };

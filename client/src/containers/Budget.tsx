@@ -1,12 +1,3 @@
-import { ResponsivePie } from '@nivo/pie';
-import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, useCallback } from 'react';
-
-import '../styles/Budget.scss';
-import { ActionBar } from '../components/ActionBar';
-import { BudgetCategory } from '../components/Budget/BudgetCategory';
-import { State } from '../store/reducers';
-import { getBudgets } from '../store/actions/budgets';
 import {
   Table,
   TableBody,
@@ -14,8 +5,19 @@ import {
   TableHead,
   TableRow,
 } from '@material-ui/core';
+import { ResponsivePie } from '@nivo/pie';
+import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useCallback } from 'react';
+
+import '../styles/Budget.scss';
+import { ActionBar } from '../components/ActionBar';
+import { BudgetCategory } from '../components/Budget/BudgetCategory';
 import { chartTheme, chartColorPalette } from './Analytics';
+import { getBudgets } from '../store/actions/budgets';
 import { LoadingSpinner } from '../components/LoadingSpinner';
+import { State } from '../store/reducers';
+import { SectionHeader } from '../components/SectionHeader';
+import { CardErrorMessage } from '../components/CardErrorMessage';
 
 export const Budget: React.FC = () => {
   const dispatch = useDispatch();
@@ -27,6 +29,7 @@ export const Budget: React.FC = () => {
   const isFetchingBudgets = useSelector(
     (state: State) => state.budgets.isFetchingBudgets,
   );
+  const budgetTotal = budgets.reduce((a, b) => a + b.amount, 0);
 
   useEffect(() => {
     getInitialBudgets();
@@ -35,11 +38,10 @@ export const Budget: React.FC = () => {
   return (
     <div className="budget-container">
       <ActionBar />
-      <h2 className="section-title">Monthly Budget</h2>
-      <p className="section-subtitle">
-        Set your monthly goals by category. You can use the "Uncategorized"
-        category to match the total goal you want to achieve.
-      </p>
+      <SectionHeader
+        subtitle={`Set your monthly goals by category. You can use the "Uncategorized" category to match the total goal you want to achieve.`}
+        title="Monthly Budget"
+      />
       <div className="budget-content-container">
         <div className="budget-categories-container">
           {isFetchingBudgets ? (
@@ -72,19 +74,22 @@ export const Budget: React.FC = () => {
             ) : (
               <>
                 <h3 className="total-title">Total</h3>
-                <div className="total-amount">
-                  {`$ ${budgets.reduce((a, b) => a + b.amount, 0)}`}
-                </div>
+                <div className="total-amount">{`$ ${budgetTotal}`}</div>
               </>
             )}
           </div>
           <div
             className="budget-pie-chart-container generic-card"
-            style={isFetchingBudgets ? { flex: 1 } : { height: '100%' }}
+            style={
+              isFetchingBudgets || budgetTotal < 1
+                ? { flex: 1 }
+                : { height: '100%' }
+            }
           >
+            <h3 className="chart-title">Budget Monthly Repartition</h3>
             {isFetchingBudgets ? (
               <LoadingSpinner />
-            ) : (
+            ) : budgetTotal > 0 ? (
               <ResponsivePie
                 colors={chartColorPalette}
                 cornerRadius={3}
@@ -107,6 +112,8 @@ export const Budget: React.FC = () => {
                 slicesLabelsTextColor="white"
                 theme={chartTheme}
               />
+            ) : (
+              <CardErrorMessage message="Please update your monthly budget before you can see this chart" />
             )}
           </div>
         </div>

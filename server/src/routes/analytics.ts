@@ -21,7 +21,7 @@ analyticsRouter.get('/monthlybar', async (req: any, res) => {
       parentCategory => parentCategory.title,
     );
 
-    // Iterate on the last 6 months
+    // Iterate on the last 3 months
     const today = new Date();
     for (let i = 2; i >= 0; i--) {
       const from = new Date(today.getFullYear(), today.getMonth() - i - 1, 1);
@@ -34,14 +34,16 @@ analyticsRouter.get('/monthlybar', async (req: any, res) => {
         req.user.id,
       );
 
-      monthlyBarChart.data.push({
-        ...currentMonthSums.reduce((acc, curr) => {
-          acc[curr.title] = Math.abs(curr.sum);
-          return acc;
-        }, {} as { [index: string]: number }),
-        month,
-      });
+      if (currentMonthSums.length > 0)
+        monthlyBarChart.data.push({
+          ...currentMonthSums.reduce((acc, curr) => {
+            acc[curr.title] = curr.sum;
+            return acc;
+          }, {} as { [index: string]: number }),
+          month,
+        });
     }
+
     return res.send({ monthlyBarChart });
   } else {
     return res.status(401).send();

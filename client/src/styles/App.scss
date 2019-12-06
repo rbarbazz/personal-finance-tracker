@@ -24,15 +24,6 @@ body {
         border-top-color: white;
     }
 }
-.section-title {
-    color: $primary-bg-color;
-    margin: $big-margin $big-margin $small-margin $big-margin;
-}
-.section-subtitle {
-    color: $disabled-color;
-    margin: 0 $big-margin $big-margin;
-    font-weight: 600;
-}
 .generic-chip {
     background-color: $primary-color;
     color: white;

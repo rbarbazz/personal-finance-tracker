@@ -1,6 +1,7 @@
 import { ResponsiveLine } from '@nivo/line';
 import React from 'react';
 
+import { CardErrorMessage } from '../CardErrorMessage';
 import { chartTheme, chartColorPalette } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';
 
@@ -12,15 +13,17 @@ export type BudgetLineChartData = {
 export const BudgetLineChart: React.FC<{
   isLoading: boolean;
   root: BudgetLineChartData;
-}> = ({ isLoading, root }) => (
-  <div className="chart-wrapper generic-card" id="budgetlinechart">
-    {isLoading ? (
-      <LoadingSpinner />
-    ) : (
-      <>
-        <h3 className="chart-title">Budget Monthly Trend</h3>
+}> = ({ isLoading, root }) => {
+  const isNotEmpty = !!root.find(line => line.data.length > 0);
+
+  return (
+    <div className="chart-wrapper generic-card" id="budgetlinechart">
+      <h3 className="chart-title">Budget Monthly Trend</h3>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
         <div className="chart-container">
-          {root.length > 0 ? (
+          {isNotEmpty ? (
             <ResponsiveLine
               axisBottom={{
                 legend: 'Month',
@@ -66,12 +69,10 @@ export const BudgetLineChart: React.FC<{
               }}
             />
           ) : (
-            <p className="chart-error-message">
-              Please import more transactions to see this chart...
-            </p>
+            <CardErrorMessage message="Please import more transactions before you can see this chart" />
           )}
         </div>
-      </>
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
+};

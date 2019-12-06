@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import '../styles/Operations.scss';
 import { ActionBar } from '../components/ActionBar';
+import { CardErrorMessage } from '../components/CardErrorMessage';
 import { GenericBtn } from '../components/GenericBtn';
 import { getOperations, getCategories } from '../store/actions/operations';
 import { LoadingSpinner } from '../components/LoadingSpinner';
@@ -11,6 +12,7 @@ import { OperationTable } from '../components/Operations/OperationsTable';
 import { ReactComponent as AddIcon } from '../icons/Add.svg';
 import { ReactComponent as ArchiveIcon } from '../icons/Archive.svg';
 import { ReactComponent as FileAddIcon } from '../icons/FileAdd.svg';
+import { SectionHeader } from '../components/SectionHeader';
 import { State } from '../store/reducers';
 import { UploadDialog } from '../components/Operations/UploadDialog';
 import { UpsertOperationDialog } from '../components/Operations/UpsertOperationDialog';
@@ -88,11 +90,15 @@ export const Operations: React.FC = () => {
           <UpsertOperationDialog toggleDialog={toggleAddDialog} />
         )}
       </ActionBar>
-      <h2 className="section-title">Operations</h2>
-      <p className="section-subtitle">Add, edit and delete operations.</p>
+      <SectionHeader
+        subtitle="Add, edit and delete operations."
+        title="Operations"
+      />
       <div className="table-container">
         {isFetchingCategories || isFetchingOperations ? (
           <LoadingSpinner />
+        ) : operations.length < 1 ? (
+          <CardErrorMessage message="Please import more transactions before you can see this table" />
         ) : (
           <OperationTable />
         )}

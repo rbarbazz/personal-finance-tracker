@@ -1,6 +1,7 @@
 import { ResponsiveTreeMap } from '@nivo/treemap';
 import React from 'react';
 
+import { CardErrorMessage } from '../CardErrorMessage';
 import { chartTheme, chartColorPalette } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
@@ -8,15 +9,19 @@ import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 export const TreeMapChart: React.FC<{
   root: TreeMapChartNode;
   isLoading: boolean;
-}> = ({ root, isLoading }) => (
-  <div className="chart-wrapper generic-card" id="treemapchart">
-    {isLoading ? (
-      <LoadingSpinner />
-    ) : (
-      <>
-        <h3 className="chart-title">Last Month Detailed Expenses</h3>
+}> = ({ root, isLoading }) => {
+  const isNotEmpty =
+    root.children &&
+    !!root.children.find(child => child.children && child.children.length > 0);
+
+  return (
+    <div className="chart-wrapper generic-card" id="treemapchart">
+      <h3 className="chart-title">Last Month Detailed Expenses</h3>
+      {isLoading ? (
+        <LoadingSpinner />
+      ) : (
         <div className="chart-container">
-          {root.children && root.children.length > 0 ? (
+          {isNotEmpty ? (
             <ResponsiveTreeMap
               colors={[
                 chartColorPalette[7],
@@ -35,12 +40,10 @@ export const TreeMapChart: React.FC<{
               value="sum"
             />
           ) : (
-            <p className="chart-error-message">
-              Please import more transactions to see this chart...
-            </p>
+            <CardErrorMessage message="Please import more transactions before you can see this chart" />
           )}
         </div>
-      </>
-    )}
-  </div>
-);
+      )}
+    </div>
+  );
+};

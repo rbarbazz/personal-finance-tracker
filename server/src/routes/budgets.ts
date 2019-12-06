@@ -23,7 +23,7 @@ budgetsRouter.get('/', async (req: any, res) => {
   if (req.user) {
     let { selectedMonth, selectedYear } = req.query;
     const from = new Date(selectedYear, selectedMonth, 1);
-    const to = new Date(selectedYear, selectedMonth, 0);
+    const to = new Date(selectedYear, selectedMonth + 1, 0);
 
     const userBudgets = await getAllBudgets(from, to, req.user.id);
     const parentCategories = await getParentCategories();

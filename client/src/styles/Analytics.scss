@@ -38,11 +38,9 @@
     margin: 0 0 $big-margin;
 }
 .chart-container {
+    display: flex;
     height: 100%;
     width: 100%;
-}
-.chart-error-message {
-    font-weight: 600;
 }
 #monthlybarchart,
 #budgetlinechart,

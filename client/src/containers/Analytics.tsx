@@ -13,6 +13,7 @@ import { BudgetLineChart } from '../components/Analytics/BudgetLineChart';
 import { GenericBtn } from '../components/GenericBtn';
 import { MonthlyBarChart } from '../components/Analytics/MonthlyBarChart';
 import { ReactComponent as SyncIcon } from '../icons/Sync.svg';
+import { SectionHeader } from '../components/SectionHeader';
 import { State } from '../store/reducers';
 import { TreeMapChart } from '../components/Analytics/TreeMapChart';
 
@@ -120,8 +121,10 @@ export const Analytics: React.FC = () => {
         />
       </ActionBar>
       <div className="analytics-content-container">
-        <h2 className="section-title">Analytics</h2>
-        <p className="section-subtitle">Your personal finances at a glance.</p>
+        <SectionHeader
+          subtitle="Your personal finances at a glance."
+          title="Analytics"
+        />
         <div className="charts-container">
           <MonthlyBarChart
             isLoading={isFetchingMonthlyBar}

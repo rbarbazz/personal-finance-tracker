@@ -23,8 +23,7 @@ export const getMonthlyExpensesSumsForParents = async (
   userId: number,
 ): Promise<{ title: string; sum: number }[]> =>
   await knex<Operation>('operations')
-    .select('categories.title')
-    .sum('amount')
+    .select('categories.title', knex.raw('abs(sum(amount)) as sum'))
     .leftJoin('categories', {
       'operations.parentCategoryId': 'categories.id',
     })
