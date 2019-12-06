@@ -13,6 +13,19 @@ import { MonthlyBarChartData } from '../../../client/src/components/Analytics/Mo
 
 export const analyticsRouter = Router();
 
+const initArrayWithMonths = (monthCount: number) => {
+  const today = new Date();
+  const ret = [];
+
+  for (let i = monthCount; i >= 0; i--) {
+    const from = new Date(today.getFullYear(), today.getMonth() - i - 1, 1);
+    const month = from.toLocaleString('default', { month: 'long' });
+
+    ret.push({ x: month, y: 0 });
+  }
+  return ret;
+};
+
 analyticsRouter.get('/monthlybar', async (req: any, res) => {
   if (req.user) {
     const monthlyBarChart: MonthlyBarChartData = { keys: [], data: [] };
@@ -112,10 +125,10 @@ analyticsRouter.get('/treemap', async (req: any, res) => {
 analyticsRouter.get('/budgetline', async (req: any, res) => {
   if (req.user) {
     const budgetLineChart: BudgetLineChartData = [
-      { id: 'Budget', data: [] },
-      { id: 'Savings', data: [] },
-      { id: 'Expenses', data: [] },
-      { id: 'Incomes', data: [] },
+      { id: 'Budget', data: initArrayWithMonths(5) },
+      { id: 'Savings', data: initArrayWithMonths(5) },
+      { id: 'Expenses', data: initArrayWithMonths(5) },
+      { id: 'Incomes', data: initArrayWithMonths(5) },
     ];
     const today = new Date();
     const from = new Date(today.getFullYear(), today.getMonth() - 6, 1);
@@ -137,27 +150,25 @@ analyticsRouter.get('/budgetline', async (req: any, res) => {
       req.user.id,
     );
 
-    if (monthlyBudgetsSums) budgetLineChart[0].data = monthlyBudgetsSums;
-    if (monthlyExpensesSums) budgetLineChart[2].data = monthlyExpensesSums;
-    if (monthlyIncomesSums) budgetLineChart[3].data = monthlyIncomesSums;
-    for (let i = 0; i < 6; i++) {
-      let monthlyExpenses = 0,
-        monthlyIncomes = 0,
-        month = '';
+    for (const sum of monthlyBudgetsSums) {
+      const i = budgetLineChart[0].data.findIndex(month => month.x === sum.x);
 
-      if (monthlyExpensesSums && monthlyExpensesSums[i]) {
-        month = monthlyExpensesSums[i].x;
-        monthlyExpenses = monthlyExpensesSums[i].y;
-      }
-      if (monthlyIncomesSums && monthlyIncomesSums[i]) {
-        month = monthlyIncomesSums[i].x;
-        monthlyIncomes = monthlyIncomesSums[i].y;
-      }
-      if (month !== '')
-        budgetLineChart[1].data.push({
-          x: month,
-          y: +(monthlyIncomes - monthlyExpenses).toFixed(2),
-        });
+      if (i) budgetLineChart[0].data[i].y = sum.y;
+    }
+    for (const sum of monthlyExpensesSums) {
+      const i = budgetLineChart[2].data.findIndex(month => month.x === sum.x);
+
+      if (i) budgetLineChart[2].data[i].y = sum.y;
+    }
+    for (const sum of monthlyIncomesSums) {
+      const i = budgetLineChart[3].data.findIndex(month => month.x === sum.x);
+
+      if (i) budgetLineChart[3].data[i].y = sum.y;
+    }
+    for (let i = 0; i < 6; i++) {
+      budgetLineChart[1].data[i].y = +(
+        budgetLineChart[3].data[i].y - budgetLineChart[2].data[i].y
+      ).toFixed(2);
     }
 
     return res.send({ budgetLineChart });

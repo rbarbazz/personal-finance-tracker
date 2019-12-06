@@ -36,11 +36,14 @@ export const getMonthlyBudgetsSums = async (
 
 export const getBudgetByCategory = async (
   categoryId: number,
+  from: Date,
+  to: Date,
   userId: number,
 ): Promise<Budget[]> =>
   await knex<Budget>('budgets')
     .where('userId', userId)
-    .andWhere('categoryId', categoryId);
+    .andWhere('categoryId', categoryId)
+    .andWhereBetween('budgetDate', [from, to]);
 
 export const insertBudgets = async (
   budgets: Partial<Budget> | Partial<Budget>[],

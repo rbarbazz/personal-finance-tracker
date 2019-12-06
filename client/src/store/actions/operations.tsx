@@ -1,6 +1,6 @@
-import { SelectOption } from '../reducers/operations';
-import { Operation, Category } from '../../../../server/src/db/models';
 import { logout } from '../../components/SideMenu';
+import { Operation, Category } from '../../../../server/src/db/models';
+import { SelectOption } from '../reducers/operations';
 
 export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES';
 export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
@@ -45,11 +45,32 @@ export type OperationsActionTypes =
   | RequestUpsertAction
   | ResponseUpsertAction;
 
-export const requestCategories = () => ({ type: REQUEST_CATEGORIES });
+export const requestCategories = (): OperationsActionTypes => ({
+  type: REQUEST_CATEGORIES,
+});
 
-export const receiveCategories = (categories: SelectOption[]) => ({
+export const receiveCategories = (
+  categories: SelectOption[],
+): OperationsActionTypes => ({
   categories,
   type: RECEIVE_CATEGORIES,
+});
+
+const requestOperations = (): OperationsActionTypes => ({
+  type: REQUEST_OPERATIONS,
+});
+
+const receiveOperations = (operations: Operation[]): OperationsActionTypes => ({
+  operations,
+  type: RECEIVE_OPERATIONS,
+});
+
+export const requestUpsert = (): OperationsActionTypes => ({
+  type: REQUEST_UPSERT,
+});
+
+export const responseUpsert = (): OperationsActionTypes => ({
+  type: RESPONSE_UPSERT,
 });
 
 export const getCategories = () => {
@@ -74,13 +95,6 @@ export const getCategories = () => {
   };
 };
 
-const requestOperations = () => ({ type: REQUEST_OPERATIONS });
-
-const receiveOperations = (operations: Operation[]) => ({
-  operations,
-  type: RECEIVE_OPERATIONS,
-});
-
 export const getOperations = () => {
   return async (dispatch: Function) => {
     dispatch(requestOperations());
@@ -98,7 +112,3 @@ export const getOperations = () => {
     }
   };
 };
-
-export const requestUpsert = () => ({ type: REQUEST_UPSERT });
-
-export const responseUpsert = () => ({ type: RESPONSE_UPSERT });

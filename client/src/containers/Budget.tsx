@@ -22,18 +22,18 @@ import { State } from '../store/reducers';
 
 export const Budget: React.FC = () => {
   const dispatch = useDispatch();
-  const getInitialBudgets = useCallback(
-    () => dispatch(getBudgets(new Date())),
-    [dispatch],
+  const selectedMonth = useSelector(
+    (state: State) => state.budgets.selectedMonth,
   );
   const budgets = useSelector((state: State) => state.budgets.budgets);
   const isFetchingBudgets = useSelector(
     (state: State) => state.budgets.isFetchingBudgets,
   );
-  const selectedMonth = useSelector(
-    (state: State) => state.budgets.selectedMonth,
-  );
   const budgetTotal = budgets.reduce((a, b) => a + b.amount, 0);
+  const getInitialBudgets = useCallback(
+    () => dispatch(getBudgets(selectedMonth)),
+    [dispatch, selectedMonth],
+  );
 
   useEffect(() => {
     getInitialBudgets();
@@ -113,7 +113,7 @@ export const Budget: React.FC = () => {
                   })}
                 enableRadialLabels={false}
                 innerRadius={0.5}
-                margin={{ top: 40, right: 40, bottom: 40, left: 40 }}
+                margin={{ top: 62, right: 0, bottom: 0, left: 0 }}
                 padAngle={1}
                 sliceLabel="id"
                 slicesLabelsTextColor="white"

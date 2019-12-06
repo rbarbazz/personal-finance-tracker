@@ -23,7 +23,7 @@ budgetsRouter.get('/', async (req: any, res) => {
   if (req.user) {
     let { selectedMonth, selectedYear } = req.query;
     const from = new Date(selectedYear, selectedMonth, 1);
-    const to = new Date(selectedYear, selectedMonth + 1, 0);
+    const to = new Date(selectedYear, selectedMonth, 2);
 
     const userBudgets = await getAllBudgets(from, to, req.user.id);
     const parentCategories = await getParentCategories();
@@ -52,6 +52,8 @@ budgetsRouter.get('/', async (req: any, res) => {
 budgetsRouter.post('/', async (req: any, res) => {
   if (req.user) {
     const { categoryId, selectedMonth, selectedYear } = req.body;
+    const from = new Date(selectedYear, selectedMonth, 1);
+    const to = new Date(selectedYear, selectedMonth, 2);
     let { amount } = req.body;
 
     const category = await getCategoryById(categoryId);
@@ -59,7 +61,12 @@ budgetsRouter.post('/', async (req: any, res) => {
       return res.send({ error: true, message: 'Wrong category' });
     if (amount < 0) amount = 0;
 
-    const existingBudget = await getBudgetByCategory(categoryId, req.user.id);
+    const existingBudget = await getBudgetByCategory(
+      categoryId,
+      from,
+      to,
+      req.user.id,
+    );
 
     const budgetDate = new Date(selectedYear, selectedMonth, 1);
 

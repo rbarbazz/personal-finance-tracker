@@ -18,9 +18,7 @@
     width: 100%;
 }
 .budget-content-container {
-    align-items: flex-start;
     display: flex;
-    flex-wrap: wrap;
     justify-content: space-between;
     height: 100%;
     margin: 0 $big-margin $big-margin;
@@ -78,7 +76,6 @@
 .budget-right-col {
     display: flex;
     flex-direction: column;
-    height: 100%;
     width: calc(50% - #{$small-margin});
 }
 .total-container,
@@ -91,6 +88,11 @@
 }
 .budget-pie-chart-container {
     margin-top: $big-margin;
+    position: relative;
+
+    .chart-title {
+        position: absolute;
+    }
 }
 .total-title {
     color: $primary-bg-color;

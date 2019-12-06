@@ -69,12 +69,18 @@ export const analytics = (
       return {
         ...state,
         averages: [
-          { amount: average(action.budgetLineChart[3].data), title: 'Incomes' },
           {
-            amount: average(action.budgetLineChart[2].data),
+            amount: average(action.budgetLineChart[3].data.slice(3, 6)),
+            title: 'Incomes',
+          },
+          {
+            amount: average(action.budgetLineChart[2].data.slice(3, 6)),
             title: 'Expenses',
           },
-          { amount: average(action.budgetLineChart[1].data), title: 'Savings' },
+          {
+            amount: average(action.budgetLineChart[1].data.slice(3, 6)),
+            title: 'Savings',
+          },
         ],
         budgetLineChart: action.budgetLineChart,
         isFetchingBudgetLine: false,

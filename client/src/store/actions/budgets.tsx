@@ -3,6 +3,7 @@ import { logout } from '../../components/SideMenu';
 
 export const REQUEST_BUDGETS = 'REQUEST_BUDGETS';
 export const RECEIVE_BUDGETS = 'RECEIVE_BUDGETS';
+export const SELECT_MONTH = 'SELECT_MONTH';
 
 interface RequestBudgetsAction {
   type: typeof REQUEST_BUDGETS;
@@ -13,13 +14,30 @@ interface ReceiveBudgetsAction {
   type: typeof RECEIVE_BUDGETS;
 }
 
-export type BudgetsActionTypes = RequestBudgetsAction | ReceiveBudgetsAction;
+interface SelectMonthAction {
+  selectedMonth: Date;
+  type: typeof SELECT_MONTH;
+}
 
-export const requestBudgets = () => ({ type: REQUEST_BUDGETS });
+export type BudgetsActionTypes =
+  | RequestBudgetsAction
+  | ReceiveBudgetsAction
+  | SelectMonthAction;
 
-export const receiveBudgets = (budgets: BudgetCategory[]) => ({
+export const requestBudgets = (): BudgetsActionTypes => ({
+  type: REQUEST_BUDGETS,
+});
+
+export const receiveBudgets = (
+  budgets: BudgetCategory[],
+): BudgetsActionTypes => ({
   budgets,
   type: RECEIVE_BUDGETS,
+});
+
+export const selectMonth = (selectedMonth: Date): BudgetsActionTypes => ({
+  selectedMonth,
+  type: SELECT_MONTH,
 });
 
 export const getBudgets = (selectedMonth: Date) => {

@@ -2,6 +2,7 @@ import {
   BudgetsActionTypes,
   RECEIVE_BUDGETS,
   REQUEST_BUDGETS,
+  SELECT_MONTH,
 } from '../actions/budgets';
 import { BudgetCategory } from '../../../../server/src/routes/budgets';
 
@@ -27,6 +28,8 @@ export const budgets = (state = initialState, action: BudgetsActionTypes) => {
         budgets: action.budgets.sort((a, b) => (a.title > b.title ? 1 : -1)),
         isFetchingBudgets: false,
       };
+    case SELECT_MONTH:
+      return { ...state, selectedMonth: action.selectedMonth };
     default:
       return state;
   }
