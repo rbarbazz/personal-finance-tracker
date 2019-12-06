@@ -6,6 +6,10 @@
 ==========================================================================
 */
 
+.budget-header {
+    display: flex;
+    justify-content: space-between;
+}
 .budget-container {
     background-color: $secondary-bg-color;
     display: flex;

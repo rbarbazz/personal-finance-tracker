@@ -12,12 +12,13 @@ import React, { useEffect, useCallback } from 'react';
 import '../styles/Budget.scss';
 import { ActionBar } from '../components/ActionBar';
 import { BudgetCategory } from '../components/Budget/BudgetCategory';
+import { CardErrorMessage } from '../components/CardErrorMessage';
 import { chartTheme, chartColorPalette } from './Analytics';
 import { getBudgets } from '../store/actions/budgets';
 import { LoadingSpinner } from '../components/LoadingSpinner';
-import { State } from '../store/reducers';
+import { MonthPicker } from '../components/Budget/MonthPicker';
 import { SectionHeader } from '../components/SectionHeader';
-import { CardErrorMessage } from '../components/CardErrorMessage';
+import { State } from '../store/reducers';
 
 export const Budget: React.FC = () => {
   const dispatch = useDispatch();
@@ -29,6 +30,9 @@ export const Budget: React.FC = () => {
   const isFetchingBudgets = useSelector(
     (state: State) => state.budgets.isFetchingBudgets,
   );
+  const selectedMonth = useSelector(
+    (state: State) => state.budgets.selectedMonth,
+  );
   const budgetTotal = budgets.reduce((a, b) => a + b.amount, 0);
 
   useEffect(() => {
@@ -38,10 +42,13 @@ export const Budget: React.FC = () => {
   return (
     <div className="budget-container">
       <ActionBar />
-      <SectionHeader
-        subtitle={`Set your monthly goals by category. You can use the "Uncategorized" category to match the total goal you want to achieve.`}
-        title="Monthly Budget"
-      />
+      <div className="budget-header">
+        <SectionHeader
+          subtitle={`Set your monthly goals by category. You can use the "Uncategorized" category to match the total goal you want to achieve.`}
+          title="Monthly Budget"
+        />
+        <MonthPicker selectedMonth={selectedMonth} />
+      </div>
       <div className="budget-content-container">
         <div className="budget-categories-container">
           {isFetchingBudgets ? (
