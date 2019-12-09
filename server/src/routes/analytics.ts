@@ -26,7 +26,7 @@ const initArrayWithMonths = (monthCount: number) => {
   return ret;
 };
 
-analyticsRouter.get('/monthlybar', async (req: any, res) => {
+analyticsRouter.get('/monthlybar', async (req, res) => {
   if (req.user) {
     const monthlyBarChart: MonthlyBarChartData = { keys: [], data: [] };
     const parentCategories = await getParentCategories();
@@ -70,7 +70,7 @@ export type TreeMapChartNode = {
   title: string;
 };
 
-analyticsRouter.get('/treemap', async (req: any, res) => {
+analyticsRouter.get('/treemap', async (req, res) => {
   if (req.user) {
     const treeMapChart: TreeMapChartNode = {
       categoryId: 0,
@@ -122,7 +122,7 @@ analyticsRouter.get('/treemap', async (req: any, res) => {
   }
 });
 
-analyticsRouter.get('/budgetline', async (req: any, res) => {
+analyticsRouter.get('/budgetline', async (req, res) => {
   if (req.user) {
     const budgetLineChart: BudgetLineChartData = [
       { id: 'Budget', data: initArrayWithMonths(5) },

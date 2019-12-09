@@ -27,7 +27,7 @@ declare module 'papaparse' {
  * Operations
  */
 // Get all operations for a user
-operationsRouter.get('/', async (req: any, res) => {
+operationsRouter.get('/', async (req, res) => {
   if (req.user) {
     const operations = await getOperations(req.user.id);
 
@@ -50,12 +50,13 @@ operationsRouter.get('/', async (req: any, res) => {
 operationsRouter.post(
   '/read-csv-col',
   upload.array('csvFiles', 1),
-  async (req: any, res) => {
+  async (req, res) => {
     if (req.user) {
       if (req.files) {
         if (req.files.length !== 1) return;
 
-        const file = req.files[0];
+        const files = req.files as Express.Multer.File[];
+        const file = files[0];
         const { mimetype, size, path } = file;
 
         if (mimetype !== 'text/csv')
@@ -84,7 +85,7 @@ operationsRouter.post(
 );
 
 // Add operation(s)
-operationsRouter.post('/', async (req: any, res) => {
+operationsRouter.post('/', async (req, res) => {
   if (req.user) {
     if (req.body.path) {
       // CSV file(s) upload
@@ -130,14 +131,15 @@ operationsRouter.post('/', async (req: any, res) => {
             if (data[label].length < 1) return;
             if (data[label].length > 255) return;
 
-            operationList.push({
-              amount: parsedFloat,
-              categoryId,
-              label: data[label],
-              operationDate: operationDate.toDate(),
-              parentCategoryId,
-              userId: req.user.id,
-            });
+            if (req.user)
+              operationList.push({
+                amount: parsedFloat,
+                categoryId,
+                label: data[label],
+                operationDate: operationDate.toDate(),
+                parentCategoryId,
+                userId: req.user.id,
+              });
           }
           fs.unlink(path, err => {
             if (err) console.error(err);
@@ -189,13 +191,13 @@ operationsRouter.post('/', async (req: any, res) => {
 });
 
 // Delete an operation
-operationsRouter.delete('/:operationId', async (req: any, res) => {
+operationsRouter.delete('/:operationId', async (req, res) => {
   if (req.user) {
     const { operationId } = req.params;
-    let operation = await getOperation(operationId);
+    let operation = await getOperation(parseInt(operationId));
 
     if (operation.length > 0 && operation[0].userId === req.user.id) {
-      await delOperation(operationId);
+      await delOperation(parseInt(operationId));
     } else {
       return res.status(401).send();
     }
@@ -206,10 +208,10 @@ operationsRouter.delete('/:operationId', async (req: any, res) => {
 });
 
 // Update an operation
-operationsRouter.put('/:operationId', async (req: any, res) => {
+operationsRouter.put('/:operationId', async (req, res) => {
   if (req.user) {
     const { operationId } = req.params;
-    const operation = await getOperation(operationId);
+    const operation = await getOperation(parseInt(operationId));
 
     if (operation.length > 0 && operation[0].userId === req.user.id) {
       const {
@@ -233,7 +235,7 @@ operationsRouter.put('/:operationId', async (req: any, res) => {
       if (isNaN(categoryId) || category.length < 1)
         return res.send({ error: true, message: 'Wrong category' });
 
-      await updateOperation(operationId, {
+      await updateOperation(parseInt(operationId), {
         amount,
         categoryId,
         label,
@@ -251,10 +253,10 @@ operationsRouter.put('/:operationId', async (req: any, res) => {
 });
 
 // Update category for an operation
-operationsRouter.patch('/:operationId', async (req: any, res) => {
+operationsRouter.patch('/:operationId', async (req, res) => {
   if (req.user) {
     const { operationId } = req.params;
-    const operation = await getOperation(operationId);
+    const operation = await getOperation(parseInt(operationId));
 
     if (operation.length > 0 && operation[0].userId === req.user.id) {
       const { categoryId } = req.body;
@@ -263,7 +265,7 @@ operationsRouter.patch('/:operationId', async (req: any, res) => {
       if (isNaN(categoryId) || category.length < 1)
         return res.send({ error: true, message: 'Wrong category' });
 
-      await updateOperation(operationId, {
+      await updateOperation(parseInt(operationId), {
         categoryId,
         parentCategoryId: category[0].parentCategoryId,
       });

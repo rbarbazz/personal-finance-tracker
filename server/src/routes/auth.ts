@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router, Request } from 'express';
 import bcrypt from 'bcrypt';
 import passport from 'passport';
 import validator from 'validator';
@@ -16,22 +16,22 @@ export const authRouter = Router();
 authRouter.get(
   '/login',
   passport.authenticate('jwt', { session: false }),
-  async (req: any, res) => {
-    if (req.user) res.send({ isLoggedIn: true, fName: req.user.fName });
-    else res.send({ isLoggedIn: false, fName: '' });
+  async (req, res) => {
+    if (req.user) return res.send({ isLoggedIn: true, fName: req.user.fName });
+    else return res.send({ isLoggedIn: false, fName: '' });
   },
 );
 
 // Logout
 authRouter.get('/logout', (_req, res) => {
   res.cookie('token', '', { httpOnly: true });
-  res.send();
+  return res.send();
 });
 
 // Login
 authRouter.post('/login', (req, res) => {
   passport.authenticate('local', { session: false }, (err, user) => {
-    if (err || !user) res.status(401).send();
+    if (err || !user) return res.status(401).send();
 
     const token = jwt.sign(
       { fName: user.fName, id: user.id },

@@ -19,7 +19,7 @@ export type BudgetCategory = {
   title: string;
 };
 
-budgetsRouter.get('/', async (req: any, res) => {
+budgetsRouter.get('/', async (req, res) => {
   if (req.user) {
     let { selectedMonth, selectedYear } = req.query;
     const from = new Date(selectedYear, selectedMonth, 1);
@@ -49,7 +49,7 @@ budgetsRouter.get('/', async (req: any, res) => {
   }
 });
 
-budgetsRouter.post('/', async (req: any, res) => {
+budgetsRouter.post('/', async (req, res) => {
   if (req.user) {
     const { categoryId, selectedMonth, selectedYear } = req.body;
     const from = new Date(selectedYear, selectedMonth, 1);
