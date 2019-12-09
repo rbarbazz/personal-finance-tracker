@@ -1,11 +1,11 @@
-import React, { useEffect, useCallback } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
 import {
   BrowserRouter as Router,
   Redirect,
   Route,
   Switch,
 } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
+import React, { useEffect, useCallback } from 'react';
 
 import '../styles/App.scss';
 import { Analytics } from './Analytics';
@@ -22,7 +22,7 @@ const fetchUserStatus = () => {
   return async (dispatch: Function) => {
     dispatch(requestUserStatus());
     try {
-      const res = await fetch('/login', {
+      const res = await fetch('/auth/login', {
         method: 'GET',
       });
       if (res.status === 200) {

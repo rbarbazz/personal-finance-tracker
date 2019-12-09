@@ -1,4 +1,5 @@
 import { useDispatch } from 'react-redux';
+import jwtDecode from 'jwt-decode';
 import React, { useState, useEffect } from 'react';
 
 import '../styles/Login.scss';
@@ -10,13 +11,6 @@ import { ReactComponent as Lock } from '../icons/Lock.svg';
 import { ReactComponent as Person } from '../icons/Person.svg';
 import { User } from '../../../server/src/db/models';
 import { userLoggedIn } from '../store/actions/user';
-
-type AuthResponse = {
-  accountCreated?: boolean;
-  error: boolean;
-  fName?: string;
-  message: string;
-};
 
 export const Login: React.FC = () => {
   const dispatch = useDispatch();
@@ -31,7 +25,7 @@ export const Login: React.FC = () => {
     if (!isRegistered) setPassword('');
     toggleLoading(true);
     try {
-      const res = await fetch(isRegistered ? '/login' : '/register', {
+      const res = await fetch(isRegistered ? '/auth/login' : '/auth/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,15 +35,22 @@ export const Login: React.FC = () => {
       toggleLoading(false);
       if (res.status === 200) {
         const {
-          accountCreated,
           error,
-          fName,
           message,
-        }: AuthResponse = await res.json();
+          token,
+        }: {
+          error: boolean;
+          message: string;
+          token: string;
+        } = await res.json();
 
         setMessage({ error, value: message });
-        if (accountCreated) return toggleIsRegistered(true);
-        if (!error && fName) return dispatch(userLoggedIn(fName));
+
+        const { fName }: { fName: string } = jwtDecode(token);
+
+        if (token && fName) {
+          return dispatch(userLoggedIn(fName));
+        }
       } else setMessage({ error: true, value: 'Wrong Email or Password' });
     } catch (error) {
       console.error(error);

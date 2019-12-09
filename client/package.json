@@ -11,6 +11,7 @@
     "@types/node": "12.12.7",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
+    "jwt-decode": "^2.2.0",
     "node-sass": "^4.13.0",
     "normalize.css": "^8.0.1",
     "react": "^16.11.0",
@@ -50,6 +51,7 @@
   },
   "devDependencies": {
     "@nivo/bar": "^0.59.2",
+    "@types/jwt-decode": "^2.2.1",
     "@types/react-csv": "^1.1.1",
     "@types/react-redux": "^7.1.5",
     "@types/react-router-dom": "^5.1.2",

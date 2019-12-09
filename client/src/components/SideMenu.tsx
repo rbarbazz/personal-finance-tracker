@@ -14,7 +14,7 @@ import { userLoggedOut } from '../store/actions/user';
 export const logout = () => {
   return async (dispatch: Function) => {
     try {
-      const res = await fetch('/logout', {
+      const res = await fetch('/auth/logout', {
         method: 'GET',
       });
       if (res.status === 200) {

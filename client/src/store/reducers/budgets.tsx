@@ -5,6 +5,7 @@ import {
   SELECT_MONTH,
 } from '../actions/budgets';
 import { BudgetCategory } from '../../../../server/src/routes/budgets';
+import { UserActionTypes, USER_LOGGED_OUT } from '../actions/user';
 
 export type BudgetsState = {
   budgets: BudgetCategory[];
@@ -18,7 +19,10 @@ const initialState = {
   selectedMonth: new Date(),
 };
 
-export const budgets = (state = initialState, action: BudgetsActionTypes) => {
+export const budgets = (
+  state = initialState,
+  action: BudgetsActionTypes | UserActionTypes,
+) => {
   switch (action.type) {
     case REQUEST_BUDGETS:
       return { ...state, isFetchingBudgets: true };
@@ -30,6 +34,8 @@ export const budgets = (state = initialState, action: BudgetsActionTypes) => {
       };
     case SELECT_MONTH:
       return { ...state, selectedMonth: action.selectedMonth };
+    case USER_LOGGED_OUT:
+      return initialState;
     default:
       return state;
   }
