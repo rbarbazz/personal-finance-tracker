@@ -1,36 +1,51 @@
 {
   "Uncategorized": [],
-  "Allowance": [
-    "Allowance/Other",
-    "Freelance Earnings",
-    "Pension",
-    "Rent Assistance",
-    "Salary",
-    "Craigslist Sales",
-    "Unemployment Benefit"
+  "Daily Life": [
+    "Clothing",
+    "Daily Life/Other",
+    "Donations",
+    "Eating/Drinking Out",
+    "Electronics",
+    "Entertainment/Other",
+    "Gifts",
+    "Groceries",
+    "Healthcare",
+    "Hobbies",
+    "Holidays",
+    "Personal Care & Grooming",
+    "Pets",
+    "Prescriptions & Medical Expenses",
+    "Professional Services",
+    "Shopping/Other",
+    "Sports & Activities",
+    "Subscriptions Services",
+    "Work Meals"
   ],
-  "Child Expenses": [
+  "Debt": [
+    "Car Loan",
+    "College Loan Repayments",
+    "Credit Card Debt Payments",
+    "Debt/Other",
+    "Loan Repayments",
+    "Mortgage Repayments",
+    "Outstanding Taxes Payments"
+  ],
+  "Family Care": [
     "After School Activities",
-    "Family Allowance",
     "Baby Expenses",
     "Child Support",
     "Childcare",
+    "Family Care/Other",
     "Kids Toys",
+    "Retirement Home",
     "School Supplies",
     "School Tuition",
     "Summer Camps"
   ],
-  "Clothes": ["New Clothes", "Uniform/Work Clothes"],
-  "Debts": ["Credit Card Debt", "Loan Repayment"],
-  "Food": [
-    "Coffee Shops",
-    "Delivery Food",
-    "Groceries",
-    "Restaurants",
-    "Work Meals"
-  ],
   "Housing": [
+    "Electricity & Gas",
     "Furnitures",
+    "Garbage Disposal",
     "Garden",
     "HOA Fees",
     "Home Improvement",
@@ -39,69 +54,42 @@
     "Home Security",
     "Homegoods",
     "Housing/Other",
+    "Internet/Cable",
     "Mortage",
+    "Phones",
     "Property Tax",
     "Rent",
-    "Strata Fees"
+    "Strata Fees",
+    "Water"
   ],
-  "Entertainment": [
-    "Activities",
-    "Books",
-    "Electronics",
-    "Going Out",
-    "Hobbies",
-    "Holidays",
-    "Music",
-    "Entertainment/Other",
-    "Sports",
-    "Subscriptions Services"
+  "Income": [
+    "Freelance Earnings",
+    "Income/Other",
+    "Pension",
+    "Reimbursments",
+    "Salary",
+    "Social Benefits",
+    "Supplemental Income"
   ],
-  "Gifts & Donations": [
-    "Birthday",
-    "Charity",
-    "Church",
-    "Gifts & Donations/Other",
-    "Political Party"
-  ],
-  "Healthcare": [
-    "Dental Care",
-    "Healtcare Refund",
-    "Medical Care",
-    "Medications",
-    "Healthcare/Other",
-    "Vision Care"
-  ],
-  "Miscellaneous": ["General Refund", "Unusual Expenses", "Unusual Incomes"],
-  "Personal Care": ["Beauty Products", "Haircuts", "Massage/Spa", "Nail Salon"],
-  "Pets": ["Pet Sitter", "Pets Food", "Pets Toys", "Veterinary Care"],
   "Savings": [
+    "Education Fund",
     "Emergency Fund",
-    "Investing Fund",
-    "Home Fund",
-    "College Fund",
-    "Savings/Other"
+    "Investment Fund",
+    "Retirement Fund",
+    "Savings/Other",
+    "Tax Free Savings Account"
   ],
-  "Taxes": ["Accountant Fees", "Income Tax", "Taxes/Other"],
+  "Taxes": ["Income Tax", "Taxes/Other"],
   "Transport": [
-    "Insurance",
+    "Car Insurance",
+    "Car Payment",
+    "Car Registration",
+    "Car Rentals",
+    "Car Repairs & Maintenance",
+    "Gas",
     "Parking",
     "Public Transit",
     "Taxis/Ubers",
-    "Transport/Other",
-    "Vehicule Fuel",
-    "Vehicule Loan",
-    "Vehicule Payment",
-    "Vehicule Registration",
-    "Vehicule Rentals",
-    "Vehicule Repairs"
-  ],
-  "Utilities": [
-    "Cable",
-    "Electricity",
-    "Garbage",
-    "Gas",
-    "Internet",
-    "Phones",
-    "Water"
+    "Transport/Other"
   ]
 }

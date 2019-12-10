@@ -1,10 +1,9 @@
 import { Router } from 'express';
-import Papa from 'papaparse';
 import fs from 'fs';
 import moment from 'moment';
 import multer from 'multer';
+import Papa from 'papaparse';
 
-import { Operation } from '../db/models';
 import {
   delOperation,
   getOperation,
@@ -13,15 +12,10 @@ import {
   updateOperation,
 } from '../controllers/operations';
 import { getChildCategories, getCategoryById } from '../controllers/categories';
+import { Operation } from '../db/models';
 
 export const operationsRouter = Router();
 const upload = multer({ dest: '../../tmp/' });
-
-declare module 'papaparse' {
-  interface ParseConfig {
-    delimitersToGuess?: string[];
-  }
-}
 
 /**
  * Operations
