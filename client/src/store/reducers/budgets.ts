@@ -4,17 +4,17 @@ import {
   REQUEST_BUDGETS,
   SELECT_MONTH,
 } from '../actions/budgets';
-import { BudgetCategory } from '../../../../server/src/routes/budgets';
+import { BudgetCategoryType } from '../../../../server/src/routes/budgets';
 import { UserActionTypes, USER_LOGGED_OUT } from '../actions/user';
 
 export type BudgetsState = {
-  budgets: BudgetCategory[];
+  budgets: BudgetCategoryType[];
   isFetchingBudgets: boolean;
   selectedMonth: Date;
 };
 
 const initialState = {
-  budgets: [] as BudgetCategory[],
+  budgets: [] as BudgetCategoryType[],
   isFetchingBudgets: false,
   selectedMonth: new Date(),
 };

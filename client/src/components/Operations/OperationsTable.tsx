@@ -5,12 +5,21 @@ import TableCell from '@material-ui/core/TableCell';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
+import { CardErrorMessage } from '../CardErrorMessage';
+import { LoadingSpinner } from '../LoadingSpinner';
+import { Operation } from '../../../../server/src/db/models';
 import { OperationTableRow } from './OperationsTableRow';
-import { State } from '../../store/reducers';
-import { useSelector } from 'react-redux';
 
-export const OperationTable: React.FC = () => {
-  const operations = useSelector((state: State) => state.operations.operations);
+export const OperationTable: React.FC<{
+  isLoading: boolean;
+  operations: Operation[];
+}> = ({ isLoading, operations }) => {
+  if (isLoading) return <LoadingSpinner />;
+
+  if (operations.length < 1)
+    return (
+      <CardErrorMessage message="Please import more transactions before you can see this table" />
+    );
 
   return (
     <Table stickyHeader aria-label="simple table">

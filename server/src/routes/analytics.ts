@@ -110,7 +110,7 @@ analyticsRouter.get('/treemap', async (req, res) => {
           treeMapChart.children[parentCategoryIndex].children!.push({
             categoryId: categorySum.categoryId,
             title: categorySum.title,
-            sum: Math.abs(categorySum.sum),
+            sum: Math.round(Math.abs(categorySum.sum)),
           });
         }
       }

@@ -30,12 +30,12 @@ export const TreeMapChart: React.FC<{
               ]}
               identity="title"
               label="title"
-              innerPadding={15}
+              innerPadding={12}
               labelSkipSize={12}
               labelTextColor="white"
               theme={chartTheme}
               margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-              outerPadding={15}
+              outerPadding={12}
               root={root}
               value="sum"
             />

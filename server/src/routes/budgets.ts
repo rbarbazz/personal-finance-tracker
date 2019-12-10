@@ -2,18 +2,18 @@ import { Router } from 'express';
 
 import {
   getAllBudgets,
-  insertBudgets,
   getBudgetByCategory,
+  insertBudgets,
   updateBudget,
 } from '../controllers/budgets';
 import {
-  getParentCategories,
   getCategoryById,
+  getParentCategories,
 } from '../controllers/categories';
 
 export const budgetsRouter = Router();
 
-export type BudgetCategory = {
+export type BudgetCategoryType = {
   amount: number;
   categoryId: number;
   title: string;
@@ -27,14 +27,15 @@ budgetsRouter.get('/', async (req, res) => {
 
     const userBudgets = await getAllBudgets(from, to, req.user.id);
     const parentCategories = await getParentCategories();
-    const budgets: BudgetCategory[] = [];
+    const budgets: BudgetCategoryType[] = [];
 
     for (const parentCategory of parentCategories) {
-      budgets.push({
-        amount: 0,
-        categoryId: parentCategory.id,
-        title: parentCategory.title,
-      });
+      if (parentCategory.title !== 'Income')
+        budgets.push({
+          amount: 0,
+          categoryId: parentCategory.id,
+          title: parentCategory.title,
+        });
     }
     for (const userBudget of userBudgets) {
       const index = budgets.findIndex(

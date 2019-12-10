@@ -1,4 +1,4 @@
-import { BudgetCategory } from '../../../../server/src/routes/budgets';
+import { BudgetCategoryType } from '../../../../server/src/routes/budgets';
 import { logout } from '../../components/SideMenu';
 
 export const REQUEST_BUDGETS = 'REQUEST_BUDGETS';
@@ -10,7 +10,7 @@ interface RequestBudgetsAction {
 }
 
 interface ReceiveBudgetsAction {
-  budgets: BudgetCategory[];
+  budgets: BudgetCategoryType[];
   type: typeof RECEIVE_BUDGETS;
 }
 
@@ -29,7 +29,7 @@ export const requestBudgets = (): BudgetsActionTypes => ({
 });
 
 export const receiveBudgets = (
-  budgets: BudgetCategory[],
+  budgets: BudgetCategoryType[],
 ): BudgetsActionTypes => ({
   budgets,
   type: RECEIVE_BUDGETS,

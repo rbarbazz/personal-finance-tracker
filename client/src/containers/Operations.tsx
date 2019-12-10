@@ -4,10 +4,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 
 import '../styles/Operations.scss';
 import { ActionBar } from '../components/ActionBar';
-import { CardErrorMessage } from '../components/CardErrorMessage';
 import { GenericBtn } from '../components/GenericBtn';
 import { getOperations, getCategories } from '../store/actions/operations';
-import { LoadingSpinner } from '../components/LoadingSpinner';
 import { OperationTable } from '../components/Operations/OperationsTable';
 import { ReactComponent as AddIcon } from '../icons/Add.svg';
 import { ReactComponent as ArchiveIcon } from '../icons/Archive.svg';
@@ -32,6 +30,16 @@ export const Operations: React.FC = () => {
   const operations = useSelector((state: State) => state.operations.operations);
   const [addOperationVisible, toggleAddDialog] = useState(false);
   const [uploadVisible, toggleUpload] = useState(false);
+  const csvData = operations.map(operation => {
+    const { amount, categoryTitle, label, operationDate } = operation;
+
+    return {
+      amount,
+      categoryTitle,
+      label,
+      operationDate: new Date(operationDate).toISOString().substring(0, 10),
+    };
+  });
 
   useEffect(() => {
     getInitialOperations();
@@ -60,18 +68,7 @@ export const Operations: React.FC = () => {
         />
         {uploadVisible && <UploadDialog toggleUpload={toggleUpload} />}
         <CSVLink
-          data={operations.map(operation => {
-            const { amount, categoryTitle, label, operationDate } = operation;
-
-            return {
-              amount,
-              categoryTitle,
-              label,
-              operationDate: new Date(operationDate)
-                .toISOString()
-                .substring(0, 10),
-            };
-          })}
+          data={csvData}
           filename="operations-export.csv"
           separator=";"
           target="_blank"
@@ -95,13 +92,10 @@ export const Operations: React.FC = () => {
         title="Operations"
       />
       <div className="table-container">
-        {isFetchingCategories || isFetchingOperations ? (
-          <LoadingSpinner />
-        ) : operations.length < 1 ? (
-          <CardErrorMessage message="Please import more transactions before you can see this table" />
-        ) : (
-          <OperationTable />
-        )}
+        <OperationTable
+          isLoading={isFetchingCategories || isFetchingOperations}
+          operations={operations}
+        />
       </div>
     </div>
   );
