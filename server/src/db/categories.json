@@ -1,0 +1,122 @@
+[
+  {
+    "children": [],
+    "title": "Uncategorized"
+  },
+  {
+    "children": [
+      "Clothing",
+      "Daily Life/Other",
+      "Donations",
+      "Eating/Drinking Out",
+      "Electronics",
+      "Entertainment/Other",
+      "Gifts",
+      "Groceries",
+      "Healthcare",
+      "Hobbies",
+      "Holidays",
+      "Personal Care & Grooming",
+      "Pets",
+      "Prescriptions & Medical Expenses",
+      "Professional Services",
+      "Shopping/Other",
+      "Sports & Activities",
+      "Subscriptions Services",
+      "Work Meals"
+    ],
+    "title": "Daily Life"
+  },
+  {
+    "children": [
+      "Car Loan",
+      "College Loan Repayments",
+      "Credit Card Debt Payments",
+      "Debt/Other",
+      "Loan Repayments",
+      "Mortgage Repayments",
+      "Outstanding Taxes Payments"
+    ],
+    "title": "Debt"
+  },
+  {
+    "children": [
+      "After School Activities",
+      "Baby Expenses",
+      "Child Support",
+      "Childcare",
+      "Family Care/Other",
+      "Kids Toys",
+      "Retirement Home",
+      "School Supplies",
+      "School Tuition",
+      "Summer Camps"
+    ],
+    "title": "Family Care"
+  },
+  {
+    "children": [
+      "Electricity & Gas",
+      "Furnitures",
+      "Garbage Disposal",
+      "Garden",
+      "HOA Fees",
+      "Home Improvement",
+      "Home Insurance",
+      "Home Maintenance",
+      "Home Security",
+      "Homegoods",
+      "Housing/Other",
+      "Internet/Cable",
+      "Mortage",
+      "Phones",
+      "Property Tax",
+      "Rent",
+      "Strata Fees",
+      "Water"
+    ],
+    "title": "Housing"
+  },
+  {
+    "children": [
+      "Freelance Earnings",
+      "Income/Other",
+      "Pension",
+      "Reimbursments",
+      "Salary",
+      "Social Benefits",
+      "Supplemental Income"
+    ],
+    "title": "Income"
+  },
+  {
+    "children": [
+      "Education Fund",
+      "Emergency Fund",
+      "Investment Fund",
+      "Retirement Fund",
+      "Savings/Other",
+      "Tax Free Savings Account"
+    ],
+    "title": "Savings"
+  },
+  {
+    "children": ["Income Tax", "Taxes/Other"],
+    "title": "Taxes"
+  },
+  {
+    "children": [
+      "Car Insurance",
+      "Car Payment",
+      "Car Registration",
+      "Car Rentals",
+      "Car Repairs & Maintenance",
+      "Gas",
+      "Parking",
+      "Public Transit",
+      "Taxis/Ubers",
+      "Transport/Other"
+    ],
+    "title": "Transport"
+  }
+]

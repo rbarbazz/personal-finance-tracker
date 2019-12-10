@@ -2,7 +2,7 @@ import { ResponsiveLine } from '@nivo/line';
 import React from 'react';
 
 import { CardErrorMessage } from '../CardErrorMessage';
-import { chartTheme, chartColorPalette } from '../../containers/Analytics';
+import { chartTheme, colorsByCategory } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 export type BudgetLineChartData = {
@@ -36,10 +36,10 @@ export const BudgetLineChart: React.FC<{
                 legendOffset: -55,
               }}
               colors={[
-                chartColorPalette[5],
-                chartColorPalette[1],
-                chartColorPalette[7],
-                chartColorPalette[3],
+                colorsByCategory['Budget'],
+                colorsByCategory['Savings'],
+                colorsByCategory['Expenses'],
+                colorsByCategory['Income'],
               ]}
               data={root}
               legends={[

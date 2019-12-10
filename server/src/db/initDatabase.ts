@@ -3,9 +3,12 @@ import Knex from 'knex';
 import { Category } from './models';
 import { getParentCategories } from '../controllers/categories';
 import { knexConfig } from './knexfile';
-import categoryTitlesJson from './categoryTitles.json';
+import jsonCategories from './categories.json';
 
-const categoryTitles: { [index: string]: string[] } = categoryTitlesJson;
+const categories: {
+  children: string[];
+  title: string;
+}[] = jsonCategories;
 export const knex = Knex(knexConfig[process.env.NODE_ENV || 'development']);
 
 const createUsers = async () => {
@@ -34,20 +37,24 @@ const createCategories = async () => {
   });
 
   await knex<Category>('categories').insert(
-    Object.keys(categoryTitles).map(parentCategoryTitle => ({
-      title: parentCategoryTitle,
+    categories.map(category => ({
       parentCategoryId: 0,
+      title: category.title,
     })),
   );
 
   const parentCategories = await getParentCategories();
 
   for (const parentCategory of parentCategories) {
-    if (categoryTitles[parentCategory.title].length > 0) {
+    const parentCategoryIndex = categories.findIndex(
+      category => category.title === parentCategory.title,
+    );
+
+    if (categories[parentCategoryIndex].children.length > 0) {
       await knex<Category>('categories').insert(
-        categoryTitles[parentCategory.title].map(childCategory => ({
-          title: childCategory,
+        categories[parentCategoryIndex].children.map(childCategory => ({
           parentCategoryId: parentCategory.id,
+          title: childCategory,
         })),
       );
     }

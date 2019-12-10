@@ -3,9 +3,10 @@ import React, { useState } from 'react';
 import { getBudgets } from '../../store/actions/budgets';
 import { LabelledField } from '../LabelledField';
 import { logout } from '../SideMenu';
+import { State } from '../../store/reducers';
 import { TableRow, TableCell } from '@material-ui/core';
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../../store/reducers';
+import { colorsByCategory } from '../../containers/Analytics';
 
 const updateBudgetAmount = (
   categoryBudget: number,
@@ -56,7 +57,12 @@ export const BudgetCategory: React.FC<{
   return (
     <TableRow>
       <TableCell>
-        <span className="generic-chip">{title}</span>
+        <span
+          className="generic-chip"
+          style={{ backgroundColor: colorsByCategory[title] }}
+        >
+          {title}
+        </span>
       </TableCell>
       <TableCell align="right">
         <div className="category-amount-container">

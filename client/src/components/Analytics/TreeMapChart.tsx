@@ -2,7 +2,7 @@ import { ResponsiveTreeMap } from '@nivo/treemap';
 import React from 'react';
 
 import { CardErrorMessage } from '../CardErrorMessage';
-import { chartTheme, chartColorPalette } from '../../containers/Analytics';
+import { chartTheme, colorsByCategory } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 
@@ -24,9 +24,9 @@ export const TreeMapChart: React.FC<{
           {isNotEmpty ? (
             <ResponsiveTreeMap
               colors={[
-                chartColorPalette[7],
-                chartColorPalette[6],
-                chartColorPalette[5],
+                colorsByCategory['Expenses'],
+                colorsByCategory['Housing'],
+                colorsByCategory['Budget'],
               ]}
               identity="title"
               label="title"

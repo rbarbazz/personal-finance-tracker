@@ -2,7 +2,7 @@ import { Data, BarProps, ResponsiveBar } from '@nivo/bar';
 import React from 'react';
 
 import { CardErrorMessage } from '../CardErrorMessage';
-import { chartTheme, chartColorPalette } from '../../containers/Analytics';
+import { chartTheme, colorsByCategory } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 export type MonthlyBarChartData = {
@@ -35,7 +35,7 @@ export const MonthlyBarChart: React.FC<{
                 legendPosition: 'middle',
                 legendOffset: -55,
               }}
-              colors={chartColorPalette}
+              colors={bar => colorsByCategory[bar.id]}
               data={data}
               indexBy="month"
               keys={keys}

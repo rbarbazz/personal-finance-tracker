@@ -3,7 +3,7 @@ import React from 'react';
 
 import { BudgetCategoryType } from '../../../../server/src/routes/budgets';
 import { CardErrorMessage } from '../CardErrorMessage';
-import { chartTheme, chartColorPalette } from '../../containers/Analytics';
+import { chartTheme, colorsByCategory } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 export const BudgetPieChart: React.FC<{
@@ -29,7 +29,7 @@ export const BudgetPieChart: React.FC<{
         <LoadingSpinner />
       ) : total > 0 ? (
         <ResponsivePie
-          colors={chartColorPalette}
+          colors={pie => colorsByCategory[pie.id]}
           cornerRadius={3}
           data={data}
           enableRadialLabels={false}
