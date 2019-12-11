@@ -18,7 +18,7 @@ export const MonthlyBarChart: React.FC<{
 
   return (
     <div className="chart-wrapper generic-card" id="monthlybarchart">
-      <h3 className="chart-title">Expenses Monthly Repartition</h3>
+      <h3 className="generic-card-title">Expenses Monthly Repartition</h3>
       {isLoading ? (
         <LoadingSpinner />
       ) : (

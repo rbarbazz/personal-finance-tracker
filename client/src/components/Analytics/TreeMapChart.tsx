@@ -16,7 +16,7 @@ export const TreeMapChart: React.FC<{
 
   return (
     <div className="chart-wrapper generic-card" id="treemapchart">
-      <h3 className="chart-title">Last Month Detailed Expenses</h3>
+      <h3 className="generic-card-title">Last Month Detailed Expenses</h3>
       {isLoading ? (
         <LoadingSpinner />
       ) : (

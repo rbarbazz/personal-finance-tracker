@@ -59,6 +59,11 @@ body {
             0 3px 10px 0 rgba(0, 0, 0, 0.19);
     }
 }
+.generic-card-title {
+    color: $primary-bg-color;
+    font-size: 1.2em;
+    margin: 0 0 $big-margin;
+}
 
 @-webkit-keyframes rotate-center {
     0% {

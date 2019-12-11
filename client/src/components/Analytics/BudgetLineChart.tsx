@@ -18,7 +18,7 @@ export const BudgetLineChart: React.FC<{
 
   return (
     <div className="chart-wrapper generic-card" id="budgetlinechart">
-      <h3 className="chart-title">Budget Monthly Trend</h3>
+      <h3 className="generic-card-title">Budget Monthly Trend</h3>
       {isLoading ? (
         <LoadingSpinner />
       ) : (

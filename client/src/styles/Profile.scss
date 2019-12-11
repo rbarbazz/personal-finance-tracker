@@ -13,3 +13,13 @@
     height: 100%;
     width: 100%;
 }
+.password-update-container {
+    margin: 0 $big-margin $big-margin;
+}
+.profile-fields-wrapper {
+    display: flex;
+}
+#old-password-field,
+#new-password-field {
+    margin-right: $big-margin;
+}
