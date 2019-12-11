@@ -1,12 +1,20 @@
+import { TableRow, TableCell } from '@material-ui/core';
+import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 
+import { colorsByCategory } from '../../containers/Analytics';
 import { getBudgets } from '../../store/actions/budgets';
 import { LabelledField } from '../LabelledField';
 import { logout } from '../SideMenu';
+import { ReactComponent as CardIcon } from '../../icons/Categories/Card.svg';
+import { ReactComponent as CarIcon } from '../../icons/Categories/Car.svg';
+import { ReactComponent as CartIcon } from '../../icons/Categories/Cart.svg';
+import { ReactComponent as HouseIcon } from '../../icons/Categories/House.svg';
+import { ReactComponent as PeopleIcon } from '../../icons/Categories/People.svg';
+import { ReactComponent as PercentIcon } from '../../icons/Categories/Percent.svg';
+import { ReactComponent as QuestionIcon } from '../../icons/Categories/Question.svg';
+import { ReactComponent as TrendingUpIcon } from '../../icons/Categories/TrendingUp.svg';
 import { State } from '../../store/reducers';
-import { TableRow, TableCell } from '@material-ui/core';
-import { useDispatch, useSelector } from 'react-redux';
-import { colorsByCategory } from '../../containers/Analytics';
 
 const updateBudgetAmount = (
   categoryBudget: number,
@@ -42,6 +50,19 @@ const updateBudgetAmount = (
   };
 };
 
+const iconsByCategory: {
+  [index: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
+} = {
+  'Daily Life': CartIcon,
+  'Family Care': PeopleIcon,
+  Debt: CardIcon,
+  Housing: HouseIcon,
+  Savings: TrendingUpIcon,
+  Taxes: PercentIcon,
+  Transport: CarIcon,
+  Uncategorized: QuestionIcon,
+};
+
 export const BudgetCategory: React.FC<{
   categoryId: number;
   title: string;
@@ -53,9 +74,15 @@ export const BudgetCategory: React.FC<{
   const selectedMonth = useSelector(
     (state: State) => state.budgets.selectedMonth,
   );
+  const CategoryIcon = iconsByCategory[title];
 
   return (
     <TableRow>
+      <TableCell align="center">
+        {iconsByCategory[title] && (
+          <CategoryIcon style={{ fill: colorsByCategory[title] }} />
+        )}
+      </TableCell>
       <TableCell>
         <span
           className="generic-chip"

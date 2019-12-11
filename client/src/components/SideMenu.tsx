@@ -5,7 +5,7 @@ import React from 'react';
 import '../styles/SideMenu.scss';
 import { ReactComponent as CalculatorIcon } from '../icons/Calculator.svg';
 import { ReactComponent as ChartIcon } from '../icons/Chart.svg';
-import { ReactComponent as HomeIcon } from '../icons/Home.svg';
+import { ReactComponent as HouseOutlineIcon } from '../icons/HouseOutline.svg';
 import { ReactComponent as LogoutIcon } from '../icons/Logout.svg';
 import { ReactComponent as PersonIcon } from '../icons/Person.svg';
 import { ReactComponent as PriceTagIcon } from '../icons/PriceTag.svg';
@@ -35,7 +35,7 @@ export const SideMenu: React.FC = () => {
     <div className="side-menu-container">
       <div className="side-menu-items">
         <Link className="side-menu-item brand-logo" to="/">
-          <HomeIcon />
+          <HouseOutlineIcon />
         </Link>
         {[
           { title: 'analytics', icon: <ChartIcon /> },

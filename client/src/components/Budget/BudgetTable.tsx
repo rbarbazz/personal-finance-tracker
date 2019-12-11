@@ -21,6 +21,7 @@ export const BudgetTable: React.FC<{
         <Table stickyHeader aria-label="simple table">
           <TableHead>
             <TableRow>
+              <TableCell />
               <TableCell>Category</TableCell>
               <TableCell align="right">Amount</TableCell>
             </TableRow>
