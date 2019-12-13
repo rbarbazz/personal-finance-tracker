@@ -14,6 +14,7 @@ import { InfoMessage } from '../InfoMessage';
 import { LabelledField } from '../LabelledField';
 import { logout } from '../SideMenu';
 import { Operation } from '../../../../server/src/db/models';
+import { ReactComponent as SaveIcon } from '../../icons/Save.svg';
 import { SelectOption } from '../../store/reducers/operations';
 import { State } from '../../store/reducers/index';
 
@@ -153,7 +154,7 @@ export const UpsertOperationDialog: React.FC<{
           }}
           id="add-operation-btn"
           isLoading={isMakingUpsert}
-          value="Save"
+          value={['Save', <SaveIcon />]}
         />
       </div>
     </Dialog>

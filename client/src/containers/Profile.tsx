@@ -3,10 +3,11 @@ import React from 'react';
 
 import '../styles/Profile.scss';
 import { ActionBar } from '../components/ActionBar';
-import { State } from '../store/reducers';
-import { SectionHeader } from '../components/SectionHeader';
-import { LabelledField } from '../components/LabelledField';
 import { GenericBtn } from '../components/GenericBtn';
+import { LabelledField } from '../components/LabelledField';
+import { ReactComponent as SaveIcon } from '../icons/Save.svg';
+import { SectionHeader } from '../components/SectionHeader';
+import { State } from '../store/reducers';
 
 export const Profile: React.FC = () => {
   const fName = useSelector((state: State) => state.user.fName);
@@ -37,7 +38,7 @@ export const Profile: React.FC = () => {
             type="password"
             value=""
           />
-          <GenericBtn action={() => {}} value="Save" />
+          <GenericBtn action={() => {}} value={['Save', <SaveIcon />]} />
         </div>
       </div>
     </div>

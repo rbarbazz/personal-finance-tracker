@@ -12,14 +12,15 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
+
+    .labelled-field {
+        margin-right: $big-margin;
+    }
 }
 .password-update-container {
     margin: 0 $big-margin $big-margin;
 }
 .profile-fields-wrapper {
+    align-items: flex-end;
     display: flex;
-}
-#old-password-field,
-#new-password-field {
-    margin-right: $big-margin;
 }

@@ -105,18 +105,12 @@ export const Analytics: React.FC = () => {
       <ActionBar>
         <GenericBtn
           action={() => {
-            if (!isFetchingCharts) {
-              dispatch(fetchMonthlyBar());
-              dispatch(fetchBudgetLine());
-              dispatch(fetchTreeMap());
-            }
+            if (!isFetchingCharts) getInitialCharts();
           }}
-          value={
-            <>
-              {'Refresh'}
-              <SyncIcon style={isFetchingCharts ? loadingAnimation : {}} />
-            </>
-          }
+          value={[
+            'Refresh',
+            <SyncIcon style={isFetchingCharts ? loadingAnimation : {}} />,
+          ]}
         />
       </ActionBar>
       <div className="analytics-content-container">

@@ -50,21 +50,11 @@ export const Operations: React.FC = () => {
       <ActionBar>
         <GenericBtn
           action={() => toggleAddDialog(true)}
-          value={
-            <>
-              {'Add'}
-              <AddIcon />
-            </>
-          }
+          value={['Add', <AddIcon />]}
         />
         <GenericBtn
           action={() => toggleUpload(true)}
-          value={
-            <>
-              {'Import'}
-              <FileAddIcon />
-            </>
-          }
+          value={['Import', <FileAddIcon />]}
         />
         {uploadVisible && <UploadDialog toggleUpload={toggleUpload} />}
         <CSVLink
@@ -73,15 +63,7 @@ export const Operations: React.FC = () => {
           separator=";"
           target="_blank"
         >
-          <GenericBtn
-            action={() => {}}
-            value={
-              <>
-                {'Export'}
-                <ArchiveIcon />
-              </>
-            }
-          />
+          <GenericBtn action={() => {}} value={['Export', <ArchiveIcon />]} />
         </CSVLink>
         {addOperationVisible && (
           <UpsertOperationDialog toggleDialog={toggleAddDialog} />

@@ -6,9 +6,10 @@ import '../styles/Login.scss';
 import { GenericBtn } from '../components/GenericBtn';
 import { InfoMessage } from '../components/InfoMessage';
 import { LabelledField } from '../components/LabelledField';
-import { ReactComponent as Email } from '../icons/Email.svg';
-import { ReactComponent as Lock } from '../icons/Lock.svg';
-import { ReactComponent as Person } from '../icons/Person.svg';
+import { ReactComponent as EmailIcon } from '../icons/Email.svg';
+import { ReactComponent as LockIcon } from '../icons/Lock.svg';
+import { ReactComponent as LoginIcon } from '../icons/Login.svg';
+import { ReactComponent as PersonIcon } from '../icons/Person.svg';
 import { User } from '../../../server/src/db/models';
 import { userLoggedIn } from '../store/actions/user';
 
@@ -21,8 +22,7 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [registerFName, setregisterFName] = useState('');
 
-  const loginUser = async (userData: Partial<User>, isRegistered: boolean) => {
-    if (!isRegistered) setPassword('');
+  const loginUser = async (userData: Partial<User>) => {
     toggleLoading(true);
     try {
       const res = await fetch(isRegistered ? '/auth/login' : '/auth/register', {
@@ -66,52 +66,35 @@ export const Login: React.FC = () => {
       <p className="greetings-paragraph">Hi stranger!</p>
       {!isRegistered && (
         <LabelledField
-          setter={setregisterFName}
           id="fname"
+          label={[<PersonIcon />, 'First Name']}
+          setter={setregisterFName}
           type="text"
-          label={
-            <>
-              <Person />
-              {'First Name'}
-            </>
-          }
           value={registerFName}
         />
       )}
       <LabelledField
-        setter={setEmail}
         id="email"
+        label={[<EmailIcon />, 'Email']}
+        setter={setEmail}
         type="email"
-        label={
-          <>
-            <Email />
-            {'Email'}
-          </>
-        }
         value={email}
       />
       <LabelledField
-        setter={setPassword}
         id="password"
+        label={[<LockIcon />, 'Password']}
+        setter={setPassword}
         type="password"
-        label={
-          <>
-            <Lock />
-            {'Password'}
-          </>
-        }
         value={password}
       />
       {message.value !== '' && (
         <InfoMessage error={message.error} value={message.value} />
       )}
       <GenericBtn
-        action={() =>
-          loginUser({ fName: registerFName, email, password }, isRegistered)
-        }
+        action={() => loginUser({ fName: registerFName, email, password })}
         id="login-btn"
         isLoading={isLoading}
-        value={isRegistered ? 'Login' : 'Sign up'}
+        value={[isRegistered ? 'Login' : 'Sign up', <LoginIcon />]}
       />
       <div className="toggle-registered-container">
         <p className="toggle-registered-paragraph">
