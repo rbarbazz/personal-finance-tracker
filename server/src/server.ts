@@ -9,6 +9,7 @@ import { authRouter } from './routes/auth';
 import { budgetsRouter } from './routes/budgets';
 import { categoriesRouter } from './routes/categories';
 import { operationsRouter } from './routes/operations';
+import { usersRouter } from './routes/users';
 import initDatabase from './db/initDatabase';
 import passport from 'passport';
 
@@ -47,6 +48,11 @@ app.use(
   '/operations',
   passport.authenticate('jwt', { session: false }),
   operationsRouter,
+);
+app.use(
+  '/users',
+  passport.authenticate('jwt', { session: false }),
+  usersRouter,
 );
 
 // Default route

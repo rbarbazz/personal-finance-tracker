@@ -17,9 +17,6 @@ import { Operation } from '../db/models';
 export const operationsRouter = Router();
 const upload = multer({ dest: '../../tmp/' });
 
-/**
- * Operations
- */
 // Get all operations for a user
 operationsRouter.get('/', async (req, res) => {
   if (req.user) {

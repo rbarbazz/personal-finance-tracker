@@ -7,14 +7,13 @@ export const GenericBtn: React.FC<{
   action: Function;
   id?: string;
   isLoading?: boolean;
-  value: React.ReactChild[] | string;
-}> = ({ action, id, value, isLoading = false }) => (
+}> = ({ action, children, id, isLoading = false }) => (
   <button
     className="generic-btn"
     disabled={isLoading}
     id={id || ''}
     onClick={() => action()}
   >
-    {isLoading ? <LoadingSpinner /> : value}
+    {isLoading ? <LoadingSpinner /> : children}
   </button>
 );

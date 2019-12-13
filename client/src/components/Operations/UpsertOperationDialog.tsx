@@ -91,26 +91,24 @@ export const UpsertOperationDialog: React.FC<{
           isEdit ? 'Edit' : 'Add'
         } Operation`}</h3>
         <LabelledField
-          setter={setDate}
           id="operation-date"
+          setter={setDate}
           type="date"
-          label="Date"
           value={operationDate}
-        />
+        >
+          Date
+        </LabelledField>
         <LabelledField
-          setter={setAmount}
           id="amount"
+          setter={setAmount}
           type="number"
-          label="Amount"
           value={amount}
-        />
-        <LabelledField
-          setter={setLabel}
-          id="label"
-          type="text"
-          label="Label"
-          value={label}
-        />
+        >
+          Amount
+        </LabelledField>
+        <LabelledField id="label" setter={setLabel} type="text" value={label}>
+          Label
+        </LabelledField>
         <label htmlFor="category-select" className="generic-label">
           Category
         </label>
@@ -154,8 +152,10 @@ export const UpsertOperationDialog: React.FC<{
           }}
           id="add-operation-btn"
           isLoading={isMakingUpsert}
-          value={['Save', <SaveIcon />]}
-        />
+        >
+          Save
+          <SaveIcon />
+        </GenericBtn>
       </div>
     </Dialog>
   );

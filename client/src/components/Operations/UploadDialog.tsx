@@ -7,16 +7,18 @@ import { GenericBtn } from '../GenericBtn';
 import { getOperations } from '../../store/actions/operations';
 import { InfoMessage } from '../InfoMessage';
 import { logout } from '../SideMenu';
+import { ReactComponent as UploadIcon } from '../../icons/Upload.svg';
+import { ReactComponent as ArrowRightIcon } from '../../icons/ArrowRight.svg';
 import { UploadCategoryMatch } from './UploadCategoryMatch';
 
 export const UploadDialog: React.FC<{
   toggleUpload: Function;
 }> = ({ toggleUpload }) => {
   const dispatch = useDispatch();
-  const [isLoading, toggleLoading] = useState(false);
-  const [message, setMessage] = useState({ error: false, value: '' });
   const [fileName, setFileName] = useState('');
   const [headers, setHeaders] = useState([] as string[]);
+  const [isLoading, toggleLoading] = useState(false);
+  const [message, setMessage] = useState({ error: false, value: '' });
   const [colMatches, setColMatches] = useState<{ [index: string]: string }>({
     amount: '',
     category: '',
@@ -171,8 +173,19 @@ export const UploadDialog: React.FC<{
           }}
           id="upload-csv-btn"
           isLoading={isLoading}
-          value={headers.length > 0 ? 'Upload' : 'Match Columns'}
-        />
+        >
+          {headers.length > 0 ? (
+            <>
+              Upload
+              <UploadIcon />
+            </>
+          ) : (
+            <>
+              Match Columns
+              <ArrowRightIcon />
+            </>
+          )}
+        </GenericBtn>
       </div>
     </Dialog>
   );

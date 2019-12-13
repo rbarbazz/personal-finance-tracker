@@ -3,11 +3,39 @@ import React from 'react';
 
 import '../styles/Profile.scss';
 import { ActionBar } from '../components/ActionBar';
-import { GenericBtn } from '../components/GenericBtn';
-import { LabelledField } from '../components/LabelledField';
-import { ReactComponent as SaveIcon } from '../icons/Save.svg';
+import { logout } from '../components/SideMenu';
+import { PwdUpdate } from '../components/Profile/PwdUpdate';
 import { SectionHeader } from '../components/SectionHeader';
 import { State } from '../store/reducers';
+
+export const updateUserInfo = (
+  setMessage: Function,
+  toggleLoading: Function,
+  userData: { oldPwd?: string; newPwd?: string },
+) => {
+  return async (dispatch: Function) => {
+    toggleLoading(true);
+    try {
+      const res = await fetch('/users/', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData),
+      });
+      toggleLoading(false);
+      if (res.status === 200) {
+        const { error, message } = await res.json();
+
+        setMessage({ error, value: message });
+        if (!error) {
+        }
+      } else dispatch(logout());
+    } catch (error) {
+      setMessage({ error: true, value: 'An error has occurred' });
+    }
+  };
+};
 
 export const Profile: React.FC = () => {
   const fName = useSelector((state: State) => state.user.fName);
@@ -16,30 +44,11 @@ export const Profile: React.FC = () => {
     <div className="profile-container">
       <ActionBar />
       <SectionHeader
-        subtitle="Soon you will be able to update your info here."
+        subtitle="Update your info here."
         title={`Welcome back, ${fName}`}
       />
-      <div className="password-update-container generic-card">
-        <h3 className="generic-card-title">Update Password</h3>
-        <div className="profile-fields-wrapper">
-          <LabelledField
-            autoComplete="current-password"
-            id="old-password"
-            label="Old Password"
-            setter={() => {}}
-            type="password"
-            value=""
-          />
-          <LabelledField
-            autoComplete="new-password"
-            id="new-password"
-            label="New Password"
-            setter={() => {}}
-            type="password"
-            value=""
-          />
-          <GenericBtn action={() => {}} value={['Save', <SaveIcon />]} />
-        </div>
+      <div className="profile-content-wrapper">
+        <PwdUpdate />
       </div>
     </div>
   );

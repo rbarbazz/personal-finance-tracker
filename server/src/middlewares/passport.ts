@@ -3,9 +3,8 @@ import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 import passport from 'passport';
 
-import { knex } from '../db/initDatabase';
 import { Request } from 'express';
-import { User } from '../db/models';
+import { getUser } from '../controllers/users';
 
 const cookieExtractor = (req: Request) => {
   let token = null;
@@ -18,14 +17,12 @@ passport.use(
   new LocalStrategy(
     { usernameField: 'email' },
     async (email, password, done) => {
-      const user = await knex<User>('users')
-        .where('email', email)
-        .first();
+      const user = await getUser(email);
 
-      if (!user) return done(null, false);
-      bcrypt.compare(password, user.password, (err, res) => {
-        if (err || !res) return done(null, false);
-        return done(null, user);
+      if (user.length < 1) return done(null, false);
+      bcrypt.compare(password, user[0].password, (err, isCorrect) => {
+        if (err || !isCorrect) return done(null, false);
+        return done(null, user[0]);
       });
     },
   ),
@@ -39,11 +36,9 @@ passport.use(
     },
     async (jwtPayload, done) => {
       try {
-        const user = await knex<User>('users')
-          .where('id', jwtPayload.id)
-          .first();
+        const user = await getUser('', jwtPayload.id);
 
-        return done(null, user);
+        return done(null, user[0]);
       } catch (err) {
         return done(err);
       }

@@ -13,16 +13,13 @@ import { ReactComponent as PersonIcon } from '../icons/Person.svg';
 import { User } from '../../../server/src/db/models';
 import { userLoggedIn } from '../store/actions/user';
 
-export const Login: React.FC = () => {
-  const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
-  const [isLoading, toggleLoading] = useState(false);
-  const [isRegistered, toggleIsRegistered] = useState(true);
-  const [message, setMessage] = useState({ error: false, value: '' });
-  const [password, setPassword] = useState('');
-  const [registerFName, setregisterFName] = useState('');
-
-  const loginUser = async (userData: Partial<User>) => {
+const loginUser = (
+  isRegistered: boolean,
+  setMessage: Function,
+  toggleLoading: Function,
+  userData: Partial<User>,
+) => {
+  return async (dispatch: Function) => {
     toggleLoading(true);
     try {
       const res = await fetch(isRegistered ? '/auth/login' : '/auth/register', {
@@ -56,6 +53,16 @@ export const Login: React.FC = () => {
       console.error(error);
     }
   };
+};
+
+export const Login: React.FC = () => {
+  const dispatch = useDispatch();
+  const [email, setEmail] = useState('');
+  const [isLoading, toggleLoading] = useState(false);
+  const [isRegistered, toggleIsRegistered] = useState(true);
+  const [message, setMessage] = useState({ error: false, value: '' });
+  const [password, setPassword] = useState('');
+  const [registerFName, setregisterFName] = useState('');
 
   useEffect(() => {
     setMessage({ error: false, value: '' });
@@ -67,48 +74,57 @@ export const Login: React.FC = () => {
       {!isRegistered && (
         <LabelledField
           id="fname"
-          label={[<PersonIcon />, 'First Name']}
           setter={setregisterFName}
           type="text"
           value={registerFName}
-        />
+        >
+          <PersonIcon />
+          First Name
+        </LabelledField>
       )}
-      <LabelledField
-        id="email"
-        label={[<EmailIcon />, 'Email']}
-        setter={setEmail}
-        type="email"
-        value={email}
-      />
+      <LabelledField id="email" setter={setEmail} type="email" value={email}>
+        <EmailIcon />
+        Email
+      </LabelledField>
       <LabelledField
         id="password"
-        label={[<LockIcon />, 'Password']}
         setter={setPassword}
         type="password"
         value={password}
-      />
+      >
+        <LockIcon />
+        Password
+      </LabelledField>
       {message.value !== '' && (
         <InfoMessage error={message.error} value={message.value} />
       )}
       <GenericBtn
-        action={() => loginUser({ fName: registerFName, email, password })}
+        action={() =>
+          dispatch(
+            loginUser(isRegistered, setMessage, toggleLoading, {
+              fName: registerFName,
+              email,
+              password,
+            }),
+          )
+        }
         id="login-btn"
         isLoading={isLoading}
-        value={[isRegistered ? 'Login' : 'Sign up', <LoginIcon />]}
-      />
+      >
+        {isRegistered ? 'Login' : 'Sign up'}
+        <LoginIcon />
+      </GenericBtn>
       <div className="toggle-registered-container">
         <p className="toggle-registered-paragraph">
-          {isRegistered
-            ? "Don't have an account? "
-            : 'Already have an account? '}
+          {`${isRegistered ? "Don't" : 'Already'} have an account?`}
           <button
+            className="toggle-registered-btn"
             onClick={() => {
               setMessage({ error: false, value: '' });
               toggleIsRegistered(!isRegistered);
             }}
-            className="toggle-registered-btn"
           >
-            {isRegistered ? 'Sign up' : 'Sign in'}
+            {`Sign ${isRegistered ? 'up' : 'in'}`}
           </button>
         </p>
       </div>

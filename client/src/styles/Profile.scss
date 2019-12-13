@@ -12,15 +12,19 @@
     flex-direction: column;
     height: 100%;
     width: 100%;
-
-    .labelled-field {
-        margin-right: $big-margin;
-    }
 }
-.password-update-container {
+.profile-content-wrapper {
+    display: flex;
     margin: 0 $big-margin $big-margin;
 }
 .profile-fields-wrapper {
-    align-items: flex-end;
     display: flex;
+    flex-direction: column;
+
+    .labelled-field {
+        margin-bottom: $big-margin / 2;
+    }
+}
+#update-pwd-btn {
+    margin: $small-margin 0 0;
 }

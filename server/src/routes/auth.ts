@@ -1,17 +1,13 @@
-import { Router, Request } from 'express';
+import { Router } from 'express';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import passport from 'passport';
 import validator from 'validator';
-import jwt from 'jsonwebtoken';
 
-import { knex } from '../db/initDatabase';
-import { User } from '../db/models';
+import { getUser, insertUsers } from '../controllers/users';
 
 export const authRouter = Router();
 
-/**
- * Authentication routes
- */
 // Get current login status
 authRouter.get(
   '/login',
@@ -50,11 +46,10 @@ authRouter.post('/login', (req, res) => {
 // Register
 authRouter.post('/register', async (req, res) => {
   const { email, fName, password } = req.body;
-  const user = await knex<User>('users')
-    .where('email', email)
-    .first();
+  const user = await getUser(email);
 
-  if (user) return res.send({ error: true, message: 'Email already in use' });
+  if (user.length > 0)
+    return res.send({ error: true, message: 'Email already in use' });
   if (fName.length > 50)
     return res.send({ error: true, message: 'First name is too long' });
   if (fName.length < 1)
@@ -75,9 +70,7 @@ authRouter.post('/register', async (req, res) => {
   bcrypt.hash(password, 10, async (error, hash) => {
     if (error) return res.send({ error: true, message: 'An error occurred' });
 
-    const insertedUserId = await knex<User>('users')
-      .returning('id')
-      .insert({ email, fName, password: hash });
+    const insertedUserId = await insertUsers(email, fName, hash);
 
     if (insertedUserId.length < 1)
       return res.send({ error: true, message: 'An error has occurred' });

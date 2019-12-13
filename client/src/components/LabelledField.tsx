@@ -8,15 +8,14 @@ export const LabelledField: React.FC<{
   autoComplete?: string;
   disabled?: boolean;
   id?: string;
-  label?: React.ReactChild[] | string;
   setter: Function;
   type: string;
   value: any;
 }> = ({
   autoComplete,
+  children,
   disabled = false,
   id,
-  label,
   setter,
   type: initialType,
   value,
@@ -26,13 +25,24 @@ export const LabelledField: React.FC<{
   return (
     <div className="labelled-field">
       <label className="generic-label" htmlFor={`${id}-field`}>
-        <div style={{ display: 'flex' }}>{label && label}</div>
+        <div style={{ display: 'flex' }}>{children}</div>
         {initialType === 'password' && (
           <div
             className="password-toggler"
             onClick={() => toggleVisibility(prev => !prev)}
           >
-            {isPwdVisible ? ['Hide', <EyeOffIcon />] : ['Show', <EyeIcon />]}
+            {value !== '' &&
+              (isPwdVisible ? (
+                <>
+                  Hide
+                  <EyeOffIcon />
+                </>
+              ) : (
+                <>
+                  Show
+                  <EyeIcon />
+                </>
+              ))}
           </div>
         )}
       </label>
@@ -46,7 +56,7 @@ export const LabelledField: React.FC<{
           type={
             initialType === 'password' && isPwdVisible ? 'text' : initialType
           }
-          {...(value ? { value: value } : {})}
+          value={value}
         />
       </div>
     </div>
