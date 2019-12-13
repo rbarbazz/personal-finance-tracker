@@ -1,6 +1,9 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
+import validator from 'validator';
 
+import { deleteBudgets } from '../controllers/budgets';
+import { deleteOperations } from '../controllers/operations';
 import { updateUser } from '../controllers/users';
 
 export const usersRouter = Router();
@@ -9,7 +12,7 @@ export const usersRouter = Router();
 usersRouter.put('/', async (req, res) => {
   if (req.user) {
     const { user } = req;
-    const { oldPwd, newPwd } = req.body;
+    const { fName, oldPwd, newPwd } = req.body;
 
     if (oldPwd !== undefined && newPwd !== undefined) {
       bcrypt.compare(oldPwd, user.password, (cmpErr, isCorrect) => {
@@ -33,7 +36,35 @@ usersRouter.put('/', async (req, res) => {
           return res.send({ error: false, message: 'Password updated' });
         });
       });
-    } else return res.send();
+    } else if (fName !== undefined) {
+      if (fName.length > 50)
+        return res.send({ error: true, message: 'First name is too long' });
+      if (fName.length < 1)
+        return res.send({ error: true, message: 'First name is too short' });
+      if (!validator.isAlpha(fName))
+        return res.send({
+          error: true,
+          message: 'First name must only contain letters',
+        });
+
+      await updateUser(user.id, { fName });
+
+      return res.send({ error: false, message: 'First Name updated' });
+    } else return res.send({ error: false, message: '' });
+  } else {
+    return res.status(401).send();
+  }
+});
+
+// Reset user's profile
+usersRouter.delete('/', async (req, res) => {
+  if (req.user) {
+    const { user } = req;
+
+    await deleteBudgets(user.id);
+    await deleteOperations(user.id);
+
+    return res.send({ error: true, message: 'Profile was reset' });
   } else {
     return res.status(401).send();
   }

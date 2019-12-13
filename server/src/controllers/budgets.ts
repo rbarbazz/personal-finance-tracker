@@ -53,3 +53,8 @@ export const updateBudget = async (budgetId: number, budget: Partial<Budget>) =>
   await knex<Budget>('budgets')
     .where('id', budgetId)
     .update(budget);
+
+export const deleteBudgets = async (userId: number) =>
+  await knex<Budget>('budgets')
+    .where('userId', userId)
+    .del();

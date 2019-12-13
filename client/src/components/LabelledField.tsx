@@ -24,28 +24,30 @@ export const LabelledField: React.FC<{
 
   return (
     <div className="labelled-field">
-      <label className="generic-label" htmlFor={`${id}-field`}>
-        <div style={{ display: 'flex' }}>{children}</div>
-        {initialType === 'password' && (
-          <div
-            className="password-toggler"
-            onClick={() => toggleVisibility(prev => !prev)}
-          >
-            {value !== '' &&
-              (isPwdVisible ? (
-                <>
-                  Hide
-                  <EyeOffIcon />
-                </>
-              ) : (
-                <>
-                  Show
-                  <EyeIcon />
-                </>
-              ))}
-          </div>
-        )}
-      </label>
+      {children && (
+        <label className="generic-label" htmlFor={`${id}-field`}>
+          <div style={{ display: 'flex' }}>{children}</div>
+          {initialType === 'password' && (
+            <div
+              className="password-toggler"
+              onClick={() => toggleVisibility(prev => !prev)}
+            >
+              {value !== '' &&
+                (isPwdVisible ? (
+                  <>
+                    Hide
+                    <EyeOffIcon />
+                  </>
+                ) : (
+                  <>
+                    Show
+                    <EyeIcon />
+                  </>
+                ))}
+            </div>
+          )}
+        </label>
+      )}
       <div className="label-input-wrapper">
         <input
           {...(autoComplete ? { autoComplete: autoComplete } : {})}

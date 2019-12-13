@@ -14,6 +14,7 @@
     width: 100%;
 }
 .profile-content-wrapper {
+    align-items: flex-start;
     display: flex;
     margin: 0 $big-margin $big-margin;
 }
@@ -23,8 +24,41 @@
 
     .labelled-field {
         margin-bottom: $big-margin / 2;
+
+        .generic-input {
+            min-width: 300px;
+        }
+    }
+    .generic-btn {
+        margin: $small-margin 0 0;
     }
 }
-#update-pwd-btn {
-    margin: $small-margin 0 0;
+#fname-update-card {
+    margin: 0 $big-margin;
+}
+#reset-profile-card {
+    .generic-card-title {
+        color: $danger-color;
+    }
+    .generic-btn {
+        background-color: $danger-color;
+
+        .loading-spinner {
+            border-color: $danger-color-dark;
+            border-top-color: white;
+        }
+        &:hover {
+            background-color: $danger-color-dark;
+        }
+        &:disabled {
+            background-color: $danger-color;
+        }
+    }
+}
+.reset-explanations {
+    color: $primary-bg-color;
+    font-size: 1.1em;
+    line-height: 1.3em;
+    margin: 0 0 $small-margin;
+    max-width: 332px;
 }

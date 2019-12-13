@@ -15,4 +15,4 @@ export const insertUsers = async (email: string, fName: string, hash: string) =>
 export const updateUser = async (userId: number, userInfo: Partial<User>) =>
   await knex<User>('users')
     .where('id', userId)
-    .update(userInfo);
+    .update({ ...userInfo, updatedAt: knex.fn.now() });

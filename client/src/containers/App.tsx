@@ -9,16 +9,16 @@ import React, { useEffect, useCallback } from 'react';
 
 import '../styles/App.scss';
 import { Analytics } from './Analytics';
+import { Budget } from './Budget';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Login } from './Login';
 import { Operations } from './Operations';
-import { requestUserStatus, receiveUserStatus } from '../store/actions/user';
-import { State } from '../store/reducers/index';
-import { SideMenu } from '../components/SideMenu';
-import { Budget } from './Budget';
 import { Profile } from './Profile';
+import { requestUserStatus, receiveUserStatus } from '../store/actions/user';
+import { SideMenu } from '../components/SideMenu';
+import { State } from '../store/reducers/index';
 
-const fetchUserStatus = () => {
+export const fetchUserStatus = () => {
   return async (dispatch: Function) => {
     dispatch(requestUserStatus());
     try {

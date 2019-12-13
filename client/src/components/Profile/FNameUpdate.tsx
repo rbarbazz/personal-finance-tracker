@@ -7,47 +7,34 @@ import { LabelledField } from '../LabelledField';
 import { ReactComponent as SaveIcon } from '../../icons/Save.svg';
 import { updateUserInfo } from '../../containers/Profile';
 
-export const PwdUpdate: React.FC = () => {
+export const FNameUpdate: React.FC = () => {
   const dispatch = useDispatch();
+  const [fName, setFName] = useState('');
   const [isLoading, toggleIsLoading] = useState(false);
   const [message, setMessage] = useState({ error: false, value: '' });
-  const [newPwd, setNewPwd] = useState('');
-  const [oldPwd, setOldPwd] = useState('');
 
   useEffect(() => {
     setMessage({ error: false, value: '' });
-  }, [newPwd, oldPwd]);
+  }, [fName]);
 
   return (
-    <div className="info-update-card generic-card">
-      <h3 className="generic-card-title">Update Password</h3>
+    <div className="info-update-card generic-card" id="fname-update-card">
+      <h3 className="generic-card-title">Update First Name</h3>
       <div className="profile-fields-wrapper">
         <LabelledField
-          autoComplete="current-password"
-          id="old-password"
-          setter={setOldPwd}
-          type="password"
-          value={oldPwd}
+          id="new-fname"
+          setter={setFName}
+          type="text"
+          value={fName}
         >
-          Old Password
-        </LabelledField>
-        <LabelledField
-          autoComplete="new-password"
-          id="new-password"
-          setter={setNewPwd}
-          type="password"
-          value={newPwd}
-        >
-          New Password
+          First Name
         </LabelledField>
         {message.value !== '' && (
           <InfoMessage error={message.error} value={message.value} />
         )}
         <GenericBtn
           action={() =>
-            dispatch(
-              updateUserInfo(setMessage, toggleIsLoading, { oldPwd, newPwd }),
-            )
+            dispatch(updateUserInfo(setMessage, toggleIsLoading, { fName }))
           }
           isLoading={isLoading}
         >

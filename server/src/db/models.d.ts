@@ -4,7 +4,7 @@ export interface User {
   fName: string;
   id: number;
   password: string;
-  updatedAt: Date;
+  updatedAt: Date | Raw<any>;
 }
 
 export interface Operation {

@@ -7,11 +7,14 @@ import { logout } from '../components/SideMenu';
 import { PwdUpdate } from '../components/Profile/PwdUpdate';
 import { SectionHeader } from '../components/SectionHeader';
 import { State } from '../store/reducers';
+import { FNameUpdate } from '../components/Profile/FNameUpdate';
+import { updatedFName } from '../store/actions/user';
+import { ResetProfile } from '../components/Profile/ResetProfile';
 
 export const updateUserInfo = (
   setMessage: Function,
   toggleLoading: Function,
-  userData: { oldPwd?: string; newPwd?: string },
+  userData: { fName?: string; oldPwd?: string; newPwd?: string },
 ) => {
   return async (dispatch: Function) => {
     toggleLoading(true);
@@ -28,8 +31,7 @@ export const updateUserInfo = (
         const { error, message } = await res.json();
 
         setMessage({ error, value: message });
-        if (!error) {
-        }
+        if (!error && userData.fName) dispatch(updatedFName(userData.fName));
       } else dispatch(logout());
     } catch (error) {
       setMessage({ error: true, value: 'An error has occurred' });
@@ -49,6 +51,8 @@ export const Profile: React.FC = () => {
       />
       <div className="profile-content-wrapper">
         <PwdUpdate />
+        <FNameUpdate />
+        <ResetProfile />
       </div>
     </div>
   );

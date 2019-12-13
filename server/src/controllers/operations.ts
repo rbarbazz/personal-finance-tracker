@@ -106,3 +106,8 @@ export const updateOperation = async (
   await knex<Operation>('operations')
     .where('id', operationId)
     .update(operation);
+
+export const deleteOperations = async (userId: number) =>
+  await knex<Operation>('operations')
+    .where('userId', userId)
+    .del();
