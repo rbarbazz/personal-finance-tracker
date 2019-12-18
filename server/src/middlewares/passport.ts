@@ -19,9 +19,13 @@ passport.use(
     async (email, password, done) => {
       const user = await getUser(email);
 
-      if (user.length < 1) return done(null, false);
+      if (user.length < 1) return done('Incorrect username or password', false);
+      if (!user[0].isActive) return done('Account is not active', false);
+
       bcrypt.compare(password, user[0].password, (err, isCorrect) => {
-        if (err || !isCorrect) return done(null, false);
+        if (err) return done('An error has occurred', false);
+        if (!isCorrect) return done('Incorrect username or password', false);
+
         return done(null, user[0]);
       });
     },
@@ -32,11 +36,14 @@ passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: cookieExtractor,
-      secretOrKey: process.env.JWT_SECRET || 'not a secret',
+      secretOrKey: process.env.JWT_LOGIN_SECRET || 'not a secret',
     },
     async (jwtPayload, done) => {
       try {
         const user = await getUser('', jwtPayload.id);
+
+        if (user.length < 1) return done(null, false);
+        if (!user[0].isActive) return done(null, false);
 
         return done(null, user[0]);
       } catch (err) {

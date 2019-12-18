@@ -3,6 +3,7 @@ export interface User {
   email: string;
   fName: string;
   id: number;
+  isActive: boolean;
   password: string;
   updatedAt: Date | Raw<any>;
 }

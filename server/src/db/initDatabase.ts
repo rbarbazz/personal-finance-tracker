@@ -20,6 +20,7 @@ const createUsers = async () => {
     table.increments();
     table.string('email');
     table.string('f_name');
+    table.boolean('is_active');
     table.string('password');
     table.timestamps(true, true);
   });

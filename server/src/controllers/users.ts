@@ -10,7 +10,7 @@ export const getUser = async (email = '', id = 0) => {
 export const insertUsers = async (email: string, fName: string, hash: string) =>
   await knex<User>('users')
     .returning('id')
-    .insert({ email, fName, password: hash });
+    .insert({ email, fName, isActive: false, password: hash });
 
 export const updateUser = async (userId: number, userInfo: Partial<User>) =>
   await knex<User>('users')

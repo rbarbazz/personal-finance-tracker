@@ -1,4 +1,5 @@
 import { useDispatch } from 'react-redux';
+import { useLocation } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import React, { useState, useEffect } from 'react';
 
@@ -16,6 +17,7 @@ import { userLoggedIn } from '../store/actions/user';
 const loginUser = (
   isRegistered: boolean,
   setMessage: Function,
+  toggleIsRegistered: Function,
   toggleLoading: Function,
   userData: Partial<User>,
 ) => {
@@ -30,25 +32,27 @@ const loginUser = (
         body: JSON.stringify(userData),
       });
       toggleLoading(false);
+      const {
+        error,
+        message,
+        token,
+      }: {
+        error: boolean;
+        message: string;
+        token: string;
+      } = await res.json();
       if (res.status === 200) {
-        const {
-          error,
-          message,
-          token,
-        }: {
-          error: boolean;
-          message: string;
-          token: string;
-        } = await res.json();
-
         setMessage({ error, value: message });
 
-        const { fName }: { fName: string } = jwtDecode(token);
+        if (!isRegistered && !error) toggleIsRegistered(true);
+        if (token) {
+          const { fName }: { fName: string } = jwtDecode(token);
 
-        if (token && fName) {
           return dispatch(userLoggedIn(fName));
         }
-      } else setMessage({ error: true, value: 'Wrong Email or Password' });
+      } else if (res.status === 401) {
+        setMessage({ error, value: message });
+      } else setMessage({ error: true, value: 'An error has occurred' });
     } catch (error) {
       console.error(error);
     }
@@ -57,6 +61,7 @@ const loginUser = (
 
 export const Login: React.FC = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [isLoading, toggleLoading] = useState(false);
   const [isRegistered, toggleIsRegistered] = useState(true);
@@ -68,6 +73,23 @@ export const Login: React.FC = () => {
     setMessage({ error: false, value: '' });
   }, [email, password, registerFName]);
 
+  useEffect(() => {
+    const qs = location.search;
+    const params = new URLSearchParams(qs);
+    const verif = params.get('verif');
+
+    if (verif === 'true')
+      setMessage({
+        error: false,
+        value: 'Account activated, you may now log in',
+      });
+    else if (verif === 'false') {
+      setMessage({
+        error: true,
+        value: 'Error validating your email',
+      });
+    }
+  }, [location]);
   return (
     <form className="login-container">
       <p className="greetings-paragraph">Hi stranger!</p>
@@ -109,11 +131,17 @@ export const Login: React.FC = () => {
       <GenericBtn
         action={() =>
           dispatch(
-            loginUser(isRegistered, setMessage, toggleLoading, {
-              fName: registerFName,
-              email,
-              password,
-            }),
+            loginUser(
+              isRegistered,
+              setMessage,
+              toggleIsRegistered,
+              toggleLoading,
+              {
+                fName: registerFName,
+                email,
+                password,
+              },
+            ),
           )
         }
         id="login-btn"
