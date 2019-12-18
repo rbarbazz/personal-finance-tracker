@@ -6,18 +6,6 @@
 ==========================================================================
 */
 
-.profile-container {
-    background-color: $secondary-bg-color;
-    display: flex;
-    flex-direction: column;
-    height: 100%;
-    width: 100%;
-}
-.profile-content-wrapper {
-    align-items: flex-start;
-    display: flex;
-    margin: 0 $big-margin $big-margin;
-}
 .profile-fields-wrapper {
     display: flex;
     flex-direction: column;
@@ -33,8 +21,16 @@
         margin: $small-margin 0 0;
     }
 }
-#fname-update-card {
-    margin: 0 $big-margin;
+.updates-cards-wrapper {
+    align-items: flex-start;
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: $big-margin;
+    width: 100%;
+}
+.info-update-card {
+    display: flex;
+    flex-direction: column;
 }
 #reset-profile-card {
     .generic-card-title {

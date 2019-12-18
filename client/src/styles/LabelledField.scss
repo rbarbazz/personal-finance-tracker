@@ -23,18 +23,14 @@
         width: 18px;
     }
 }
-.generic-input {
-    &[type='email'],
-    &[type='text'],
-    &[type='password'],
-    &[type='date'],
-    &[type='number'] {
-        border: hsl(0, 0%, 80%) solid 1px;
-        color: $primary-color;
-        font-family: $primary-font-family;
-        line-height: 1;
-        padding: 15px;
-    }
+input.generic-input {
+    border: hsl(0, 0%, 80%) solid 1px;
+    color: $primary-color;
+    font-family: $primary-font-family;
+    line-height: 1;
+    padding: 15px;
+    width: 100%;
+
     &:focus {
         outline: $primary-color solid 2px;
     }

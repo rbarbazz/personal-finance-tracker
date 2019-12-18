@@ -13,6 +13,7 @@ export const GenericBtn: React.FC<{
     disabled={isLoading}
     id={id || ''}
     onClick={() => action()}
+    type="button"
   >
     {isLoading ? <LoadingSpinner /> : children}
   </button>

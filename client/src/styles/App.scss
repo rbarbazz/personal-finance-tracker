@@ -64,6 +64,22 @@ body {
     font-size: 1.2em;
     margin: 0 0 $big-margin;
 }
+.page-container {
+    background-color: $secondary-bg-color;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 100%;
+}
+.content-container {
+    overflow-y: auto;
+}
+.inner-content-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin: 0 $big-margin $big-margin;
+}
 
 @-webkit-keyframes rotate-center {
     0% {

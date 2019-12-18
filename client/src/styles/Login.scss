@@ -17,6 +17,8 @@
 
     .labelled-field {
         margin-bottom: $big-margin / 2;
+        min-width: 280px;
+        width: 100%;
     }
     .generic-btn {
         width: 100%;

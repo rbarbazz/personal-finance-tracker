@@ -43,16 +43,20 @@ export const Profile: React.FC = () => {
   const fName = useSelector((state: State) => state.user.fName);
 
   return (
-    <div className="profile-container">
+    <div className="page-container">
       <ActionBar />
-      <SectionHeader
-        subtitle="Update your info here."
-        title={`Welcome back, ${fName}`}
-      />
-      <div className="profile-content-wrapper">
-        <PwdUpdate />
-        <FNameUpdate />
-        <ResetProfile />
+      <div className="content-container">
+        <SectionHeader
+          subtitle="Update your info here."
+          title={`Welcome back, ${fName}`}
+        />
+        <div className="inner-content-container">
+          <div className="updates-cards-wrapper">
+            <PwdUpdate />
+            <FNameUpdate />
+          </div>
+          <ResetProfile />
+        </div>
       </div>
     </div>
   );

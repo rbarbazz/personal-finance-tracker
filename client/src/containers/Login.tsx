@@ -69,10 +69,11 @@ export const Login: React.FC = () => {
   }, [email, password, registerFName]);
 
   return (
-    <div className="login-container">
+    <form className="login-container">
       <p className="greetings-paragraph">Hi stranger!</p>
       {!isRegistered && (
         <LabelledField
+          autoComplete="given-name"
           id="fname"
           setter={setregisterFName}
           type="text"
@@ -82,11 +83,18 @@ export const Login: React.FC = () => {
           First Name
         </LabelledField>
       )}
-      <LabelledField id="email" setter={setEmail} type="email" value={email}>
+      <LabelledField
+        autoComplete="email"
+        id="email"
+        setter={setEmail}
+        type="email"
+        value={email}
+      >
         <EmailIcon />
         Email
       </LabelledField>
       <LabelledField
+        autoComplete={isRegistered ? 'current-password' : 'new-password'}
         id="password"
         setter={setPassword}
         type="password"
@@ -123,11 +131,12 @@ export const Login: React.FC = () => {
               setMessage({ error: false, value: '' });
               toggleIsRegistered(!isRegistered);
             }}
+            type="button"
           >
             {`Sign ${isRegistered ? 'up' : 'in'}`}
           </button>
         </p>
       </div>
-    </div>
+    </form>
   );
 };

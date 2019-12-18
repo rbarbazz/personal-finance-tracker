@@ -101,7 +101,7 @@ export const Analytics: React.FC = () => {
   }, [getInitialCharts]);
 
   return (
-    <div className="dashboard-main-container">
+    <div className="page-container">
       <ActionBar>
         <GenericBtn
           action={() => {
@@ -112,12 +112,12 @@ export const Analytics: React.FC = () => {
           <SyncIcon style={isFetchingCharts ? loadingAnimation : {}} />
         </GenericBtn>
       </ActionBar>
-      <div className="analytics-content-container">
+      <div className="content-container">
         <SectionHeader
           subtitle="Your personal finances at a glance."
           title="Analytics"
         />
-        <div className="charts-container">
+        <div className="inner-content-container">
           <MonthlyBarChart
             isLoading={isFetchingMonthlyBar}
             root={monthlyBarChart}
