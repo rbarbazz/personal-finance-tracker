@@ -56,7 +56,7 @@ export const Budget: React.FC = () => {
                 <LoadingSpinner />
               ) : (
                 <>
-                  <h3 className="total-title">Total</h3>
+                  <h3 className="total-title generic-card-title">Total</h3>
                   <div className="total-amount">{`$ ${budgetTotal}`}</div>
                 </>
               )}

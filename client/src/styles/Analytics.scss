@@ -43,8 +43,7 @@
     min-height: 123px;
     width: calc(33% - (#{$big-margin} * 2.5));
 }
-.text-card-title {
-    color: $primary-bg-color;
+.average-card-title {
     font-size: 1.5em;
     margin: $big-margin 0 0;
     text-align: center;

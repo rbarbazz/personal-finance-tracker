@@ -14,7 +14,7 @@ export const Averages: React.FC<{
         ) : (
           <>
             <div className="text-card-amount">{`$ ${average.amount}`}</div>
-            <h3 className="text-card-title">{`Monthly Average ${average.title}`}</h3>
+            <h3 className="average-card-title generic-card-title">{`Monthly Average ${average.title}`}</h3>
             <p className="text-card-subtitle">Last three months</p>
           </>
         )}

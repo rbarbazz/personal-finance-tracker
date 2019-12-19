@@ -10,6 +10,7 @@ import React, { useEffect, useCallback } from 'react';
 import '../styles/App.scss';
 import { Analytics } from './Analytics';
 import { Budget } from './Budget';
+import { Fire } from './Fire';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Login } from './Login';
 import { Operations } from './Operations';
@@ -17,6 +18,7 @@ import { Profile } from './Profile';
 import { requestUserStatus, receiveUserStatus } from '../store/actions/user';
 import { SideMenu } from '../components/SideMenu';
 import { State } from '../store/reducers/index';
+import { PrivateRoute } from '../components/PrivateRoute';
 
 export const fetchUserStatus = () => {
   return async (dispatch: Function) => {
@@ -64,18 +66,21 @@ const App: React.FC = () => {
             <Route exact path="/">
               {isLoggedIn ? <Redirect to="/analytics" /> : <Login />}
             </Route>
-            <Route exact path="/analytics">
-              {isLoggedIn ? <Analytics /> : <Redirect to="/" />}
-            </Route>
-            <Route exact path="/budget">
-              {isLoggedIn ? <Budget /> : <Redirect to="/" />}
-            </Route>
-            <Route exact path="/profile">
-              {isLoggedIn ? <Profile /> : <Redirect to="/" />}
-            </Route>
-            <Route exact path="/transactions">
-              {isLoggedIn ? <Operations /> : <Redirect to="/" />}
-            </Route>
+            <PrivateRoute isLoggedIn={isLoggedIn} path="/analytics">
+              <Analytics />
+            </PrivateRoute>
+            <PrivateRoute isLoggedIn={isLoggedIn} path="/budget">
+              <Budget />
+            </PrivateRoute>
+            <PrivateRoute isLoggedIn={isLoggedIn} path="/transactions">
+              <Operations />
+            </PrivateRoute>
+            <PrivateRoute isLoggedIn={isLoggedIn} path="/calculators">
+              <Fire />
+            </PrivateRoute>
+            <PrivateRoute isLoggedIn={isLoggedIn} path="/profile">
+              <Profile />
+            </PrivateRoute>
             <Route path="*">
               <Redirect to="/" />
             </Route>

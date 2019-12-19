@@ -24,13 +24,15 @@
 .updates-cards-wrapper {
     align-items: flex-start;
     display: flex;
-    justify-content: space-between;
     margin-bottom: $big-margin;
     width: 100%;
 }
 .info-update-card {
     display: flex;
     flex-direction: column;
+}
+#fname-update-card {
+    margin: 0 $big-margin;
 }
 #reset-profile-card {
     .generic-card-title {

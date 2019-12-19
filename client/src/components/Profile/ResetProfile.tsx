@@ -28,6 +28,7 @@ const resetProfile = (setMessage: Function, toggleLoading: Function) => {
 export const ResetProfile: React.FC = () => {
   const dispatch = useDispatch();
   const [isLoading, toggleIsLoading] = useState(false);
+  const [hasConfirmed, toggleConfirmation] = useState(false);
   const [message, setMessage] = useState({ error: false, value: '' });
 
   return (
@@ -42,10 +43,17 @@ export const ResetProfile: React.FC = () => {
           <InfoMessage error={message.error} value={message.value} />
         )}
         <GenericBtn
-          action={() => dispatch(resetProfile(setMessage, toggleIsLoading))}
+          action={() => {
+            if (!hasConfirmed) {
+              toggleConfirmation(true);
+              return setMessage({ error: true, value: 'Are you sure?' });
+            }
+            dispatch(resetProfile(setMessage, toggleIsLoading));
+            toggleConfirmation(false);
+          }}
           isLoading={isLoading}
         >
-          Reset Profile
+          {!hasConfirmed ? 'Reset Profile' : 'Yes'}
           <ResetIcon />
         </GenericBtn>
       </div>
