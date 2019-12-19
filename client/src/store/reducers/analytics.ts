@@ -13,7 +13,7 @@ import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
 
 export type AnalyticsState = {
-  averages: { amount: string; title: string }[];
+  averages: { amount: number; title: string }[];
   budgetLineChart: BudgetLineChartData;
   isFetchingBudgetLine: boolean;
   isFetchingMonthlyBar: boolean;
@@ -24,9 +24,9 @@ export type AnalyticsState = {
 
 const initialState: AnalyticsState = {
   averages: [
-    { amount: '0', title: 'Incomes' },
-    { amount: '0', title: 'Expenses' },
-    { amount: '0', title: 'Savings' },
+    { amount: 0, title: 'Incomes' },
+    { amount: 0, title: 'Expenses' },
+    { amount: 0, title: 'Savings' },
   ],
   budgetLineChart: [] as BudgetLineChartData,
   isFetchingBudgetLine: false,
@@ -38,8 +38,10 @@ const initialState: AnalyticsState = {
 
 const average = (array: { x: string; y: number }[]) => {
   if (array.length > 0)
-    return (array.reduce((a, b) => a + b.y, 0) / array.length).toFixed(2);
-  else return '0';
+    return parseFloat(
+      (array.reduce((a, b) => a + b.y, 0) / array.length).toFixed(2),
+    );
+  else return 0;
 };
 
 export const analytics = (

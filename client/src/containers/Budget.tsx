@@ -51,12 +51,12 @@ export const Budget: React.FC = () => {
               root={budgets}
               total={budgetTotal}
             />
-            <div className="total-container generic-card">
+            <div className="generic-card">
               {isFetchingBudgets ? (
                 <LoadingSpinner />
               ) : (
                 <>
-                  <h3 className="total-title generic-card-title">Total</h3>
+                  <h3 className="generic-card-title">Total</h3>
                   <div className="total-amount">{`$ ${budgetTotal}`}</div>
                 </>
               )}

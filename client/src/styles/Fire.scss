@@ -1,0 +1,29 @@
+@import 'shared.scss';
+
+/*
+==========================================================================
+   Fire container
+==========================================================================
+*/
+
+.fire-number-card {
+    .generic-input {
+        color: $primary-bg-color;
+        font-weight: 600;
+        margin: 0 auto;
+        max-width: 150px;
+        min-width: initial;
+    }
+    .generic-card-title {
+        margin-bottom: $small-margin;
+    }
+}
+.fire-number-explanation {
+    margin-top: $big-margin;
+}
+.fire-number-amount {
+    color: $primary-bg-color;
+    font-size: 3em;
+    font-weight: 600;
+    text-align: center;
+}

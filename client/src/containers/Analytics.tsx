@@ -96,9 +96,7 @@ export const Analytics: React.FC = () => {
   const isFetchingCharts =
     isFetchingMonthlyBar || isFetchingBudgetLine || isFetchingTreeMap;
 
-  useEffect(() => {
-    getInitialCharts();
-  }, [getInitialCharts]);
+  useEffect(() => getInitialCharts(), [getInitialCharts]);
 
   return (
     <div className="page-container">

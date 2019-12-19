@@ -1,10 +1,25 @@
-import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
+import React, { useCallback, useEffect } from 'react';
 
-import '../styles/Analytics.scss';
+import '../styles/Fire.scss';
 import { ActionBar } from '../components/ActionBar';
+import { fetchBudgetLine } from '../store/actions/analytics';
+import { FireNumberCalculator } from '../components/Fire/FireNumberCalculator';
 import { SectionHeader } from '../components/SectionHeader';
+import { State } from '../store/reducers';
 
 export const Fire: React.FC = () => {
+  const dispatch = useDispatch();
+  const getAverages = useCallback(() => {
+    dispatch(fetchBudgetLine());
+  }, [dispatch]);
+  const isFetchingBudgetLine = useSelector(
+    (state: State) => state.analytics.isFetchingBudgetLine,
+  );
+  const averages = useSelector((state: State) => state.analytics.averages);
+
+  useEffect(() => getAverages(), [getAverages]);
+
   return (
     <div className="page-container">
       <ActionBar></ActionBar>
@@ -14,9 +29,10 @@ export const Fire: React.FC = () => {
           title="FIRE Calculators"
         />
         <div className="inner-content-container">
-          <div className="generic-card">
-            <h3 className="generic-card-title">FIRE Number Calculator</h3>
-          </div>
+          <FireNumberCalculator
+            averageExpenses={averages[1].amount}
+            isLoading={isFetchingBudgetLine}
+          />
         </div>
       </div>
     </div>

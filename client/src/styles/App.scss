@@ -64,6 +64,11 @@ body {
     font-size: 1.2em;
     margin: 0 0 $big-margin;
 }
+.generic-card-subtitle {
+    color: $disabled-color;
+    margin: 0 0 $small-margin;
+    font-weight: 600;
+}
 .page-container {
     background-color: $secondary-bg-color;
     display: flex;

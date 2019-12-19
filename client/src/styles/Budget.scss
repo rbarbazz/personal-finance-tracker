@@ -47,7 +47,6 @@
         max-width: 150px;
         min-width: initial;
         padding: 10px;
-        text-align: right;
 
         &:disabled {
             color: $disabled-color;
@@ -58,15 +57,16 @@
     align-items: center;
     display: flex;
     justify-content: flex-end;
+
+    .generic-card {
+        display: flex;
+        flex-direction: column;
+        min-height: 123px;
+    }
 }
 .action-button-wrapper {
     margin-left: 15px;
     width: 36px;
-}
-.total-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 123px;
 }
 
 /*
@@ -79,7 +79,7 @@
     flex-direction: column;
     height: 300px;
 }
-.total-title {
+.budget-col .generic-card-title {
     font-size: 1.5em;
     text-align: center;
 }

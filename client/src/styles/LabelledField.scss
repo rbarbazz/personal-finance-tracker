@@ -31,6 +31,9 @@ input.generic-input {
     padding: 15px;
     width: 100%;
 
+    &[type='number'] {
+        text-align: right;
+    }
     &:focus {
         outline: $primary-color solid 2px;
     }
