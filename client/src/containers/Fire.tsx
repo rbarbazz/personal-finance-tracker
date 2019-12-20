@@ -31,6 +31,7 @@ export const Fire: React.FC = () => {
         <div className="inner-content-container">
           <FireNumberCalculator
             averageExpenses={averages[1].amount}
+            averageIncomes={averages[0].amount}
             isLoading={isFetchingBudgetLine}
           />
         </div>

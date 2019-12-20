@@ -66,8 +66,15 @@ body {
 }
 .generic-card-subtitle {
     color: $disabled-color;
+    line-height: 1.25em;
     margin: 0 0 $small-margin;
     font-weight: 600;
+}
+.generic-card-separator {
+    background-color: $disabled-color;
+    height: 1px;
+    margin: $small-margin 0;
+    width: 100%;
 }
 .page-container {
     background-color: $secondary-bg-color;

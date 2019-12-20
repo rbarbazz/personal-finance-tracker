@@ -7,23 +7,51 @@
 */
 
 .fire-number-card {
+    max-width: 1200px;
+    width: 100%;
+
+    .labelled-field {
+        align-items: center;
+        display: flex;
+        justify-content: space-between;
+        margin: $small-margin 0;
+    }
+    .generic-label {
+        font-weight: 600;
+        width: initial;
+    }
     .generic-input {
         color: $primary-bg-color;
         font-weight: 600;
-        margin: 0 auto;
         max-width: 150px;
         min-width: initial;
     }
     .generic-card-title {
         margin-bottom: $small-margin;
+
+        &:nth-of-type(2) {
+            margin-top: $big-margin;
+        }
     }
+}
+.fire-number-calculation {
+    max-width: 500px;
 }
 .fire-number-explanation {
     margin-top: $big-margin;
 }
+.fire-number-amount-container {
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+}
+.fire-amount-explanation {
+    font-weight: 600;
+    margin: 0;
+}
 .fire-number-amount {
     color: $primary-bg-color;
-    font-size: 3em;
+    font-size: 2em;
     font-weight: 600;
-    text-align: center;
+    text-align: right;
 }
