@@ -8,6 +8,9 @@ export const LabelledField: React.FC<{
   autoComplete?: string;
   disabled?: boolean;
   id?: string;
+  max?: number;
+  min?: number;
+  step?: number;
   setter: Function;
   type: string;
   value: any;
@@ -16,6 +19,9 @@ export const LabelledField: React.FC<{
   children,
   disabled = false,
   id,
+  max,
+  min,
+  step,
   setter,
   type: initialType,
   value,
@@ -50,11 +56,21 @@ export const LabelledField: React.FC<{
       )}
       <div className="label-input-wrapper">
         <input
-          {...(autoComplete ? { autoComplete: autoComplete } : {})}
+          {...(autoComplete ? { autoComplete } : {})}
           className="generic-input"
           disabled={disabled}
           {...(id ? { id: `${id}-field` } : {})}
-          onChange={event => setter(event.target.value)}
+          {...(max !== undefined ? { max } : {})}
+          {...(min !== undefined ? { min } : {})}
+          {...(step ? { step } : {})}
+          onChange={event => {
+            if (initialType === 'number') {
+              const valAsNum = event.target.valueAsNumber;
+
+              return isNaN(valAsNum) ? setter(0) : setter(valAsNum);
+            }
+            return setter(event.target.value);
+          }}
           type={
             initialType === 'password' && isPwdVisible ? 'text' : initialType
           }

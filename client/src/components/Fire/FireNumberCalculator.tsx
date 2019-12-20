@@ -1,6 +1,7 @@
 import { LabelledField } from '../LabelledField';
 import { LoadingSpinner } from '../LoadingSpinner';
 import React, { useState, useEffect } from 'react';
+import { InfoMessage } from '../InfoMessage';
 
 export const FireNumberCalculator: React.FC<{
   averageExpenses: number;
@@ -11,26 +12,33 @@ export const FireNumberCalculator: React.FC<{
   const [expectedROI, setExpectedROI] = useState(4);
   const [expenses, setExpenses] = useState(averageExpenses);
   const [incomes, setIncomes] = useState(averageIncomes);
+  const [message, setMessage] = useState({ error: false, value: '' });
   const [netWorth, setNetWorth] = useState(0);
   const [savingsRate, setSavingsRate] = useState(50);
+  const [yearsToRet, setYearsToRet] = useState(0);
 
-  // useEffect(() => {
-  //   let portfolioValue = netWorth;
-  //   const monthlyROIRate = expectedROI / 12 / 100;
-  //   const monthlyIncomesSavings = incomes * (savingsRate / 100);
-  //   const afterExpenses = monthlyIncomesSavings - expenses;
-  //   let index = 0;
+  useEffect(() => {
+    setMessage({ error: false, value: '' });
+    let portfolioValue = netWorth;
+    const monthlyROIRate = expectedROI / 12 / 100;
+    const monthlyIncomesSavings = incomes * (savingsRate / 100);
+    let index = 0;
 
-  //   while (portfolioValue <= expenses * 300) {
-  //     const monthlyEarnings = portfolioValue * monthlyROIRate + afterExpenses;
+    while (portfolioValue <= expenses * 300) {
+      let monthlyEarnings = monthlyIncomesSavings;
 
-  //     console.log(portfolioValue);
-  //     if (monthlyEarnings < 0) break;
-  //     portfolioValue += monthlyEarnings;
-  //     index += 1;
-  //   }
-  //   console.log(index / 12);
-  // }, [expectedROI, expenses, incomes, netWorth, savingsRate]);
+      if (portfolioValue > 0)
+        monthlyEarnings += portfolioValue * monthlyROIRate;
+      portfolioValue += monthlyEarnings;
+      index += 1;
+      if (index > 1200)
+        return setMessage({
+          error: true,
+          value: 'Be realistic, this would take more than a lifetime...',
+        });
+    }
+    setYearsToRet(index / 12);
+  }, [expectedROI, expenses, incomes, netWorth, savingsRate]);
 
   return (
     <div className="generic-card fire-number-card">
@@ -40,19 +48,21 @@ export const FireNumberCalculator: React.FC<{
       ) : (
         <>
           <p className="generic-card-subtitle">
-            Input your monthly expenses goal (default to monthly average) to get
-            the amount you need to save to achieve financial independance. Based
-            on a 4% yearly return rate after inflation, this is the amount that
-            will maintain your current standard of living.
+            Input your monthly expenses goal (default to your current monthly
+            average) to get the amount you need to save to achieve financial
+            independance. Based on a 4% yearly return rate after inflation, this
+            is the amount that will maintain your current standard of living.
           </p>
           <div className="fire-number-calculation">
             <LabelledField
               id="fire-number-expenses"
+              min={0}
               setter={setExpenses}
+              step={100}
               type="number"
               value={expenses}
             >
-              Monthly Expenses
+              Monthly Expenses Goal
             </LabelledField>
             <div className="generic-card-separator" />
             <div className="fire-number-amount-container">
@@ -69,6 +79,7 @@ export const FireNumberCalculator: React.FC<{
           <div className="fire-number-calculation">
             <LabelledField
               id="fire-number-age"
+              min={0}
               setter={setAge}
               type="number"
               value={age}
@@ -78,6 +89,7 @@ export const FireNumberCalculator: React.FC<{
             <LabelledField
               id="fire-number-net-worth"
               setter={setNetWorth}
+              step={100}
               type="number"
               value={netWorth}
             >
@@ -85,7 +97,9 @@ export const FireNumberCalculator: React.FC<{
             </LabelledField>
             <LabelledField
               id="fire-number-incomes"
+              min={0}
               setter={setIncomes}
+              step={100}
               type="number"
               value={incomes}
             >
@@ -93,6 +107,8 @@ export const FireNumberCalculator: React.FC<{
             </LabelledField>
             <LabelledField
               id="fire-number-savings-rate"
+              max={100}
+              min={0}
               setter={setSavingsRate}
               type="number"
               value={savingsRate}
@@ -101,6 +117,8 @@ export const FireNumberCalculator: React.FC<{
             </LabelledField>
             <LabelledField
               id="fire-number-expected-roi"
+              max={100}
+              min={0}
               setter={setExpectedROI}
               type="number"
               value={expectedROI}
@@ -112,12 +130,17 @@ export const FireNumberCalculator: React.FC<{
               <p className="fire-amount-explanation">
                 Years before Financial Independance
               </p>
-              <div className="fire-number-amount">{0 / 12}</div>
+              <div className="fire-number-amount">{yearsToRet.toFixed(1)}</div>
             </div>
             <div className="fire-number-amount-container">
               <p className="fire-amount-explanation">Retirement Age</p>
-              <div className="fire-number-amount">{0 + age}</div>
+              <div className="fire-number-amount">
+                {(yearsToRet + age).toFixed(1)}
+              </div>
             </div>
+            {message.value !== '' && (
+              <InfoMessage error={message.error} value={message.value} />
+            )}
           </div>
         </>
       )}
