@@ -71,10 +71,14 @@ body {
     font-weight: 600;
 }
 .generic-card-separator {
-    background-color: $disabled-color;
-    height: 1px;
+    border-top: solid 1px $disabled-color;
     margin: $small-margin 0;
     width: 100%;
+}
+.generic-vertical-separator {
+    border-left: solid 1px $disabled-color;
+    height: 100%;
+    margin: 0 $small-margin;
 }
 .page-container {
     background-color: $secondary-bg-color;

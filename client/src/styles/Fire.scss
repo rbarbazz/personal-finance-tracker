@@ -7,7 +7,7 @@
 */
 
 .fire-number-card {
-    max-width: 1200px;
+    display: flex;
     width: 100%;
 
     .labelled-field {
@@ -37,8 +37,10 @@
         margin-top: $small-margin;
     }
 }
-.fire-number-calculation {
-    max-width: 500px;
+.fire-number-col {
+    display: flex;
+    flex-direction: column;
+    width: calc(50% - #{$small-margin});
 }
 .fire-number-explanation {
     margin-top: $big-margin;
@@ -57,4 +59,10 @@
     font-size: 2em;
     font-weight: 600;
     text-align: right;
+}
+.retirement-line-chart {
+    display: flex;
+    height: 500px;
+    margin-top: $big-margin;
+    width: 100%;
 }
