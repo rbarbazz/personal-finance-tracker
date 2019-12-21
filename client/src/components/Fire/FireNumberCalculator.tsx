@@ -5,6 +5,8 @@ import { LabelledField } from '../LabelledField';
 import { LoadingSpinner } from '../LoadingSpinner';
 import { RetirementPlanChart } from './RetirementPlanChart';
 
+const currentYear = new Date().getFullYear();
+
 export const FireNumberCalculator: React.FC<{
   averageExpenses: number;
   averageIncomes: number;
@@ -21,33 +23,45 @@ export const FireNumberCalculator: React.FC<{
   const [chartData, setChartData] = useState([] as { x: string; y: number }[]);
 
   useEffect(() => {
-    setMessage({ error: false, value: '' });
-    const currentYear = new Date().getFullYear();
+    const fireNumber = expenses * 300;
     const quarterIncomesSavings = incomes * 4 * (savingsRate / 100);
     const quarterROIRate = expectedROI / 4 / 100;
     const newChartData = [];
     let index = 0;
+    let hasReachedFire = false;
     let portfolioValue = netWorth;
 
-    while (portfolioValue <= expenses * 300) {
+    setMessage({ error: false, value: '' });
+
+    while (portfolioValue < fireNumber * 1.1) {
       let quarterEarnings = quarterIncomesSavings;
 
+      // Add up quarterly incomes
       if (portfolioValue > 0)
         quarterEarnings += portfolioValue * quarterROIRate;
       portfolioValue += quarterEarnings;
+
+      // Add data point every year
       if (index % 4 === 0)
         newChartData.push({
           x: (currentYear + index / 4).toString(),
           y: Math.round(portfolioValue),
         });
       index += 1;
+
+      // Check that values aren't nonsense
       if (index > 1200)
         return setMessage({
           error: true,
           value: 'Be realistic, this would take more than a lifetime...',
         });
+
+      // Save index when reached FIRE number
+      if (portfolioValue >= fireNumber && !hasReachedFire) {
+        hasReachedFire = true;
+        setYearsToRet(index / 4);
+      }
     }
-    setYearsToRet(index / 4);
     setChartData(newChartData);
   }, [expectedROI, expenses, incomes, netWorth, savingsRate]);
 
@@ -173,7 +187,10 @@ export const FireNumberCalculator: React.FC<{
         )}
       </div>
       <div className="generic-card retirement-line-chart">
-        <RetirementPlanChart root={[{ id: 'portfolio', data: chartData }]} />
+        <RetirementPlanChart
+          fireNumber={expenses * 300}
+          root={[{ id: 'portfolio', data: chartData }]}
+        />
       </div>
     </>
   );
