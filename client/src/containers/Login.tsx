@@ -24,11 +24,14 @@ const loginUser = (
   return async (dispatch: Function) => {
     toggleLoading(true);
     try {
-      const res = await fetch(isRegistered ? '/auth/login' : '/auth/register', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userData),
-      });
+      const res = await fetch(
+        `/api/auth/${isRegistered ? 'login' : 'register'}`,
+        {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(userData),
+        },
+      );
       toggleLoading(false);
       const {
         error,

@@ -24,7 +24,7 @@ export const fetchUserStatus = () => {
   return async (dispatch: Function) => {
     dispatch(requestUserStatus());
     try {
-      const res = await fetch('/auth/login', { method: 'GET' });
+      const res = await fetch('/api/auth/login', { method: 'GET' });
       if (res.status === 200) {
         const {
           isLoggedIn,

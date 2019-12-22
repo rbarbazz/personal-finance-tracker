@@ -1,7 +1,7 @@
 import { ResponsiveBar } from '@nivo/bar';
 import React from 'react';
 
-import { BarChartData } from '../../../../common/common';
+import { BarChartData } from '../../../../shared';
 import { CardErrorMessage } from '../CardErrorMessage';
 import { chartTheme, colorsByCategory } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';

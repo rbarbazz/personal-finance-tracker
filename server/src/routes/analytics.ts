@@ -8,7 +8,7 @@ import {
 } from '../controllers/operations';
 import { getMonthlyBudgetsSums } from '../controllers/budgets';
 import { getParentCategories } from '../controllers/categories';
-import { BarChartData, LineChartData } from '../../../common/common';
+import { BarChartData, LineChartData } from '../../../shared';
 
 export const analyticsRouter = Router();
 

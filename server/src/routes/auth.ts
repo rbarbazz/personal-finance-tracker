@@ -14,7 +14,7 @@ import { getUser, insertUsers, updateUser } from '../controllers/users';
 const sendEmailVerifLink = async (userEmail: string, token: string) => {
   const verifUrl = `${
     process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
-  }/auth/email-verification/${token}`;
+  }/api/auth/email-verification/${token}`;
   const testAccount = await createTestAccount();
   const transporter = createTransport({
     host: 'smtp.ethereal.email',

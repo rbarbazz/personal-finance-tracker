@@ -31,37 +31,36 @@ app.use(express.static(path.join(...staticFolder)));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
-  '/analytics',
+  '/api/analytics',
   passport.authenticate('jwt', { session: false }),
   analyticsRouter,
 );
-app.use('/auth', authRouter);
+app.use('/api/auth', authRouter);
 app.use(
-  '/budgets',
+  '/api/budgets',
   passport.authenticate('jwt', { session: false }),
   budgetsRouter,
 );
 app.use(
-  '/categories',
+  '/api/categories',
   passport.authenticate('jwt', { session: false }),
   categoriesRouter,
 );
 app.use(
-  '/operations',
+  '/api/operations',
   passport.authenticate('jwt', { session: false }),
   operationsRouter,
 );
 app.use(
-  '/users',
+  '/api/users',
   passport.authenticate('jwt', { session: false }),
   usersRouter,
 );
 
 // Default route
-app.get('*', (_req, res) => {
-  if (process.env.NODE_ENV === 'development') return res.send();
-
-  return res.sendFile(path.join(...staticFolder, '/index.html'));
-});
+if (process.env.NODE_ENV === 'production')
+  app.get('*', (_req, res) =>
+    res.sendFile(path.join(...staticFolder, '/index.html')),
+  );
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));

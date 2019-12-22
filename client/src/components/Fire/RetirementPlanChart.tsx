@@ -3,7 +3,7 @@ import numeral from 'numeral';
 import React from 'react';
 
 import { colorsByCategory, chartTheme } from '../../containers/Analytics';
-import { LineChartData } from '../../../../common/common';
+import { LineChartData } from '../../../../shared';
 
 export const RetirementPlanChart: React.FC<{
   fireNumber: number;

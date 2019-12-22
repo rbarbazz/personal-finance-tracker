@@ -45,7 +45,7 @@ export const getBudgets = (selectedMonth: Date) => {
     dispatch(requestBudgets());
     try {
       const res = await fetch(
-        `/budgets?selectedMonth=${selectedMonth.getMonth()}&selectedYear=${selectedMonth.getFullYear()}`,
+        `/api/budgets?selectedMonth=${selectedMonth.getMonth()}&selectedYear=${selectedMonth.getFullYear()}`,
         { method: 'GET' },
       );
       if (res.status === 200) {

@@ -23,7 +23,7 @@ const updateBudgetAmount = (
 ) => {
   return async (dispatch: Function) => {
     try {
-      const res = await fetch('/budgets', {
+      const res = await fetch('/api/budgets', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

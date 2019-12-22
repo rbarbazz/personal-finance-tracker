@@ -14,7 +14,7 @@ import { UpsertOperationDialog } from './UpsertOperationDialog';
 const updateCategory = (categoryId: number, operationId: number) => {
   return async (dispatch: Function) => {
     try {
-      const res = await fetch(`/operations/${operationId}`, {
+      const res = await fetch(`/api/operations/${operationId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ categoryId }),
@@ -30,12 +30,9 @@ const updateCategory = (categoryId: number, operationId: number) => {
 const delOperation = (operationId: number) => {
   return async (dispatch: Function) => {
     try {
-      const res = await fetch(
-        `${process.env.REACT_APP_API_URL}/operations/${operationId}`,
-        {
-          method: 'DELETE',
-        },
-      );
+      const res = await fetch(`/api/operations/${operationId}`, {
+        method: 'DELETE',
+      });
       if (res.status === 200) dispatch(getOperations());
       else dispatch(logout());
     } catch (error) {

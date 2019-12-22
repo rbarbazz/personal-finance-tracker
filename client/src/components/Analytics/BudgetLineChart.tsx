@@ -3,7 +3,7 @@ import React from 'react';
 
 import { CardErrorMessage } from '../CardErrorMessage';
 import { chartTheme, colorsByCategory } from '../../containers/Analytics';
-import { LineChartData } from '../../../../common/common';
+import { LineChartData } from '../../../../shared';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 export const BudgetLineChart: React.FC<{

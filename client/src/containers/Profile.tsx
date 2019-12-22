@@ -19,7 +19,7 @@ export const updateUserInfo = (
   return async (dispatch: Function) => {
     toggleLoading(true);
     try {
-      const res = await fetch('/users/', {
+      const res = await fetch('/api/users/', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),

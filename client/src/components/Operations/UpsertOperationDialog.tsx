@@ -29,7 +29,7 @@ const upsertOperation = (
     dispatch(requestUpsert());
     try {
       const res = await fetch(
-        `/operations${isEdit ? `/${initialOperationId}` : ''}`,
+        `/api/operations${isEdit ? `/${initialOperationId}` : ''}`,
         {
           method: isEdit ? 'PUT' : 'POST',
           headers: { 'Content-Type': 'application/json' },

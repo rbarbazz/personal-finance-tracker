@@ -1,4 +1,4 @@
-import { BarChartData, LineChartData } from '../../../../common/common';
+import { BarChartData, LineChartData } from '../../../../shared';
 import { logout } from '../../components/SideMenu';
 import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 
@@ -72,7 +72,7 @@ export const fetchMonthlyBar = () => {
   return async (dispatch: Function) => {
     dispatch(requestMonthlyBar());
     try {
-      const res = await fetch('/analytics/monthlybar', { method: 'GET' });
+      const res = await fetch('/api/analytics/monthlybar', { method: 'GET' });
       if (res.status === 200) {
         const { monthlyBarChart } = await res.json();
 
@@ -88,7 +88,7 @@ export const fetchTreeMap = () => {
   return async (dispatch: Function) => {
     dispatch(requestTreeMap());
     try {
-      const res = await fetch('/analytics/treemap', { method: 'GET' });
+      const res = await fetch('/api/analytics/treemap', { method: 'GET' });
       if (res.status === 200) {
         const { treeMapChart } = await res.json();
 
@@ -104,7 +104,7 @@ export const fetchBudgetLine = () => {
   return async (dispatch: Function) => {
     dispatch(requestBudgetLine());
     try {
-      const res = await fetch('/analytics/budgetline', { method: 'GET' });
+      const res = await fetch('/api/analytics/budgetline', { method: 'GET' });
       if (res.status === 200) {
         const { budgetLineChart } = await res.json();
 

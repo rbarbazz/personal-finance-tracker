@@ -41,7 +41,7 @@ export const UploadDialog: React.FC<{
       data.append('csvFiles', files[0], files[0].name);
 
       try {
-        const res = await fetch('/operations/read-csv-col', {
+        const res = await fetch('/api/operations/read-csv-col', {
           method: 'POST',
           body: data,
         });
@@ -76,7 +76,7 @@ export const UploadDialog: React.FC<{
       toggleLoading(true);
 
       try {
-        const res = await fetch('/operations', {
+        const res = await fetch('/api/operations', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ colMatches, path: fileName }),
