@@ -78,9 +78,7 @@ export const UploadDialog: React.FC<{
       try {
         const res = await fetch('/operations', {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ colMatches, path: fileName }),
         });
         toggleLoading(false);

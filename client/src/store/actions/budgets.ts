@@ -46,9 +46,7 @@ export const getBudgets = (selectedMonth: Date) => {
     try {
       const res = await fetch(
         `/budgets?selectedMonth=${selectedMonth.getMonth()}&selectedYear=${selectedMonth.getFullYear()}`,
-        {
-          method: 'GET',
-        },
+        { method: 'GET' },
       );
       if (res.status === 200) {
         const { budgets } = await res.json();

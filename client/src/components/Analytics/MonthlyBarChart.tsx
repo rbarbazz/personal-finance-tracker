@@ -1,17 +1,13 @@
-import { Data, BarProps, ResponsiveBar } from '@nivo/bar';
+import { ResponsiveBar } from '@nivo/bar';
 import React from 'react';
 
+import { BarChartData } from '../../../../common/common';
 import { CardErrorMessage } from '../CardErrorMessage';
 import { chartTheme, colorsByCategory } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';
 
-export type MonthlyBarChartData = {
-  data: Data['data'];
-  keys: BarProps['keys'];
-};
-
 export const MonthlyBarChart: React.FC<{
-  root: MonthlyBarChartData;
+  root: BarChartData;
   isLoading: boolean;
 }> = ({ root, isLoading }) => {
   const { data, keys } = root;

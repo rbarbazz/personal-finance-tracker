@@ -26,9 +26,7 @@ const loginUser = (
     try {
       const res = await fetch(isRegistered ? '/auth/login' : '/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(userData),
       });
       toggleLoading(false);

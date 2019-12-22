@@ -2,12 +2,12 @@ import { ResponsiveLine } from '@nivo/line';
 import numeral from 'numeral';
 import React from 'react';
 
-import { BudgetLineChartData } from '../Analytics/BudgetLineChart';
 import { colorsByCategory, chartTheme } from '../../containers/Analytics';
+import { LineChartData } from '../../../../common/common';
 
 export const RetirementPlanChart: React.FC<{
   fireNumber: number;
-  root: BudgetLineChartData;
+  root: LineChartData;
 }> = ({ fireNumber, root }) => (
   <ResponsiveLine
     axisBottom={{

@@ -10,9 +10,7 @@ const resetProfile = (setMessage: Function, toggleLoading: Function) => {
   return async (dispatch: Function) => {
     toggleLoading(true);
     try {
-      const res = await fetch('/users/', {
-        method: 'DELETE',
-      });
+      const res = await fetch('/users/', { method: 'DELETE' });
       toggleLoading(false);
       if (res.status === 200) {
         const { error, message } = await res.json();

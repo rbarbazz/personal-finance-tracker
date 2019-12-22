@@ -3,16 +3,12 @@ import React from 'react';
 
 import { CardErrorMessage } from '../CardErrorMessage';
 import { chartTheme, colorsByCategory } from '../../containers/Analytics';
+import { LineChartData } from '../../../../common/common';
 import { LoadingSpinner } from '../LoadingSpinner';
-
-export type BudgetLineChartData = {
-  id: string;
-  data: { x: string; y: number }[];
-}[];
 
 export const BudgetLineChart: React.FC<{
   isLoading: boolean;
-  root: BudgetLineChartData;
+  root: LineChartData;
 }> = ({ isLoading, root }) => {
   const isNotEmpty = !!root.find(line => line.data.length > 0);
 

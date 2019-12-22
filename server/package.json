@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "tsnd -r dotenv/config --respawn --no-notify src/server.ts"
+    "build": "NODE_ENV=production tsc",
+    "start": "NODE_ENV=production node -r dotenv/config build/server.js",
+    "watch": "NODE_ENV=development tsnd -r dotenv/config --respawn --no-notify src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +34,7 @@
   "devDependencies": {
     "@types/bcrypt": "^3.0.0",
     "@types/cookie-parser": "^1.4.2",
+    "@types/cors": "^2.8.6",
     "@types/express": "^4.17.2",
     "@types/express-session": "^1.15.16",
     "@types/multer": "^1.3.10",
@@ -42,6 +45,7 @@
     "@types/passport-jwt": "^3.0.3",
     "@types/passport-local": "^1.0.33",
     "@types/validator": "^10.11.3",
+    "cors": "^2.8.5",
     "ts-node-dev": "^1.0.0-pre.44",
     "typescript": "^3.7.3"
   }

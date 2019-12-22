@@ -1,5 +1,6 @@
 import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 import express from 'express';
 import path from 'path';
 
@@ -23,9 +24,10 @@ initDatabase();
  */
 export const app = express();
 const port = process.env.port || 8080;
-const staticFolder = __dirname + '/../client/build';
+const staticFolder = [__dirname, '../../client/build'];
 
-app.use(express.static(staticFolder));
+app.use(cors());
+app.use(express.static(path.join(...staticFolder)));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
@@ -59,7 +61,7 @@ app.use(
 app.get('*', (_req, res) => {
   if (process.env.NODE_ENV === 'development') return res.send();
 
-  return res.sendFile(path.join(`${staticFolder}/index.html`));
+  return res.sendFile(path.join(...staticFolder, '/index.html'));
 });
 
 app.listen(port, () => console.log(`App listening on port ${port}!`));

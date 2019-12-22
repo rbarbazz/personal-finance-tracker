@@ -7,18 +7,17 @@ import {
   REQUEST_MONTHLY_BAR,
   REQUEST_TREEMAP,
 } from '../actions/analytics';
-import { BudgetLineChartData } from '../../components/Analytics/BudgetLineChart';
-import { MonthlyBarChartData } from '../../components/Analytics/MonthlyBarChart';
+import { BarChartData, LineChartData } from '../../../../common/common';
 import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
 
 export type AnalyticsState = {
   averages: { amount: number; title: string }[];
-  budgetLineChart: BudgetLineChartData;
+  budgetLineChart: LineChartData;
   isFetchingBudgetLine: boolean;
   isFetchingMonthlyBar: boolean;
   isFetchingTreeMap: boolean;
-  monthlyBarChart: MonthlyBarChartData;
+  monthlyBarChart: BarChartData;
   treeMapChart: TreeMapChartNode;
 };
 
@@ -28,7 +27,7 @@ const initialState: AnalyticsState = {
     { amount: 0, title: 'Expenses' },
     { amount: 0, title: 'Savings' },
   ],
-  budgetLineChart: [] as BudgetLineChartData,
+  budgetLineChart: [] as LineChartData,
   isFetchingBudgetLine: false,
   isFetchingMonthlyBar: false,
   isFetchingTreeMap: false,

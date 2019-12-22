@@ -32,9 +32,7 @@ const upsertOperation = (
         `/operations${isEdit ? `/${initialOperationId}` : ''}`,
         {
           method: isEdit ? 'PUT' : 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(operation),
         },
       );

@@ -65,3 +65,6 @@ typings/
 
 # Temporary uploads
 tmp
+
+# Build
+build

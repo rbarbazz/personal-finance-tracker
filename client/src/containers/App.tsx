@@ -14,19 +14,17 @@ import { Fire } from './Fire';
 import { LoadingSpinner } from '../components/LoadingSpinner';
 import { Login } from './Login';
 import { Operations } from './Operations';
+import { PrivateRoute } from '../components/PrivateRoute';
 import { Profile } from './Profile';
 import { requestUserStatus, receiveUserStatus } from '../store/actions/user';
 import { SideMenu } from '../components/SideMenu';
 import { State } from '../store/reducers/index';
-import { PrivateRoute } from '../components/PrivateRoute';
 
 export const fetchUserStatus = () => {
   return async (dispatch: Function) => {
     dispatch(requestUserStatus());
     try {
-      const res = await fetch('/auth/login', {
-        method: 'GET',
-      });
+      const res = await fetch('/auth/login', { method: 'GET' });
       if (res.status === 200) {
         const {
           isLoggedIn,

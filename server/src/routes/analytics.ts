@@ -6,10 +6,9 @@ import {
   getMonthlyExpensesSumsForParents,
   getMonthlyIncomesSums,
 } from '../controllers/operations';
-import { BudgetLineChartData } from '../../../client/src/components/Analytics/BudgetLineChart';
 import { getMonthlyBudgetsSums } from '../controllers/budgets';
 import { getParentCategories } from '../controllers/categories';
-import { MonthlyBarChartData } from '../../../client/src/components/Analytics/MonthlyBarChart';
+import { BarChartData, LineChartData } from '../../../common/common';
 
 export const analyticsRouter = Router();
 
@@ -28,7 +27,7 @@ const initArrayWithMonths = (monthCount: number) => {
 
 analyticsRouter.get('/monthlybar', async (req, res) => {
   if (req.user) {
-    const monthlyBarChart: MonthlyBarChartData = { keys: [], data: [] };
+    const monthlyBarChart: BarChartData = { keys: [], data: [] };
     const parentCategories = await getParentCategories();
     monthlyBarChart.keys = parentCategories.map(
       parentCategory => parentCategory.title,
@@ -124,7 +123,7 @@ analyticsRouter.get('/treemap', async (req, res) => {
 
 analyticsRouter.get('/budgetline', async (req, res) => {
   if (req.user) {
-    const budgetLineChart: BudgetLineChartData = [
+    const budgetLineChart: LineChartData = [
       { id: 'Budget', data: initArrayWithMonths(5) },
       { id: 'Savings', data: initArrayWithMonths(5) },
       { id: 'Expenses', data: initArrayWithMonths(5) },

@@ -25,9 +25,7 @@ const updateBudgetAmount = (
     try {
       const res = await fetch('/budgets', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           amount: categoryBudget,
           categoryId,

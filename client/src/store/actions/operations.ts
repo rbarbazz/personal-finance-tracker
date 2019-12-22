@@ -77,9 +77,7 @@ export const getCategories = () => {
   return async (dispatch: Function) => {
     dispatch(requestCategories());
     try {
-      const res = await fetch('/categories', {
-        method: 'GET',
-      });
+      const res = await fetch('/categories', { method: 'GET' });
       if (res.status === 200) {
         const { categories }: { categories: Category[] } = await res.json();
 
@@ -99,9 +97,7 @@ export const getOperations = () => {
   return async (dispatch: Function) => {
     dispatch(requestOperations());
     try {
-      const res = await fetch('/operations', {
-        method: 'GET',
-      });
+      const res = await fetch('/operations', { method: 'GET' });
       if (res.status === 200) {
         const { operations }: { operations: Operation[] } = await res.json();
 

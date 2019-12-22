@@ -1,6 +1,5 @@
-import { BudgetLineChartData } from '../../components/Analytics/BudgetLineChart';
+import { BarChartData, LineChartData } from '../../../../common/common';
 import { logout } from '../../components/SideMenu';
-import { MonthlyBarChartData } from '../../components/Analytics/MonthlyBarChart';
 import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
 
 export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR';
@@ -16,7 +15,7 @@ interface RequestMonthlyBarAction {
 
 interface ReceiveMonthlyBarAction {
   type: typeof RECEIVE_MONTHLY_BAR;
-  monthlyBarChart: MonthlyBarChartData;
+  monthlyBarChart: BarChartData;
 }
 
 interface RequestTreeMapAction {
@@ -34,7 +33,7 @@ interface RequestBudgetLineAction {
 
 interface ReceiveBudgetLineAction {
   type: typeof RECEIVE_BUDGET_LINE;
-  budgetLineChart: BudgetLineChartData;
+  budgetLineChart: LineChartData;
 }
 
 export type AnalyticsActionTypes =
@@ -50,7 +49,7 @@ const requestMonthlyBar = (): AnalyticsActionTypes => ({
 });
 
 const receiveMonthlyBar = (
-  monthlyBarChart: MonthlyBarChartData,
+  monthlyBarChart: BarChartData,
 ): AnalyticsActionTypes => ({ monthlyBarChart, type: RECEIVE_MONTHLY_BAR });
 
 const requestTreeMap = (): AnalyticsActionTypes => ({
@@ -66,16 +65,14 @@ const requestBudgetLine = (): AnalyticsActionTypes => ({
 });
 
 const receiveBudgetLine = (
-  budgetLineChart: BudgetLineChartData,
+  budgetLineChart: LineChartData,
 ): AnalyticsActionTypes => ({ budgetLineChart, type: RECEIVE_BUDGET_LINE });
 
 export const fetchMonthlyBar = () => {
   return async (dispatch: Function) => {
     dispatch(requestMonthlyBar());
     try {
-      const res = await fetch('/analytics/monthlybar', {
-        method: 'GET',
-      });
+      const res = await fetch('/analytics/monthlybar', { method: 'GET' });
       if (res.status === 200) {
         const { monthlyBarChart } = await res.json();
 
@@ -91,9 +88,7 @@ export const fetchTreeMap = () => {
   return async (dispatch: Function) => {
     dispatch(requestTreeMap());
     try {
-      const res = await fetch('/analytics/treemap', {
-        method: 'GET',
-      });
+      const res = await fetch('/analytics/treemap', { method: 'GET' });
       if (res.status === 200) {
         const { treeMapChart } = await res.json();
 
@@ -109,9 +104,7 @@ export const fetchBudgetLine = () => {
   return async (dispatch: Function) => {
     dispatch(requestBudgetLine());
     try {
-      const res = await fetch('/analytics/budgetline', {
-        method: 'GET',
-      });
+      const res = await fetch('/analytics/budgetline', { method: 'GET' });
       if (res.status === 200) {
         const { budgetLineChart } = await res.json();
 
