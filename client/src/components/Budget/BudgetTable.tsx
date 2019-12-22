@@ -6,7 +6,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 import { BudgetCategory } from './BudgetCategory';
-import { BudgetCategoryType } from '../../../../server/src/routes/budgets';
+import { BudgetCategoryType } from '../../../../shared';
 import { LoadingSpinner } from '../LoadingSpinner';
 
 export const BudgetTable: React.FC<{

@@ -1,4 +1,4 @@
-import { BudgetCategoryType } from '../../../../server/src/routes/budgets';
+import { BudgetCategoryType } from '../../../../shared';
 import { logout } from '../../components/SideMenu';
 
 export const REQUEST_BUDGETS = 'REQUEST_BUDGETS';

@@ -4,7 +4,7 @@ import {
   REQUEST_BUDGETS,
   SELECT_MONTH,
 } from '../actions/budgets';
-import { BudgetCategoryType } from '../../../../server/src/routes/budgets';
+import { BudgetCategoryType } from '../../../../shared';
 import { UserActionTypes, USER_LOGGED_OUT } from '../actions/user';
 
 export type BudgetsState = {

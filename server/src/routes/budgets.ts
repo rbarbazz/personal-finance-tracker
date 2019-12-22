@@ -10,14 +10,9 @@ import {
   getCategoryById,
   getParentCategories,
 } from '../controllers/categories';
+import { BudgetCategoryType } from '../../../shared';
 
 export const budgetsRouter = Router();
-
-export type BudgetCategoryType = {
-  amount: number;
-  categoryId: number;
-  title: string;
-};
 
 budgetsRouter.get('/', async (req, res) => {
   if (req.user) {

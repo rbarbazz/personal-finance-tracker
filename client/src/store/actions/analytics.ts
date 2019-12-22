@@ -1,6 +1,6 @@
 import { BarChartData, LineChartData } from '../../../../shared';
 import { logout } from '../../components/SideMenu';
-import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
+import { TreeMapChartNode } from '../../../../shared';
 
 export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR';
 export const RECEIVE_MONTHLY_BAR = 'RECEIVE_MONTHLY_BAR';

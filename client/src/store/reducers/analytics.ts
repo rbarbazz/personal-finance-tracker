@@ -8,7 +8,7 @@ import {
   REQUEST_TREEMAP,
 } from '../actions/analytics';
 import { BarChartData, LineChartData } from '../../../../shared';
-import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
+import { TreeMapChartNode } from '../../../../shared';
 import { USER_LOGGED_OUT, UserActionTypes } from '../actions/user';
 
 export type AnalyticsState = {

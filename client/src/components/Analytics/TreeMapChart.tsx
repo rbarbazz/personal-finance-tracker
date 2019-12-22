@@ -4,7 +4,7 @@ import React from 'react';
 import { CardErrorMessage } from '../CardErrorMessage';
 import { chartTheme, colorsByCategory } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';
-import { TreeMapChartNode } from '../../../../server/src/routes/analytics';
+import { TreeMapChartNode } from '../../../../shared';
 
 export const TreeMapChart: React.FC<{
   root: TreeMapChartNode;

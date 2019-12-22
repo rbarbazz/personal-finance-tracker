@@ -8,7 +8,7 @@ import {
 } from '../controllers/operations';
 import { getMonthlyBudgetsSums } from '../controllers/budgets';
 import { getParentCategories } from '../controllers/categories';
-import { BarChartData, LineChartData } from '../../../shared';
+import { BarChartData, LineChartData, TreeMapChartNode } from '../../../shared';
 
 export const analyticsRouter = Router();
 
@@ -61,13 +61,6 @@ analyticsRouter.get('/monthlybar', async (req, res) => {
     return res.status(401).send();
   }
 });
-
-export type TreeMapChartNode = {
-  categoryId: number;
-  children?: TreeMapChartNode[];
-  sum?: number;
-  title: string;
-};
 
 analyticsRouter.get('/treemap', async (req, res) => {
   if (req.user) {

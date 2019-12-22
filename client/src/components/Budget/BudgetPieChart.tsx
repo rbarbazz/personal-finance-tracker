@@ -1,7 +1,7 @@
 import { ResponsivePie } from '@nivo/pie';
 import React from 'react';
 
-import { BudgetCategoryType } from '../../../../server/src/routes/budgets';
+import { BudgetCategoryType } from '../../../../shared';
 import { CardErrorMessage } from '../CardErrorMessage';
 import { chartTheme, colorsByCategory } from '../../containers/Analytics';
 import { LoadingSpinner } from '../LoadingSpinner';
