@@ -1,0 +1,62 @@
+@import '../../shared.scss';
+
+/*
+==========================================================================
+   Profile container
+==========================================================================
+*/
+
+.profile-fields-wrapper {
+    display: flex;
+    flex-direction: column;
+
+    .labelled-field {
+        margin-bottom: $big-margin / 2;
+
+        .generic-input {
+            min-width: 300px;
+        }
+    }
+    .generic-btn {
+        margin: $small-margin 0 0;
+    }
+}
+.updates-cards-wrapper {
+    align-items: flex-start;
+    display: flex;
+    margin-bottom: $big-margin;
+    width: 100%;
+}
+.info-update-card {
+    display: flex;
+    flex-direction: column;
+}
+#fname-update-card {
+    margin: 0 $big-margin;
+}
+#reset-profile-card {
+    .generic-card-title {
+        color: $danger-color;
+    }
+    .generic-btn {
+        background-color: $danger-color;
+
+        .loading-spinner {
+            border-color: $danger-color-dark;
+            border-top-color: white;
+        }
+        &:hover {
+            background-color: $danger-color-dark;
+        }
+        &:disabled {
+            background-color: $danger-color;
+        }
+    }
+}
+.reset-explanations {
+    color: $primary-bg-color;
+    font-size: 1.1em;
+    line-height: 1.3em;
+    margin: 0 0 $small-margin;
+    max-width: 332px;
+}

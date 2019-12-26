@@ -1,0 +1,33 @@
+@import '../shared.scss';
+
+/*
+==========================================================================
+   ActionBar component
+==========================================================================
+*/
+
+.action-bar {
+    align-items: center;
+    background-color: white;
+    box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: flex-end;
+    min-height: 50px;
+    padding: 10px $big-margin;
+    z-index: 1;
+}
+.actions-container {
+    align-items: center;
+    display: flex;
+
+    > * {
+        margin: 0 ($small-margin / 2);
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+    a {
+        text-decoration: none;
+    }
+}

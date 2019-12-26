@@ -1,0 +1,49 @@
+@import '../../shared.scss';
+
+/*
+==========================================================================
+   AddOperationDialog component
+==========================================================================
+*/
+
+.new-operation-dialog {
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: $big-margin;
+
+    .labelled-field {
+        margin-bottom: $big-margin / 2;
+    }
+}
+.new-operation-title {
+    color: $primary-color;
+    font-family: $primary-font-family;
+    font-size: 2em;
+    letter-spacing: 0.05em;
+    margin: 0 0 $small-margin;
+    text-align: center;
+}
+.generic-label {
+    text-align: left;
+    width: 100%;
+}
+#category-select {
+    color: $primary-color;
+    font-family: $primary-font-family;
+    margin: 0 0 $small-margin;
+    width: 100%;
+
+    .category-select__single-value {
+        color: $primary-color;
+    }
+    .category-select__control {
+        padding: 6px;
+    }
+}
+#operation-date-field {
+    padding: 12px 15px;
+}
+#add-operation-btn {
+    margin: $small-margin 0 0;
+}

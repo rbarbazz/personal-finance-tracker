@@ -6,8 +6,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import thunk from 'redux-thunk';
 
-import App from './containers/App';
-import reducers from './store/reducers/index';
+import App from './app/App';
+import reducers from './app/rootReducer';
 
 const store = createStore(reducers, applyMiddleware(thunk, createLogger()));
 

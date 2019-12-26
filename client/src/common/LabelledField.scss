@@ -1,0 +1,60 @@
+@import '../shared.scss';
+
+/*
+==========================================================================
+   LabelledField component
+==========================================================================
+*/
+
+.generic-label {
+    align-items: center;
+    color: $primary-color;
+    display: flex;
+    font-family: $primary-font-family;
+    height: 24px;
+    justify-content: space-between;
+    margin-bottom: 5px;
+    text-align: left;
+
+    svg {
+        fill: $primary-color;
+        height: 18px;
+        margin-right: 5px;
+        width: 18px;
+    }
+}
+input.generic-input {
+    border: hsl(0, 0%, 80%) solid 1px;
+    color: $primary-color;
+    font-family: $primary-font-family;
+    line-height: 1;
+    padding: 15px;
+    width: 100%;
+
+    &[type='number'] {
+        text-align: right;
+    }
+    &:focus {
+        outline: $primary-color solid 2px;
+    }
+    &:hover {
+        border-color: hsl(0, 0%, 70%);
+    }
+    &:disabled {
+        border-color: white;
+    }
+}
+.label-input-wrapper {
+    display: flex;
+}
+.password-toggler {
+    align-items: center;
+    cursor: pointer;
+    display: flex;
+
+    svg {
+        height: 24px;
+        margin: 0 0 0 5px;
+        width: 24px;
+    }
+}

@@ -1,0 +1,89 @@
+@import '../../shared.scss';
+
+/*
+==========================================================================
+   UploadDialog component
+==========================================================================
+*/
+
+.upload-dialog {
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: $big-margin;
+}
+.upload-title {
+    color: $primary-color;
+    font-family: $primary-font-family;
+    font-size: 2em;
+    letter-spacing: 0.05em;
+    margin: 0 0 $small-margin;
+    text-align: center;
+}
+.upload-explanations {
+    font-family: $primary-font-family;
+    font-size: 20px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+.upload-explanation-item {
+    margin: $small-margin 0;
+
+    a {
+        color: $primary-color;
+        font-weight: 600;
+        text-decoration: none;
+    }
+    code {
+        color: $primary-color;
+        font-size: 18px;
+    }
+    strong {
+        color: $primary-color;
+    }
+}
+#upload-csv-btn {
+    margin: $small-margin 0 0;
+}
+#upload-input {
+    height: 0.1px;
+    opacity: 0;
+    overflow: hidden;
+    position: absolute;
+    width: 0.1px;
+    z-index: -1;
+}
+#upload-input-label {
+    border: 3px $primary-color dotted;
+    color: $primary-color;
+    cursor: pointer;
+    font-family: $primary-font-family;
+    font-weight: 600;
+    margin: $small-margin 0;
+    padding: $small-margin;
+    text-align: center;
+}
+.col-match-container {
+    margin: $small-margin 0;
+}
+.upload-category-container {
+    align-items: center;
+    display: flex;
+    font-family: $primary-font-family;
+    justify-content: space-between;
+    margin-bottom: $small-margin;
+
+    svg {
+        height: 30px;
+        width: 30px;
+    }
+    .col-name-wrapper {
+        display: flex;
+        width: 90px;
+    }
+    .generic-chip {
+        margin: 0;
+        text-transform: capitalize;
+    }
+}
