@@ -3,12 +3,12 @@ import { Operation, Category } from '../../../../server/src/db/models';
 import { UserActionTypes, USER_LOGGED_OUT } from '../Profile/user';
 
 // Actions
-export const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES';
-export const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
-export const REQUEST_OPERATIONS = 'REQUEST_OPERATIONS';
-export const RECEIVE_OPERATIONS = 'RECEIVE_OPERATIONS';
-export const REQUEST_UPSERT = 'REQUEST_UPSERT';
-export const RESPONSE_UPSERT = 'RESPONSE_UPSERT';
+const REQUEST_CATEGORIES = 'REQUEST_CATEGORIES';
+const RECEIVE_CATEGORIES = 'RECEIVE_CATEGORIES';
+const REQUEST_OPERATIONS = 'REQUEST_OPERATIONS';
+const RECEIVE_OPERATIONS = 'RECEIVE_OPERATIONS';
+const REQUEST_UPSERT = 'REQUEST_UPSERT';
+const RESPONSE_UPSERT = 'RESPONSE_UPSERT';
 
 interface RequestCategoriesAction {
   type: typeof REQUEST_CATEGORIES;
@@ -36,7 +36,7 @@ interface ResponseUpsertAction {
   type: typeof RESPONSE_UPSERT;
 }
 
-export type OperationsActionTypes =
+type OperationsActionTypes =
   | RequestCategoriesAction
   | ReceiveCategoriesAction
   | RequestOperationsAction

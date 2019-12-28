@@ -1,38 +1,37 @@
-import { useSelector, useDispatch } from 'react-redux';
-import React, { useCallback, useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
 
 import './Fire.scss';
 import { ActionBar } from '../../common/ActionBar';
-import { fetchBudgetLine } from '../Analytics/analytics';
 import { FireNumberCalculator } from './FireNumberCalculator';
+import { GenericBtn } from '../../common/GenericBtn';
+import { ReactComponent as SaveIcon } from '../../icons/Save.svg';
+import { RetirementPlanChart } from './RetirementPlanChart';
 import { SectionHeader } from '../../common/SectionHeader';
 import { State } from '../../app/rootReducer';
 
 export const Fire: React.FC = () => {
-  const dispatch = useDispatch();
-  const getAverages = useCallback(() => {
-    dispatch(fetchBudgetLine());
-  }, [dispatch]);
-  const isFetchingBudgetLine = useSelector(
-    (state: State) => state.analytics.isFetchingBudgetLine,
-  );
-  const averages = useSelector((state: State) => state.analytics.averages);
-
-  useEffect(() => getAverages(), [getAverages]);
+  const { expenses } = useSelector((state: State) => state.fire.params);
+  const [chartData, setChartData] = useState([] as { x: string; y: number }[]);
 
   return (
     <div className="page-container">
-      <ActionBar></ActionBar>
+      <ActionBar>
+        <GenericBtn action={() => {}}>
+          Save
+          <SaveIcon />
+        </GenericBtn>
+      </ActionBar>
       <div className="content-container">
         <SectionHeader
           subtitle="Calculate your FIRE number and plan your way to early retirement."
           title="FIRE Calculators"
         />
         <div className="inner-content-container">
-          <FireNumberCalculator
-            averageExpenses={averages[1].amount}
-            averageIncomes={averages[0].amount}
-            isLoading={isFetchingBudgetLine}
+          <FireNumberCalculator setChartData={setChartData} />
+          <RetirementPlanChart
+            fireNumber={expenses * 300}
+            root={[{ id: 'portfolio', data: chartData }]}
           />
         </div>
       </div>
