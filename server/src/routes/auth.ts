@@ -65,7 +65,7 @@ authRouter.post('/login', (req, res) => {
 
     const token = jwt.sign(
       { fName: user.fName, id: user.id },
-      process.env.JWT_SECRET || 'not a secret',
+      process.env.JWT_LOGIN_SECRET || 'not a secret',
       { expiresIn: '12h' },
     );
 

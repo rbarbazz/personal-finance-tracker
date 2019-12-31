@@ -4,7 +4,7 @@ import React, { useState, useRef } from 'react';
 
 import './UploadDialog.scss';
 import { GenericBtn } from '../../common/GenericBtn';
-import { getOperations } from './operations';
+import { getOperations } from './operationsStore';
 import { InfoMessage } from '../../common/InfoMessage';
 import { logout } from '../../common/SideMenu';
 import { ReactComponent as UploadIcon } from '../../icons/Upload.svg';

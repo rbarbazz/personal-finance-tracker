@@ -33,3 +33,14 @@ export interface Budget {
   id: number;
   userId: number;
 }
+
+export interface FireParams {
+  age: number;
+  expectedRoi: number;
+  expenses: number;
+  id: number;
+  incomes: number;
+  netWorth: number;
+  savingsRate: number;
+  userId: number;
+}

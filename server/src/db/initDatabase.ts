@@ -92,9 +92,26 @@ const createBudgets = async () => {
   });
 };
 
+const createFireParams = async () => {
+  if (await knex.schema.hasTable('fire_params')) {
+    return;
+  }
+
+  await knex.schema.createTable('fire_params', table => {
+    table.increments();
+    table.integer('age');
+    table.float('expected_roi');
+    table.integer('expenses');
+    table.integer('incomes');
+    table.integer('net_worth');
+    table.float('savings_rate');
+  });
+};
+
 export default () => {
   createUsers();
   createCategories();
   createOperations();
   createBudgets();
+  createFireParams();
 };

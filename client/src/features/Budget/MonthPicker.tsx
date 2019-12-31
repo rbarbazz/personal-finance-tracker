@@ -1,10 +1,10 @@
+import { useDispatch } from 'react-redux';
 import React from 'react';
 
 import './MonthPicker.scss';
 import { ReactComponent as ArrowLeftOutlineIcon } from '../../icons/ArrowLeftOutline.svg';
 import { ReactComponent as ArrowRightOutlineIcon } from '../../icons/ArrowRightOutline.svg';
-import { useDispatch } from 'react-redux';
-import { selectMonth } from './budgets';
+import { selectMonth } from './budgetStore';
 
 export const MonthPicker: React.FC<{ selectedMonth: Date }> = ({
   selectedMonth,

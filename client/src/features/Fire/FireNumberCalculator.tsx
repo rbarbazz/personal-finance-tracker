@@ -4,7 +4,7 @@ import { InfoMessage } from '../../common/InfoMessage';
 import { LabelledField } from '../../common/LabelledField';
 import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../../app/rootReducer';
-import { updateFireParam } from './fire';
+import { updateFireParam } from './fireStore';
 
 const currentYear = new Date().getFullYear();
 

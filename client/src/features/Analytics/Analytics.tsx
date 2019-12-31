@@ -2,7 +2,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import React, { useEffect, useCallback } from 'react';
 
 import './Analytics.scss';
-import { fetchBudgetLine, fetchMonthlyBar, fetchTreeMap } from './analytics';
+import {
+  fetchBudgetLine,
+  fetchMonthlyBar,
+  fetchTreeMap,
+} from './analyticsStore';
 import { ActionBar } from '../../common/ActionBar';
 import { Averages } from './Averages';
 import { BudgetLineChart } from './BudgetLineChart';

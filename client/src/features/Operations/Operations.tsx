@@ -5,7 +5,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import './Operations.scss';
 import { ActionBar } from '../../common/ActionBar';
 import { GenericBtn } from '../../common/GenericBtn';
-import { getOperations, getCategories } from './operations';
+import { getOperations, getCategories } from './operationsStore';
 import { OperationTable } from './OperationsTable';
 import { ReactComponent as AddIcon } from '../../icons/Add.svg';
 import { ReactComponent as ArchiveIcon } from '../../icons/Archive.svg';

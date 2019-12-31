@@ -1,9 +1,15 @@
 import { combineReducers } from 'redux';
 
-import { analytics, AnalyticsState } from '../features/Analytics/analytics';
-import { budgets, BudgetsState } from '../features/Budget/budgets';
-import { fire, FireState } from '../features/Fire/fire';
-import { operations, OperationsState } from '../features/Operations/operations';
+import {
+  analytics,
+  AnalyticsState,
+} from '../features/Analytics/analyticsStore';
+import { budgets, BudgetsState } from '../features/Budget/budgetStore';
+import { fire, FireState } from '../features/Fire/fireStore';
+import {
+  operations,
+  OperationsState,
+} from '../features/Operations/operationsStore';
 import { user, UserState } from '../features/Profile/user';
 
 export interface State {

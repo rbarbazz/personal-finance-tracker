@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 
 import { colorsByCategory } from '../Analytics/Analytics';
-import { getBudgets } from './budgets';
+import { getBudgets } from './budgetStore';
 import { LabelledField } from '../../common/LabelledField';
 import { logout } from '../../common/SideMenu';
 import { ReactComponent as CardIcon } from '../../icons/Categories/Card.svg';

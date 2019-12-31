@@ -2,6 +2,7 @@ import bodyParser from 'body-parser';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import passport from 'passport';
 import path from 'path';
 
 import './middlewares/passport';
@@ -9,10 +10,10 @@ import { analyticsRouter } from './routes/analytics';
 import { authRouter } from './routes/auth';
 import { budgetsRouter } from './routes/budgets';
 import { categoriesRouter } from './routes/categories';
+import { fireRouter } from './routes/fire';
 import { operationsRouter } from './routes/operations';
 import { usersRouter } from './routes/users';
 import initDatabase from './db/initDatabase';
-import passport from 'passport';
 
 /**
  * Create DB and the tables if they are not present
@@ -45,6 +46,11 @@ app.use(
   '/api/categories',
   passport.authenticate('jwt', { session: false }),
   categoriesRouter,
+);
+app.use(
+  '/api/fire',
+  passport.authenticate('jwt', { session: false }),
+  fireRouter,
 );
 app.use(
   '/api/operations',

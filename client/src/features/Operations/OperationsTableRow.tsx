@@ -4,10 +4,9 @@ import Select from 'react-select';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
-import { getOperations } from './operations';
+import { getOperations, SelectOption } from './operationsStore';
 import { logout } from '../../common/SideMenu';
 import { Operation } from '../../../../server/src/db/models';
-import { SelectOption } from './operations';
 import { State } from '../../app/rootReducer';
 import { UpsertOperationDialog } from './UpsertOperationDialog';
 

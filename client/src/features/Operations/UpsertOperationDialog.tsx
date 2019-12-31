@@ -15,7 +15,7 @@ import {
   responseUpsert,
   getOperations,
   SelectOption,
-} from './operations';
+} from './operationsStore';
 import { State } from '../../app/rootReducer';
 
 const upsertOperation = (

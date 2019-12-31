@@ -67,7 +67,10 @@ export const LabelledField: React.FC<{
             if (initialType === 'number') {
               const valAsNum = event.target.valueAsNumber;
 
-              return isNaN(valAsNum) ? setter(0) : setter(valAsNum);
+              if (isNaN(valAsNum)) return setter(0);
+              if (min && valAsNum < min) return setter(min);
+              if (max && valAsNum > max) return setter(max);
+              return setter(valAsNum);
             }
             return setter(event.target.value);
           }}
