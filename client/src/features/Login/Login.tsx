@@ -92,7 +92,25 @@ export const Login: React.FC = () => {
     }
   }, [location]);
   return (
-    <form className="login-container">
+    <form
+      onSubmit={event => {
+        event.preventDefault();
+        dispatch(
+          loginUser(
+            isRegistered,
+            setMessage,
+            toggleIsRegistered,
+            toggleLoading,
+            {
+              fName: registerFName,
+              email,
+              password,
+            },
+          ),
+        );
+      }}
+      className="login-container"
+    >
       <p className="greetings-paragraph">Hi stranger!</p>
       {!isRegistered && (
         <LabelledField
@@ -129,25 +147,7 @@ export const Login: React.FC = () => {
       {message.value !== '' && (
         <InfoMessage error={message.error} value={message.value} />
       )}
-      <GenericBtn
-        action={() =>
-          dispatch(
-            loginUser(
-              isRegistered,
-              setMessage,
-              toggleIsRegistered,
-              toggleLoading,
-              {
-                fName: registerFName,
-                email,
-                password,
-              },
-            ),
-          )
-        }
-        id="login-btn"
-        isLoading={isLoading}
-      >
+      <GenericBtn id="login-btn" isLoading={isLoading} type="submit">
         {isRegistered ? 'Login' : 'Sign up'}
         <LoginIcon />
       </GenericBtn>

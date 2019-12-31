@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "@nivo/bar": "^0.59.2",
+    "@testing-library/react": "^9.4.0",
     "@types/jwt-decode": "^2.2.1",
     "@types/numeral": "0.0.26",
     "@types/react-csv": "^1.1.1",
