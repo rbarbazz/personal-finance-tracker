@@ -1,5 +1,9 @@
+import { logout } from '../../common/SideMenu';
+
 // Actions
 const UPDATE_FIRE_PARAM = 'UPDATE_FIRE_PARAM';
+const REQUEST_FIRE_PARAMS = 'REQUEST_FIRE_PARAMS';
+const RECEIVE_FIRE_PARAMS = 'RECEIVE_FIRE_PARAMS';
 
 interface UpdateFireParamAction {
   type: typeof UPDATE_FIRE_PARAM;
@@ -7,10 +11,22 @@ interface UpdateFireParamAction {
   value: number;
 }
 
-type FireActionTypes = UpdateFireParamAction;
+interface RequestFireParamsAction {
+  type: typeof REQUEST_FIRE_PARAMS;
+}
+
+interface ReceiveFireParamsAction {
+  type: typeof RECEIVE_FIRE_PARAMS;
+}
+
+type FireActionTypes =
+  | UpdateFireParamAction
+  | RequestFireParamsAction
+  | ReceiveFireParamsAction;
 
 // Reducers
 export type FireState = {
+  isFetchingFireParams: boolean;
   params: {
     age: number;
     expectedRoi: number;
@@ -22,6 +38,7 @@ export type FireState = {
 };
 
 const initialState = {
+  isFetchingFireParams: false,
   params: {
     age: 30,
     expectedRoi: 4,
@@ -39,6 +56,10 @@ export const fire = (state = initialState, action: FireActionTypes) => {
         ...state,
         params: { ...state.params, [action.param]: action.value },
       };
+    case REQUEST_FIRE_PARAMS:
+      return { ...state, isFetchingFireParams: true };
+    case RECEIVE_FIRE_PARAMS:
+      return { ...state, isFetchingFireParams: false };
     default:
       return state;
   }
@@ -53,3 +74,41 @@ export const updateFireParam = (
   param,
   value,
 });
+
+export const requestFireParams = (): FireActionTypes => ({
+  type: REQUEST_FIRE_PARAMS,
+});
+
+export const receiveFireParams = (): FireActionTypes => ({
+  type: RECEIVE_FIRE_PARAMS,
+});
+
+export const getFireParams = () => {
+  return async (dispatch: Function) => {
+    dispatch(requestFireParams());
+    try {
+      const res = await fetch('/api/fire', { method: 'GET' });
+      if (res.status === 200) {
+        const {
+          age,
+          expectedRoi,
+          expenses,
+          incomes,
+          netWorth,
+          savingsRate,
+        }: FireState['params'] = await res.json();
+
+        if (age) dispatch(updateFireParam('age', age));
+        if (expectedRoi) dispatch(updateFireParam('expectedRoi', expectedRoi));
+        if (expenses) dispatch(updateFireParam('expenses', expenses));
+        if (incomes) dispatch(updateFireParam('incomes', incomes));
+        if (netWorth) dispatch(updateFireParam('netWorth', netWorth));
+        if (savingsRate) dispatch(updateFireParam('savingsRate', savingsRate));
+
+        dispatch(receiveFireParams());
+      } else dispatch(logout());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};

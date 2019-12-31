@@ -1,8 +1,24 @@
 import { Router } from 'express';
 
-import { insertFireParams } from '../controllers/fire';
+import {
+  insertFireParams,
+  getFireParams,
+  updateFireParams,
+} from '../controllers/fire';
 
 export const fireRouter = Router();
+
+// Get current saved fire params
+fireRouter.get('/', async (req, res) => {
+  if (req.user) {
+    const currFireParams = await getFireParams(req.user.id);
+
+    if (currFireParams.length > 0) return res.send(currFireParams[0]);
+    return res.send({});
+  } else {
+    res.status(401).send();
+  }
+});
 
 // Save fire params
 fireRouter.post('/', async (req, res) => {
@@ -50,15 +66,27 @@ fireRouter.post('/', async (req, res) => {
         message: 'Savings Rate provided is incorrect',
       });
 
-    await insertFireParams({
-      age,
-      expectedRoi,
-      expenses,
-      incomes,
-      netWorth,
-      savingsRate,
-      userId: req.user.id,
-    });
+    const existingFireParams = await getFireParams(req.user.id);
+
+    if (existingFireParams.length > 0)
+      await updateFireParams(existingFireParams[0].id, {
+        age,
+        expectedRoi,
+        expenses,
+        incomes,
+        netWorth,
+        savingsRate,
+      });
+    else
+      await insertFireParams({
+        age,
+        expectedRoi,
+        expenses,
+        incomes,
+        netWorth,
+        savingsRate,
+        userId: req.user.id,
+      });
 
     res.send({ error: false, message: 'Your current parameters were saved' });
   } else {

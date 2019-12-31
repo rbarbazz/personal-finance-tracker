@@ -105,6 +105,7 @@ const createFireParams = async () => {
     table.integer('incomes');
     table.integer('net_worth');
     table.float('savings_rate');
+    table.integer('user_id');
   });
 };
 

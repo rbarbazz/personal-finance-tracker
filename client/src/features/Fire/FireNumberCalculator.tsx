@@ -2,15 +2,17 @@ import React, { useState, useEffect } from 'react';
 
 import { InfoMessage } from '../../common/InfoMessage';
 import { LabelledField } from '../../common/LabelledField';
-import { useSelector, useDispatch } from 'react-redux';
 import { State } from '../../app/rootReducer';
 import { updateFireParam } from './fireStore';
+import { useSelector, useDispatch } from 'react-redux';
 
 const currentYear = new Date().getFullYear();
 
 export const FireNumberCalculator: React.FC<{
+  message: { error: boolean; value: string };
   setChartData: Function;
-}> = ({ setChartData }) => {
+  setMessage: Function;
+}> = ({ message, setChartData, setMessage }) => {
   const dispatch = useDispatch();
   const {
     age,
@@ -20,7 +22,6 @@ export const FireNumberCalculator: React.FC<{
     netWorth,
     savingsRate,
   } = useSelector((state: State) => state.fire.params);
-  const [message, setMessage] = useState({ error: false, value: '' });
   const [yearsToRet, setYearsToRet] = useState(0);
 
   useEffect(() => {
@@ -64,7 +65,15 @@ export const FireNumberCalculator: React.FC<{
       }
     }
     setChartData(newChartData);
-  }, [expectedRoi, expenses, incomes, netWorth, savingsRate, setChartData]);
+  }, [
+    expectedRoi,
+    expenses,
+    incomes,
+    netWorth,
+    savingsRate,
+    setChartData,
+    setMessage,
+  ]);
 
   return (
     <div className="generic-card fire-number-card">
