@@ -97,3 +97,31 @@ export const getBudgets = (selectedMonth: Date) => {
     }
   };
 };
+
+export const updateBudgetAmount = (
+  categoryBudgetAmount: number,
+  categoryId: number,
+  selectedMonth: Date,
+) => {
+  return async (dispatch: Function) => {
+    try {
+      const res = await fetch('/api/budgets', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: categoryBudgetAmount,
+          categoryId,
+          selectedMonth: selectedMonth.getMonth(),
+          selectedYear: selectedMonth.getFullYear(),
+        }),
+      });
+      if (res.status === 200) {
+        const { error } = await res.json();
+
+        if (!error) dispatch(getBudgets(selectedMonth));
+      } else dispatch(logout());
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};

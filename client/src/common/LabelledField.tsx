@@ -65,7 +65,8 @@ export const LabelledField: React.FC<{
           {...(step ? { step } : {})}
           onChange={event => {
             if (initialType === 'number') {
-              const valAsNum = event.target.valueAsNumber;
+              let valAsNum = parseFloat(event.target.value);
+              if (Number.isInteger(valAsNum)) valAsNum = Math.round(valAsNum);
 
               if (isNaN(valAsNum)) return setter(0);
               if (min && valAsNum < min) return setter(min);

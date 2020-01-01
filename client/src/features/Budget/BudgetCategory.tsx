@@ -3,9 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import React, { useState } from 'react';
 
 import { colorsByCategory } from '../Analytics/Analytics';
-import { getBudgets } from './budgetStore';
 import { LabelledField } from '../../common/LabelledField';
-import { logout } from '../../common/SideMenu';
 import { ReactComponent as CardIcon } from '../../icons/Categories/Card.svg';
 import { ReactComponent as CarIcon } from '../../icons/Categories/Car.svg';
 import { ReactComponent as CartIcon } from '../../icons/Categories/Cart.svg';
@@ -15,38 +13,7 @@ import { ReactComponent as PercentIcon } from '../../icons/Categories/Percent.sv
 import { ReactComponent as QuestionIcon } from '../../icons/Categories/Question.svg';
 import { ReactComponent as TrendingUpIcon } from '../../icons/Categories/TrendingUp.svg';
 import { State } from '../../app/rootReducer';
-
-const updateBudgetAmount = (
-  categoryBudget: number,
-  categoryId: number,
-  selectedMonth: Date,
-) => {
-  return async (dispatch: Function) => {
-    try {
-      const res = await fetch('/api/budgets', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          amount: categoryBudget,
-          categoryId,
-          selectedMonth: selectedMonth.getMonth(),
-          selectedYear: selectedMonth.getFullYear(),
-        }),
-      });
-      if (res.status === 200) {
-        const { error } = await res.json();
-
-        if (!error) {
-          dispatch(getBudgets(selectedMonth));
-        }
-      } else {
-        dispatch(logout());
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
+import { updateBudgetAmount } from './budgetStore';
 
 const iconsByCategory: {
   [index: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
@@ -67,12 +34,22 @@ export const BudgetCategory: React.FC<{
   initialValue: number;
 }> = ({ categoryId, title, initialValue }) => {
   const dispatch = useDispatch();
-  const [categoryBudget, setCategoryBudget] = useState(initialValue);
+  const [categoryBudgetAmount, setCategoryBudgetAmount] = useState(
+    initialValue,
+  );
   const [isEditing, toggleIsEditing] = useState(false);
   const selectedMonth = useSelector(
     (state: State) => state.budgets.selectedMonth,
   );
   const CategoryIcon = iconsByCategory[title];
+
+  const handleClick = () => {
+    if (isEditing)
+      dispatch(
+        updateBudgetAmount(categoryBudgetAmount, categoryId, selectedMonth),
+      );
+    toggleIsEditing(prevState => !prevState);
+  };
 
   return (
     <TableRow>
@@ -93,25 +70,12 @@ export const BudgetCategory: React.FC<{
         <div className="category-amount-container">
           <LabelledField
             disabled={!isEditing}
-            setter={setCategoryBudget}
+            setter={setCategoryBudgetAmount}
             type="number"
-            value={categoryBudget}
+            value={categoryBudgetAmount}
           />
           <div className="action-button-wrapper">
-            <button
-              className="generic-row-action-btn"
-              onClick={() => {
-                if (isEditing)
-                  dispatch(
-                    updateBudgetAmount(
-                      categoryBudget,
-                      categoryId,
-                      selectedMonth,
-                    ),
-                  );
-                toggleIsEditing(prevState => !prevState);
-              }}
-            >
+            <button className="generic-row-action-btn" onClick={handleClick}>
               {isEditing ? 'Save' : 'Edit'}
             </button>
           </div>

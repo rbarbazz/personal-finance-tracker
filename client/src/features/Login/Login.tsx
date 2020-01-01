@@ -14,52 +14,6 @@ import { ReactComponent as PersonIcon } from '../../icons/Person.svg';
 import { User } from '../../../../server/src/db/models';
 import { userLoggedIn } from '../Profile/user';
 
-const loginUser = (
-  isRegistered: boolean,
-  setMessage: Function,
-  toggleIsRegistered: Function,
-  toggleLoading: Function,
-  userData: Partial<User>,
-) => {
-  return async (dispatch: Function) => {
-    toggleLoading(true);
-    try {
-      const res = await fetch(
-        `/api/auth/${isRegistered ? 'login' : 'register'}`,
-        {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(userData),
-        },
-      );
-      toggleLoading(false);
-      const {
-        error,
-        message,
-        token,
-      }: {
-        error: boolean;
-        message: string;
-        token: string;
-      } = await res.json();
-      if (res.status === 200) {
-        setMessage({ error, value: message });
-
-        if (!isRegistered && !error) toggleIsRegistered(true);
-        if (token) {
-          const { fName }: { fName: string } = jwtDecode(token);
-
-          return dispatch(userLoggedIn(fName));
-        }
-      } else if (res.status === 401) {
-        setMessage({ error, value: message });
-      } else setMessage({ error: true, value: 'An error has occurred' });
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
-
 export const Login: React.FC = () => {
   const dispatch = useDispatch();
   const location = useLocation();
@@ -69,6 +23,46 @@ export const Login: React.FC = () => {
   const [message, setMessage] = useState({ error: false, value: '' });
   const [password, setPassword] = useState('');
   const [registerFName, setregisterFName] = useState('');
+
+  const loginUser = (userData: Partial<User>) => {
+    return async (dispatch: Function) => {
+      toggleLoading(true);
+      try {
+        const res = await fetch(
+          `/api/auth/${isRegistered ? 'login' : 'register'}`,
+          {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData),
+          },
+        );
+        toggleLoading(false);
+        const {
+          error,
+          message,
+          token,
+        }: {
+          error: boolean;
+          message: string;
+          token: string;
+        } = await res.json();
+        if (res.status === 200) {
+          setMessage({ error, value: message });
+
+          if (!isRegistered && !error) toggleIsRegistered(true);
+          if (token) {
+            const { fName }: { fName: string } = jwtDecode(token);
+
+            return dispatch(userLoggedIn(fName));
+          }
+        } else if (res.status === 401) {
+          setMessage({ error, value: message });
+        } else setMessage({ error: true, value: 'An error has occurred' });
+      } catch (error) {
+        console.error(error);
+      }
+    };
+  };
 
   useEffect(() => {
     setMessage({ error: false, value: '' });
@@ -91,22 +85,17 @@ export const Login: React.FC = () => {
       });
     }
   }, [location]);
+
   return (
     <form
       onSubmit={event => {
         event.preventDefault();
         dispatch(
-          loginUser(
-            isRegistered,
-            setMessage,
-            toggleIsRegistered,
-            toggleLoading,
-            {
-              fName: registerFName,
-              email,
-              password,
-            },
-          ),
+          loginUser({
+            fName: registerFName,
+            email,
+            password,
+          }),
         );
       }}
       className="login-container"
