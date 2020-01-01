@@ -45,6 +45,13 @@ export const getBudgetByCategory = async (
     .andWhere('categoryId', categoryId)
     .andWhereBetween('budgetDate', [from, to]);
 
+export const getLatestBudgets = async (userId: number) =>
+  await knex<Budget>('budgets')
+    .select('amount', 'budgetDate', 'categoryId', 'userId')
+    .where('userId', userId)
+    .limit(9)
+    .orderBy('budgetDate', 'desc');
+
 export const insertBudgets = async (
   budgets: Partial<Budget> | Partial<Budget>[],
 ) => await knex<Budget>('budgets').insert(budgets);

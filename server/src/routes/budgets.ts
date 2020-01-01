@@ -3,6 +3,7 @@ import { Router } from 'express';
 import {
   getAllBudgets,
   getBudgetByCategory,
+  getLatestBudgets,
   insertBudgets,
   updateBudget,
 } from '../controllers/budgets';
@@ -20,7 +21,29 @@ budgetsRouter.get('/', async (req, res) => {
     const from = new Date(selectedYear, selectedMonth, 1);
     const to = new Date(selectedYear, selectedMonth, 2);
 
-    const userBudgets = await getAllBudgets(from, to, req.user.id);
+    let userBudgets = await getAllBudgets(from, to, req.user.id);
+    // If no results use latests budgets
+    if (userBudgets.length < 1) {
+      const latestsBudgets = await getLatestBudgets(req.user.id);
+
+      if (latestsBudgets.length > 0) {
+        const budgetsToInsert = latestsBudgets.filter(
+          budget =>
+            budget.budgetDate.toISOString() ===
+            latestsBudgets[0].budgetDate.toISOString(),
+        );
+        const budgetDate = new Date(selectedYear, selectedMonth, 1);
+
+        for (const budgetToInsert of budgetsToInsert) {
+          await insertBudgets({
+            ...budgetToInsert,
+            budgetDate,
+          });
+        }
+        userBudgets = await getAllBudgets(from, to, req.user.id);
+      }
+    }
+
     const parentCategories = await getParentCategories();
     const budgets: BudgetCategoryType[] = [];
 
