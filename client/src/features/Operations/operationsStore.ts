@@ -47,8 +47,13 @@ type OperationsActionTypes =
 // Reducers
 export type SelectOption = {
   label: string;
+  parentCategoryTitle: string;
   value: number;
 };
+
+export interface SelectCategory extends Category {
+  parentCategoryTitle: string;
+}
 
 export type OperationsState = {
   categories: SelectOption[];
@@ -142,12 +147,17 @@ export const getCategories = () => {
     try {
       const res = await fetch('/api/categories', { method: 'GET' });
       if (res.status === 200) {
-        const { categories }: { categories: Category[] } = await res.json();
+        const {
+          categories,
+        }: { categories: SelectCategory[] } = await res.json();
 
-        const selectCategories = categories.map(({ id, title }: Category) => ({
-          value: id,
-          label: title,
-        }));
+        const selectCategories = categories.map(
+          ({ id, parentCategoryTitle, title }) => ({
+            label: title,
+            parentCategoryTitle,
+            value: id,
+          }),
+        );
         dispatch(receiveCategories(selectCategories));
       } else dispatch(logout());
     } catch (error) {

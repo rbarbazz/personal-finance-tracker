@@ -7,6 +7,7 @@ import { LabelledField } from '../../common/LabelledField';
 import { ReactComponent as CardIcon } from '../../icons/Categories/Card.svg';
 import { ReactComponent as CarIcon } from '../../icons/Categories/Car.svg';
 import { ReactComponent as CartIcon } from '../../icons/Categories/Cart.svg';
+import { ReactComponent as CoinIcon } from '../../icons/Categories/Coin.svg';
 import { ReactComponent as HouseIcon } from '../../icons/Categories/House.svg';
 import { ReactComponent as PeopleIcon } from '../../icons/Categories/People.svg';
 import { ReactComponent as PercentIcon } from '../../icons/Categories/Percent.svg';
@@ -15,12 +16,13 @@ import { ReactComponent as TrendingUpIcon } from '../../icons/Categories/Trendin
 import { State } from '../../app/rootReducer';
 import { updateBudgetAmount } from './budgetStore';
 
-const iconsByCategory: {
+export const iconsByCategoryTitle: {
   [index: string]: React.FunctionComponent<React.SVGProps<SVGSVGElement>>;
 } = {
   'Daily Life': CartIcon,
   'Family Care': PeopleIcon,
   Debt: CardIcon,
+  Income: CoinIcon,
   Housing: HouseIcon,
   Savings: TrendingUpIcon,
   Taxes: PercentIcon,
@@ -41,7 +43,7 @@ export const BudgetCategory: React.FC<{
   const selectedMonth = useSelector(
     (state: State) => state.budgets.selectedMonth,
   );
-  const CategoryIcon = iconsByCategory[title];
+  const CategoryIcon = iconsByCategoryTitle[title];
 
   const handleClick = () => {
     if (isEditing)
@@ -54,7 +56,7 @@ export const BudgetCategory: React.FC<{
   return (
     <TableRow>
       <TableCell align="center">
-        {iconsByCategory[title] && (
+        {iconsByCategoryTitle[title] && (
           <CategoryIcon style={{ fill: colorsByCategory[title] }} />
         )}
       </TableCell>

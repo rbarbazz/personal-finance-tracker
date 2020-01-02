@@ -24,10 +24,8 @@ operationsRouter.get('/', async (req, res) => {
 
     operations.sort((a, b) => {
       const ret = +new Date(b.operationDate) - +new Date(a.operationDate);
-      if (ret === 0) {
-        console.log;
-        return b.id - a.id;
-      }
+
+      if (ret === 0) return b.id - a.id;
       return ret;
     });
 

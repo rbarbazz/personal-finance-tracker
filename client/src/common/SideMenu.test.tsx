@@ -3,7 +3,7 @@ import { fireEvent } from '@testing-library/react';
 import React from 'react';
 
 import { SideMenu } from './SideMenu';
-import { renderWithRedux } from '../setupTests';
+import { history, renderWithRedux, renderWithRouter } from '../setupTests';
 import * as userStore from '../features/Profile/user';
 
 test('Logs out on click', () => {
@@ -14,4 +14,16 @@ test('Logs out on click', () => {
   fireEvent.click(getByText(/logout\.svg/i));
 
   expect(mockLogout).toHaveBeenCalledTimes(1);
+});
+
+test('Changes page when click on a link', () => {
+  const { getByText } = renderWithRouter(<SideMenu />);
+
+  fireEvent.click(getByText(/chart\.svg/i));
+
+  expect(history.location.pathname).toBe('/analytics');
+
+  fireEvent.click(getByText(/calculator\.svg/i));
+
+  expect(history.location.pathname).toBe('/budget');
 });

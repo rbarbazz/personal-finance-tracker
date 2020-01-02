@@ -1,10 +1,13 @@
+import { ThemeConfig } from 'react-select/src/theme';
 import { useSelector, useDispatch } from 'react-redux';
 import React, { useState } from 'react';
-import Select from 'react-select';
+import Select, { Styles } from 'react-select';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
+import { colorsByCategory } from '../Analytics/Analytics';
 import { getOperations, SelectOption } from './operationsStore';
+import { iconsByCategoryTitle } from '../Budget/BudgetCategory';
 import { logout } from '../../features/Profile/user';
 import { Operation } from '../../../../server/src/db/models';
 import { State } from '../../app/rootReducer';
@@ -40,6 +43,26 @@ const delOperation = (operationId: number) => {
   };
 };
 
+export const customSelectStyles: Styles = {
+  container: provided => ({ ...provided }),
+  control: provided => ({ ...provided, padding: 8 }),
+  option: (provided, state) => ({
+    ...provided,
+    color: state.isSelected ? 'white' : '#282828',
+  }),
+};
+
+export const customSelectTheme: ThemeConfig = theme => ({
+  ...theme,
+  borderRadius: 0,
+  colors: {
+    ...theme.colors,
+    primary: '#007944',
+    primary25: '#e8edf3',
+    primary50: '#c1cde0',
+  },
+});
+
 export const OperationTableRow: React.FC<{
   operation: Operation;
 }> = ({ operation }) => {
@@ -52,34 +75,45 @@ export const OperationTableRow: React.FC<{
     categories.find(category => category.value === categoryId),
   );
 
+  const handleChange = (selectedOption: any) => {
+    setCategory(selectedOption);
+    if (selectedOption) dispatch(updateCategory(selectedOption.value, id));
+  };
+
   return (
     <TableRow>
-      <TableCell>
-        <span className="generic-chip">{dateLocale}</span>
-      </TableCell>
+      <TableCell>{dateLocale}</TableCell>
       <TableCell>
         <span className="amount-cell">{amount}</span>
       </TableCell>
       <TableCell>{label}</TableCell>
       <TableCell style={{ minWidth: 200, maxWidth: 200 }}>
         <Select
-          className={'category-select'}
-          classNamePrefix="category-select"
-          menuPosition="fixed"
-          onChange={selectedOption => {
-            setCategory(selectedOption);
-            if (selectedOption)
-              dispatch(updateCategory(selectedOption.value, id));
+          formatOptionLabel={({ value, label, parentCategoryTitle }) => {
+            const ParentCategoryIcon =
+              iconsByCategoryTitle[parentCategoryTitle];
+
+            return (
+              <div style={{ alignItems: 'center', display: 'flex' }}>
+                {ParentCategoryIcon && (
+                  <ParentCategoryIcon
+                    style={{
+                      fill: colorsByCategory[parentCategoryTitle],
+                      height: 22,
+                      marginRight: 15,
+                      width: 22,
+                    }}
+                  />
+                )}
+                <div>{label}</div>
+              </div>
+            );
           }}
+          menuPosition="fixed"
+          onChange={handleChange}
           options={categories}
-          theme={theme => ({
-            ...theme,
-            borderRadius: 0,
-            colors: {
-              ...theme.colors,
-              primary: '#007944',
-            },
-          })}
+          styles={customSelectStyles}
+          theme={customSelectTheme}
           value={selectedCategory}
         />
       </TableCell>

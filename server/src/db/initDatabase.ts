@@ -5,7 +5,7 @@ import { getParentCategories } from '../controllers/categories';
 import { knexConfig } from './knexfile';
 import jsonCategories from './categories.json';
 
-const categories: {
+export const categories: {
   children: string[];
   title: string;
 }[] = jsonCategories;

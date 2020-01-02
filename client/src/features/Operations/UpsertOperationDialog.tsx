@@ -4,18 +4,21 @@ import React, { useState } from 'react';
 import Select from 'react-select';
 
 import './UpsertOperationDialog.scss';
+import {
+  getOperations,
+  requestUpsert,
+  responseUpsert,
+  SelectOption,
+} from './operationsStore';
+import { colorsByCategory } from '../Analytics/Analytics';
+import { customSelectTheme, customSelectStyles } from './OperationsTableRow';
 import { GenericBtn } from '../../common/GenericBtn';
+import { iconsByCategoryTitle } from '../Budget/BudgetCategory';
 import { InfoMessage } from '../../common/InfoMessage';
 import { LabelledField } from '../../common/LabelledField';
 import { logout } from '../../features/Profile/user';
 import { Operation } from '../../../../server/src/db/models';
 import { ReactComponent as SaveIcon } from '../../icons/Save.svg';
-import {
-  requestUpsert,
-  responseUpsert,
-  getOperations,
-  SelectOption,
-} from './operationsStore';
 import { State } from '../../app/rootReducer';
 
 const upsertOperation = (
@@ -111,21 +114,32 @@ export const UpsertOperationDialog: React.FC<{
           Category
         </label>
         <Select
-          classNamePrefix="category-select"
-          id="category-select"
-          menuPosition="fixed"
-          onChange={selectedOption => {
-            setCategory(selectedOption);
+          formatOptionLabel={({ value, label, parentCategoryTitle }) => {
+            const ParentCategoryIcon =
+              iconsByCategoryTitle[parentCategoryTitle];
+
+            return (
+              <div style={{ alignItems: 'center', display: 'flex' }}>
+                {ParentCategoryIcon && (
+                  <ParentCategoryIcon
+                    style={{
+                      fill: colorsByCategory[parentCategoryTitle],
+                      height: 22,
+                      marginRight: 15,
+                      width: 22,
+                    }}
+                  />
+                )}
+                <div>{label}</div>
+              </div>
+            );
           }}
+          inputId="category-select"
+          menuPosition="fixed"
+          onChange={selectedOption => setCategory(selectedOption)}
           options={categories}
-          theme={theme => ({
-            ...theme,
-            borderRadius: 0,
-            colors: {
-              ...theme.colors,
-              primary: '#007944',
-            },
-          })}
+          styles={customSelectStyles}
+          theme={customSelectTheme}
           value={selectedCategory}
         />
         {message.value !== '' && (
