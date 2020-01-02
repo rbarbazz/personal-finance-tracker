@@ -6,7 +6,7 @@ import './UploadDialog.scss';
 import { GenericBtn } from '../../common/GenericBtn';
 import { getOperations } from './operationsStore';
 import { InfoMessage } from '../../common/InfoMessage';
-import { logout } from '../../common/SideMenu';
+import { logout } from '../../features/Profile/user';
 import { ReactComponent as UploadIcon } from '../../icons/Upload.svg';
 import { ReactComponent as ArrowRightIcon } from '../../icons/ArrowRight.svg';
 import { UploadCategoryMatch } from './UploadCategoryMatch';

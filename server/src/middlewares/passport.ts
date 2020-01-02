@@ -36,7 +36,7 @@ passport.use(
   new JwtStrategy(
     {
       jwtFromRequest: cookieExtractor,
-      secretOrKey: process.env.JWT_LOGIN_SECRET || 'not a secret',
+      secretOrKey: process.env.JWT_ACCESS_SECRET || 'not a secret',
     },
     async (jwtPayload, done) => {
       try {

@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import React from 'react';
 
 import './SideMenu.scss';
+import { logout } from '../features/Profile/user';
 import { ReactComponent as CalculatorIcon } from '../icons/Calculator.svg';
 import { ReactComponent as ChartIcon } from '../icons/Chart.svg';
 import { ReactComponent as FireIcon } from '../icons/Fire.svg';
@@ -10,21 +11,6 @@ import { ReactComponent as HouseOutlineIcon } from '../icons/HouseOutline.svg';
 import { ReactComponent as LogoutIcon } from '../icons/Logout.svg';
 import { ReactComponent as PersonIcon } from '../icons/Person.svg';
 import { ReactComponent as PriceTagIcon } from '../icons/PriceTag.svg';
-import { userLoggedOut } from '../features/Profile/user';
-
-export const logout = () => {
-  return async (dispatch: Function) => {
-    try {
-      const res = await fetch('/api/auth/logout', { method: 'GET' });
-      if (res.status === 200) {
-        dispatch(userLoggedOut());
-      }
-      window.location.reload();
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
 
 export const SideMenu: React.FC = () => {
   const dispatch = useDispatch();

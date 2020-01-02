@@ -1,4 +1,4 @@
-import { logout } from '../../common/SideMenu';
+import { logout } from '../../features/Profile/user';
 import { Operation, Category } from '../../../../server/src/db/models';
 import { UserActionTypes, USER_LOGGED_OUT } from '../Profile/user';
 

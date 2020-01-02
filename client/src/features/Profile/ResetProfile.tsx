@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 
 import { GenericBtn } from '../../common/GenericBtn';
 import { InfoMessage } from '../../common/InfoMessage';
-import { logout } from '../../common/SideMenu';
+import { logout } from '../../features/Profile/user';
 import { ReactComponent as ResetIcon } from '../../icons/Reset.svg';
 
 const resetProfile = (setMessage: Function, toggleLoading: Function) => {

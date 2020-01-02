@@ -95,3 +95,17 @@ export const updatedFName = (fName: string): UserActionTypes => ({
   fName,
   type: UPDATE_FNAME_SUCCESS,
 });
+
+// Side Effects
+export const logout = () => {
+  return async (dispatch: Function) => {
+    try {
+      const res = await fetch('/api/auth/logout', { method: 'GET' });
+
+      if (res.status === 200) dispatch(userLoggedOut());
+      window.location.reload();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+};

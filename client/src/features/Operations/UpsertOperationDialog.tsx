@@ -7,7 +7,7 @@ import './UpsertOperationDialog.scss';
 import { GenericBtn } from '../../common/GenericBtn';
 import { InfoMessage } from '../../common/InfoMessage';
 import { LabelledField } from '../../common/LabelledField';
-import { logout } from '../../common/SideMenu';
+import { logout } from '../../features/Profile/user';
 import { Operation } from '../../../../server/src/db/models';
 import { ReactComponent as SaveIcon } from '../../icons/Save.svg';
 import {

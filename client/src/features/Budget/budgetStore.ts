@@ -1,5 +1,5 @@
 import { BudgetCategoryType } from '../../../../shared';
-import { logout } from '../../common/SideMenu';
+import { logout } from '../../features/Profile/user';
 import { UserActionTypes, USER_LOGGED_OUT } from '../Profile/user';
 
 // Actions

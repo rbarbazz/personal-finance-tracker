@@ -3,7 +3,7 @@ import React from 'react';
 
 import './Profile.scss';
 import { ActionBar } from '../../common/ActionBar';
-import { logout } from '../../common/SideMenu';
+import { logout } from '../../features/Profile/user';
 import { PwdUpdate } from './PwdUpdate';
 import { SectionHeader } from '../../common/SectionHeader';
 import { State } from '../../app/rootReducer';

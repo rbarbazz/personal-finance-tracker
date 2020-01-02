@@ -8,7 +8,7 @@ import { FireParams } from '../../../../server/src/db/models';
 import { GenericBtn } from '../../common/GenericBtn';
 import { getFireParams } from './fireStore';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
-import { logout } from '../../common/SideMenu';
+import { logout } from '../../features/Profile/user';
 import { ReactComponent as SaveIcon } from '../../icons/Save.svg';
 import { RetirementPlanChart } from './RetirementPlanChart';
 import { SectionHeader } from '../../common/SectionHeader';

@@ -1,5 +1,5 @@
 import { BarChartData, LineChartData } from '../../../../shared';
-import { logout } from '../../common/SideMenu';
+import { logout } from '../../features/Profile/user';
 import { TreeMapChartNode } from '../../../../shared';
 import { UserActionTypes, USER_LOGGED_OUT } from '../Profile/user';
 

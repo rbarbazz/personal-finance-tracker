@@ -1,4 +1,4 @@
-import { logout } from '../../common/SideMenu';
+import { logout } from '../../features/Profile/user';
 
 // Actions
 const UPDATE_FIRE_PARAM = 'UPDATE_FIRE_PARAM';
