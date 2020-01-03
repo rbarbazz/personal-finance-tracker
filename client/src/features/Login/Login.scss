@@ -13,6 +13,7 @@
     display: flex;
     flex-direction: column;
     padding: $big-margin;
+    margin: $small-margin 0;
     text-align: center;
 
     .labelled-field {
@@ -44,5 +45,23 @@
 
     &:hover {
         color: $primary-color-dark;
+    }
+}
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, phone)) {
+    .login-container {
+        border-radius: 0;
+        margin: 0;
+        padding: $big-margin $small-margin;
+        width: 100%;
+
+        .labelled-field {
+            min-width: initial;
+        }
     }
 }

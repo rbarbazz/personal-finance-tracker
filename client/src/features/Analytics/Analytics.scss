@@ -11,11 +11,6 @@
     flex-direction: column;
     width: calc(50% - (#{$big-margin} * 2.5));
 }
-.chart-container {
-    display: flex;
-    height: 500px;
-    width: 100%;
-}
 #monthlybarchart,
 #budgetlinechart,
 #treemapchart,
@@ -33,6 +28,7 @@
 
 .text-card-containter {
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
 
@@ -57,4 +53,24 @@
     font-size: 3em;
     font-weight: 600;
     text-align: center;
+}
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, laptop)) {
+    .chart-wrapper {
+        width: 100%;
+    }
+    .text-card-containter {
+        .generic-card {
+            width: 100%;
+
+            &:nth-of-type(2) {
+                margin: $big-margin 0;
+            }
+        }
+    }
 }

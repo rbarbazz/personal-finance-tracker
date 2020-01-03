@@ -16,3 +16,11 @@ $danger-color-dark: #8e1922;
 
 $big-margin: 40px;
 $small-margin: $big-margin / 2;
+
+$breakpoints: (
+    phone: 575px,
+    small-tablet: 700px,
+    tablet: 900px,
+    laptop: 1280px,
+    desktop: 1400px,
+);

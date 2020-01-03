@@ -1,47 +1,21 @@
 import { ThemeConfig } from 'react-select/src/theme';
 import { useSelector, useDispatch } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
 import React, { useState } from 'react';
 import Select, { Styles } from 'react-select';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
 
+import {
+  SelectOption,
+  updateOperationCategory,
+  delOperation,
+} from './operationsStore';
 import { colorsByCategory } from '../Analytics/Analytics';
-import { getOperations, SelectOption } from './operationsStore';
 import { iconsByCategoryTitle } from '../Budget/BudgetCategory';
-import { logout } from '../../features/Profile/user';
 import { Operation } from '../../../../server/src/db/models';
 import { State } from '../../app/rootReducer';
 import { UpsertOperationDialog } from './UpsertOperationDialog';
-
-const updateCategory = (categoryId: number, operationId: number) => {
-  return async (dispatch: Function) => {
-    try {
-      const res = await fetch(`/api/operations/${operationId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ categoryId }),
-      });
-      if (res.status === 200) {
-      } else dispatch(logout());
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
-
-const delOperation = (operationId: number) => {
-  return async (dispatch: Function) => {
-    try {
-      const res = await fetch(`/api/operations/${operationId}`, {
-        method: 'DELETE',
-      });
-      if (res.status === 200) dispatch(getOperations());
-      else dispatch(logout());
-    } catch (error) {
-      console.error(error);
-    }
-  };
-};
 
 export const customSelectStyles: Styles = {
   container: provided => ({ ...provided }),
@@ -66,23 +40,34 @@ export const customSelectTheme: ThemeConfig = theme => ({
 export const OperationTableRow: React.FC<{
   operation: Operation;
 }> = ({ operation }) => {
-  const dispatch = useDispatch();
-  const categories = useSelector((state: State) => state.operations.categories);
   const { id, operationDate, amount, label, categoryId } = operation;
   const dateLocale = new Date(operationDate).toISOString().substring(0, 10);
+  const dispatch = useDispatch();
+  const categories = useSelector((state: State) => state.operations.categories);
   const [editOperationVisible, toggleEditDialog] = useState(false);
   const [selectedCategory, setCategory] = useState<SelectOption | any>(
     categories.find(category => category.value === categoryId),
   );
+  const categoryColor = selectedCategory
+    ? colorsByCategory[selectedCategory.parentCategoryTitle]
+    : 'white';
+  const StyledTableCell = withStyles({
+    root: {
+      borderLeftWidth: 12,
+      borderLeftStyle: 'solid',
+      borderLeftColor: categoryColor,
+    },
+  })(TableCell);
 
   const handleChange = (selectedOption: any) => {
     setCategory(selectedOption);
-    if (selectedOption) dispatch(updateCategory(selectedOption.value, id));
+    if (selectedOption)
+      dispatch(updateOperationCategory(selectedOption.value, id));
   };
 
   return (
     <TableRow>
-      <TableCell>{dateLocale}</TableCell>
+      <StyledTableCell>{dateLocale}</StyledTableCell>
       <TableCell>
         <span className="amount-cell">{amount}</span>
       </TableCell>
@@ -120,9 +105,7 @@ export const OperationTableRow: React.FC<{
       <TableCell>
         <button
           className="generic-row-action-btn"
-          onClick={() => {
-            toggleEditDialog(true);
-          }}
+          onClick={() => toggleEditDialog(true)}
         >
           Edit
         </button>
@@ -141,9 +124,7 @@ export const OperationTableRow: React.FC<{
         )}
         <button
           className="generic-row-action-btn"
-          onClick={() => {
-            dispatch(delOperation(id));
-          }}
+          onClick={() => dispatch(delOperation(id))}
         >
           Delete
         </button>

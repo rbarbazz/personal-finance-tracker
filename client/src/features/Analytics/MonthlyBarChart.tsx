@@ -5,6 +5,7 @@ import { BarChartData } from '../../../../shared';
 import { CardErrorMessage } from '../../common/CardErrorMessage';
 import { chartTheme, colorsByCategory } from './Analytics';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
+import { ResponsiveChart } from '../../common/ResponsiveChart';
 
 export const MonthlyBarChart: React.FC<{
   root: BarChartData;
@@ -18,7 +19,7 @@ export const MonthlyBarChart: React.FC<{
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="chart-container">
+        <ResponsiveChart>
           {data && data.length > 0 ? (
             <ResponsiveBar
               axisBottom={{
@@ -45,7 +46,7 @@ export const MonthlyBarChart: React.FC<{
           ) : (
             <CardErrorMessage message="Please import more transactions before you can see this chart" />
           )}
-        </div>
+        </ResponsiveChart>
       )}
     </div>
   );

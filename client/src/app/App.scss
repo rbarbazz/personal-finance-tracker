@@ -2,7 +2,7 @@
 
 /*
 ==========================================================================
-   App container
+   Generic components
 ==========================================================================
 */
 
@@ -84,8 +84,8 @@ body {
     background-color: $secondary-bg-color;
     display: flex;
     flex-direction: column;
+    flex: 1;
     height: 100%;
-    width: 100%;
 }
 .content-container {
     overflow-y: auto;
@@ -96,6 +96,11 @@ body {
     justify-content: space-between;
     margin: 0 $big-margin $big-margin;
 }
+
+/*
+   Animations
+==========================================================================
+*/
 
 @-webkit-keyframes rotate-center {
     0% {
@@ -115,5 +120,16 @@ body {
     100% {
         -webkit-transform: rotate(360deg);
         transform: rotate(360deg);
+    }
+}
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, phone)) {
+    #root {
+        align-items: initial;
     }
 }

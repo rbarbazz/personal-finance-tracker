@@ -1,0 +1,20 @@
+@import '../shared.scss';
+
+/*
+==========================================================================
+   ResponsiveChart container
+==========================================================================
+*/
+
+.chart-container {
+    display: flex;
+    height: 500px;
+    position: relative;
+    width: 100%;
+}
+.chart-responsive-container {
+    display: flex;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+}

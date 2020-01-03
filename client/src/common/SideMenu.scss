@@ -13,17 +13,19 @@ $arrow-size: 10px;
     display: flex;
     flex-direction: column;
     height: 100%;
+    overflow-y: auto;
+    width: 80px;
 }
 .side-menu-item {
     align-items: center;
     border: none;
     cursor: pointer;
     display: flex;
+    height: 70px;
     font-size: 1.2em;
     fill: $disabled-color;
     justify-content: center;
     overflow: hidden;
-    padding: $small-margin ($small-margin + $arrow-size);
     position: relative;
     text-align: left;
     text-decoration: none;
@@ -50,8 +52,6 @@ $arrow-size: 10px;
     &.brand-logo {
         background-color: $primary-color;
         fill: white;
-        height: 70px;
-        padding: 0;
     }
 }
 .arrow-left {

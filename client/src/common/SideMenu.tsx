@@ -5,9 +5,9 @@ import React from 'react';
 import './SideMenu.scss';
 import { logout } from '../features/Profile/user';
 import { ReactComponent as CalculatorIcon } from '../icons/Calculator.svg';
+import { ReactComponent as BurgerIcon } from '../icons/Burger.svg';
 import { ReactComponent as ChartIcon } from '../icons/Chart.svg';
 import { ReactComponent as FireIcon } from '../icons/Fire.svg';
-import { ReactComponent as HouseOutlineIcon } from '../icons/HouseOutline.svg';
 import { ReactComponent as LogoutIcon } from '../icons/Logout.svg';
 import { ReactComponent as PersonIcon } from '../icons/Person.svg';
 import { ReactComponent as PriceTagIcon } from '../icons/PriceTag.svg';
@@ -20,7 +20,7 @@ export const SideMenu: React.FC = () => {
     <div className="side-menu-container">
       <div className="side-menu-items">
         <Link className="side-menu-item brand-logo" to="/">
-          <HouseOutlineIcon />
+          <BurgerIcon />
         </Link>
         {[
           { title: 'analytics', icon: <ChartIcon /> },

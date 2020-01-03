@@ -4,6 +4,7 @@ import React from 'react';
 import { CardErrorMessage } from '../../common/CardErrorMessage';
 import { chartTheme, colorsByCategory } from './Analytics';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
+import { ResponsiveChart } from '../../common/ResponsiveChart';
 import { TreeMapChartNode } from '../../../../shared';
 
 export const TreeMapChart: React.FC<{
@@ -20,7 +21,7 @@ export const TreeMapChart: React.FC<{
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <div className="chart-container">
+        <ResponsiveChart>
           {isNotEmpty ? (
             <ResponsiveTreeMap
               colors={[
@@ -42,7 +43,7 @@ export const TreeMapChart: React.FC<{
           ) : (
             <CardErrorMessage message="Please import more transactions before you can see this chart" />
           )}
-        </div>
+        </ResponsiveChart>
       )}
     </div>
   );
