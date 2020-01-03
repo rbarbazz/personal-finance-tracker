@@ -55,7 +55,7 @@ export const BudgetCategory: React.FC<{
 
   return (
     <TableRow>
-      <TableCell align="center">
+      <TableCell align="center" className="hidden-on-mobile">
         {iconsByCategoryTitle[title] && (
           <CategoryIcon style={{ fill: colorsByCategory[title] }} />
         )}
@@ -76,11 +76,13 @@ export const BudgetCategory: React.FC<{
             type="number"
             value={categoryBudgetAmount}
           />
-          <div className="action-button-wrapper">
-            <button className="generic-row-action-btn" onClick={handleClick}>
-              {isEditing ? 'Save' : 'Edit'}
-            </button>
-          </div>
+        </div>
+      </TableCell>
+      <TableCell className="hidden-on-mobile">
+        <div className="action-button-wrapper">
+          <button className="generic-row-action-btn" onClick={handleClick}>
+            {isEditing ? 'Save' : 'Edit'}
+          </button>
         </div>
       </TableCell>
     </TableRow>

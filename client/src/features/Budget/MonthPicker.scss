@@ -27,3 +27,10 @@
     font-weight: 600;
     margin: 0 $small-margin;
 }
+
+@media (max-width: map-get($breakpoints, phone)) {
+    .month-selector-container {
+        margin: 0 0 $big-margin 0;
+        justify-content: center;
+    }
+}

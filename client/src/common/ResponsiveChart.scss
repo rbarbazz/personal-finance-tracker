@@ -26,6 +26,9 @@
 
 @media (max-width: map-get($breakpoints, phone)) {
     .chart-container {
+        height: initial;
+    }
+    .chart-responsive-container {
         display: none;
     }
 }
