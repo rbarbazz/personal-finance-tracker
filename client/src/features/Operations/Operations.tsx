@@ -72,15 +72,17 @@ export const Operations: React.FC = () => {
           <UpsertOperationDialog toggleDialog={toggleAddDialog} />
         )}
       </ActionBar>
-      <SectionHeader
-        subtitle="Add, edit and delete operations."
-        title="Operations"
-      />
-      <div className="table-container">
-        <OperationTable
-          isLoading={isFetchingCategories || isFetchingOperations}
-          operations={operations}
+      <div className="content-container">
+        <SectionHeader
+          subtitle="Add, edit and delete operations."
+          title="Operations"
         />
+        <div className="inner-content-container" id="operations-container">
+          <OperationTable
+            isLoading={isFetchingCategories || isFetchingOperations}
+            operations={operations}
+          />
+        </div>
       </div>
     </div>
   );

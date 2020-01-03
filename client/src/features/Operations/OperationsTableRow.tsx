@@ -71,8 +71,11 @@ export const OperationTableRow: React.FC<{
       <TableCell>
         <span className="amount-cell">{amount}</span>
       </TableCell>
-      <TableCell>{label}</TableCell>
-      <TableCell style={{ minWidth: 200, maxWidth: 200 }}>
+      <TableCell style={{ maxWidth: 200 }}>{label}</TableCell>
+      <TableCell
+        className="hidden-on-mobile"
+        style={{ minWidth: 200, maxWidth: 200 }}
+      >
         <Select
           formatOptionLabel={({ value, label, parentCategoryTitle }) => {
             const ParentCategoryIcon =
@@ -86,11 +89,11 @@ export const OperationTableRow: React.FC<{
                       fill: colorsByCategory[parentCategoryTitle],
                       height: 22,
                       marginRight: 15,
-                      width: 22,
+                      minWidth: 22,
                     }}
                   />
                 )}
-                <div>{label}</div>
+                <div style={{ overflow: 'hidden' }}>{label}</div>
               </div>
             );
           }}
@@ -102,7 +105,7 @@ export const OperationTableRow: React.FC<{
           value={selectedCategory}
         />
       </TableCell>
-      <TableCell>
+      <TableCell className="hidden-on-mobile">
         <button
           className="generic-row-action-btn"
           onClick={() => toggleEditDialog(true)}

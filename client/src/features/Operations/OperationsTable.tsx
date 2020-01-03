@@ -1,3 +1,4 @@
+import { withStyles } from '@material-ui/core/styles';
 import React from 'react';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -9,6 +10,14 @@ import { CardErrorMessage } from '../../common/CardErrorMessage';
 import { LoadingSpinner } from '../../common/LoadingSpinner';
 import { Operation } from '../../../../server/src/db/models';
 import { OperationTableRow } from './OperationsTableRow';
+
+const StyledTableCell = withStyles({
+  root: {
+    borderLeftWidth: 12,
+    borderLeftStyle: 'solid',
+    borderLeftColor: 'white',
+  },
+})(TableCell);
 
 export const OperationTable: React.FC<{
   isLoading: boolean;
@@ -22,14 +31,14 @@ export const OperationTable: React.FC<{
     );
 
   return (
-    <Table stickyHeader aria-label="simple table">
+    <Table aria-label="simple table">
       <TableHead>
         <TableRow>
-          <TableCell>Date</TableCell>
+          <StyledTableCell>Date</StyledTableCell>
           <TableCell>Amount</TableCell>
           <TableCell>Label</TableCell>
-          <TableCell>Category</TableCell>
-          <TableCell>Actions</TableCell>
+          <TableCell className="hidden-on-mobile">Category</TableCell>
+          <TableCell className="hidden-on-mobile">Actions</TableCell>
         </TableRow>
       </TableHead>
       <TableBody>

@@ -27,9 +27,9 @@
 
 @media (max-width: map-get($breakpoints, phone)) {
     .section-title {
-        margin: $big-margin $small-margin $small-margin $small-margin;
+        margin: $small-margin;
     }
     .section-subtitle {
-        margin: 0 $small-margin $big-margin;
+        margin: 0 $small-margin $small-margin;
     }
 }

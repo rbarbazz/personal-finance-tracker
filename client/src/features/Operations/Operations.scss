@@ -6,14 +6,13 @@
 ==========================================================================
 */
 
-.table-container {
-    background-color: white;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-    display: flex;
-    height: 100%;
-    overflow: auto;
-    margin: 0 $big-margin $big-margin;
-
+#operations-container {
+    table {
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2),
+            0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        min-width: 840px;
+    }
     .MuiTableCell-root {
         font-family: $primary-font-family;
         font-size: 16px;
@@ -28,4 +27,34 @@
 }
 .amount-cell {
     font-weight: 600;
+}
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: 1000px) {
+    #operations-container {
+        margin: 0;
+    }
+}
+
+@media (max-width: map-get($breakpoints, phone)) {
+    .page-container .actions-container > button {
+        display: none;
+    }
+    #operations-container {
+        margin: 0;
+
+        table {
+            min-width: initial;
+        }
+    }
+    .MuiTableBody-root .MuiTableCell-root {
+        font-size: 12px;
+    }
+    .hidden-on-mobile {
+        display: none;
+    }
 }

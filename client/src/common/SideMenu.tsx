@@ -42,6 +42,7 @@ export const SideMenu: React.FC = () => {
                 pathname === `/${item.title}` ? ' selected' : ''
               }`}
               key={`side-menu-item-${item.title}`}
+              onClick={() => toggleMenu(false)}
               to={`/${item.title}`}
             >
               {item.icon}
