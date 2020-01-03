@@ -19,3 +19,17 @@
     margin: 0 $big-margin $big-margin;
     font-weight: 600;
 }
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, phone)) {
+    .section-title {
+        margin: $big-margin $small-margin $small-margin $small-margin;
+    }
+    .section-subtitle {
+        margin: 0 $small-margin $big-margin;
+    }
+}

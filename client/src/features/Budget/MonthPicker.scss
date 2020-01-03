@@ -12,6 +12,7 @@
     flex: 1;
     justify-content: flex-end;
     margin: 0 $big-margin $big-margin 0;
+    min-width: 175px;
 
     svg {
         fill: $primary-color;

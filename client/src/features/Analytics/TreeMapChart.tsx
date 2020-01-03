@@ -21,29 +21,35 @@ export const TreeMapChart: React.FC<{
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <ResponsiveChart>
-          {isNotEmpty ? (
-            <ResponsiveTreeMap
-              colors={[
-                colorsByCategory['Expenses'],
-                colorsByCategory['Housing'],
-                colorsByCategory['Budget'],
-              ]}
-              identity="title"
-              label="title"
-              innerPadding={12}
-              labelSkipSize={12}
-              labelTextColor="white"
-              theme={chartTheme}
-              margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
-              outerPadding={12}
-              root={root}
-              value="sum"
-            />
-          ) : (
-            <CardErrorMessage message="Please import more transactions before you can see this chart" />
-          )}
-        </ResponsiveChart>
+        <>
+          <ResponsiveChart>
+            {isNotEmpty ? (
+              <ResponsiveTreeMap
+                colors={[
+                  colorsByCategory['Expenses'],
+                  colorsByCategory['Housing'],
+                  colorsByCategory['Budget'],
+                ]}
+                identity="title"
+                label="title"
+                innerPadding={12}
+                labelSkipSize={12}
+                labelTextColor="white"
+                theme={chartTheme}
+                margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+                outerPadding={12}
+                root={root}
+                value="sum"
+              />
+            ) : (
+              <CardErrorMessage message="Please import more transactions before you can see this chart" />
+            )}
+          </ResponsiveChart>
+          <CardErrorMessage
+            isMobileError
+            message="Charts are only available in landscape mode on mobile. If you are on landscape mode then your phone is too small sorry."
+          />
+        </>
       )}
     </div>
   );

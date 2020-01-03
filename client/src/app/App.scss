@@ -18,6 +18,7 @@ body {
     font-family: $primary-font-family;
     height: 100%;
     justify-content: center;
+    overflow: hidden;
 
     > .loading-spinner {
         border-color: $primary-color-dark;
@@ -131,5 +132,14 @@ body {
 @media (max-width: map-get($breakpoints, phone)) {
     #root {
         align-items: initial;
+    }
+    .inner-content-container {
+        margin: 0 $small-margin $big-margin;
+    }
+    .generic-card {
+        padding: $small-margin;
+    }
+    .generic-card-title {
+        text-align: center;
     }
 }

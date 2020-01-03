@@ -10,11 +10,20 @@ $arrow-size: 10px;
 
 .side-menu-container {
     background-color: $primary-bg-color;
-    display: flex;
-    flex-direction: column;
     height: 100%;
-    overflow-y: auto;
+    overflow: hidden;
+    transition: width 0.1s;
     width: 80px;
+    z-index: 10;
+}
+.side-menu-items {
+    -ms-overflow-style: none;
+    height: 100%;
+    margin-top: 70px;
+    overflow: auto;
+}
+.side-menu-items::-webkit-scrollbar {
+    display: none;
 }
 .side-menu-item {
     align-items: center;
@@ -50,8 +59,15 @@ $arrow-size: 10px;
         width: 30px;
     }
     &.brand-logo {
+        -webkit-appearance: none;
         background-color: $primary-color;
         fill: white;
+        left: 0;
+        padding: 0;
+        position: absolute;
+        top: 0;
+        width: 80px;
+        z-index: 11;
     }
 }
 .arrow-left {
@@ -64,4 +80,21 @@ $arrow-size: 10px;
     right: 0;
     top: calc(50% - #{$arrow-size});
     width: 0;
+}
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, phone)) {
+    .side-menu-container {
+        left: 0;
+        position: absolute;
+    }
+    .side-menu-item.selected {
+        .arrow-left {
+            display: none;
+        }
+    }
 }

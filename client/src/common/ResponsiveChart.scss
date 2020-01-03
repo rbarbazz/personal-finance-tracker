@@ -18,3 +18,14 @@
     position: absolute;
     width: 100%;
 }
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, phone)) {
+    .chart-container {
+        display: none;
+    }
+}

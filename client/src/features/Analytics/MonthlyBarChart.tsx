@@ -19,34 +19,40 @@ export const MonthlyBarChart: React.FC<{
       {isLoading ? (
         <LoadingSpinner />
       ) : (
-        <ResponsiveChart>
-          {data && data.length > 0 ? (
-            <ResponsiveBar
-              axisBottom={{
-                legend: 'Month',
-                legendPosition: 'middle',
-                legendOffset: 45,
-              }}
-              axisLeft={{
-                legend: 'Expenses',
-                legendPosition: 'middle',
-                legendOffset: -55,
-              }}
-              colors={bar => colorsByCategory[bar.id]}
-              data={data}
-              indexBy="month"
-              keys={keys}
-              label={d => `$ ${d.value}`}
-              labelSkipHeight={15}
-              labelTextColor="white"
-              margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
-              padding={0.3}
-              theme={chartTheme}
-            />
-          ) : (
-            <CardErrorMessage message="Please import more transactions before you can see this chart" />
-          )}
-        </ResponsiveChart>
+        <>
+          <ResponsiveChart>
+            {data && data.length > 0 ? (
+              <ResponsiveBar
+                axisBottom={{
+                  legend: 'Month',
+                  legendPosition: 'middle',
+                  legendOffset: 45,
+                }}
+                axisLeft={{
+                  legend: 'Expenses',
+                  legendPosition: 'middle',
+                  legendOffset: -55,
+                }}
+                colors={bar => colorsByCategory[bar.id]}
+                data={data}
+                indexBy="month"
+                keys={keys}
+                label={d => `$ ${d.value}`}
+                labelSkipHeight={15}
+                labelTextColor="white"
+                margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
+                padding={0.3}
+                theme={chartTheme}
+              />
+            ) : (
+              <CardErrorMessage message="Please import more transactions before you can see this chart" />
+            )}
+          </ResponsiveChart>
+          <CardErrorMessage
+            isMobileError
+            message="Charts are only available in landscape mode on mobile. If you are on landscape mode then your phone is too small sorry."
+          />
+        </>
       )}
     </div>
   );

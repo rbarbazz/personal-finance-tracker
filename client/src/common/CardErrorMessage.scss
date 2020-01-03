@@ -12,6 +12,9 @@
     flex-direction: column;
     margin: auto;
 
+    &.mobile-error {
+        display: none;
+    }
     svg {
         fill: $disabled-color;
         height: 40px;
@@ -22,4 +25,15 @@
     color: $disabled-color;
     font-weight: 600;
     text-align: center;
+}
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, phone)) {
+    .chart-error-container.mobile-error {
+        display: flex;
+    }
 }

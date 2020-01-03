@@ -31,3 +31,14 @@
         text-decoration: none;
     }
 }
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, phone)) {
+    .action-bar {
+        padding: 10px $small-margin;
+    }
+}
