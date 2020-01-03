@@ -22,3 +22,14 @@
         outline: 1px solid #43a047;
     }
 }
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, tablet)) {
+    .message-container {
+        min-width: initial;
+    }
+}

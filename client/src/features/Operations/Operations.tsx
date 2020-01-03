@@ -46,7 +46,7 @@ export const Operations: React.FC = () => {
   }, [getInitialOperations]);
 
   return (
-    <div className="page-container">
+    <div className="page-container" id="operations-page">
       <ActionBar>
         <GenericBtn action={() => toggleAddDialog(true)}>
           Add

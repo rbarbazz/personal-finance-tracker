@@ -6,35 +6,33 @@
 ==========================================================================
 */
 
+.info-update-card {
+    display: flex;
+    flex-direction: column;
+    max-width: 700px;
+    width: calc(50% - #{$big-margin} * 2.5);
+}
 .profile-fields-wrapper {
     display: flex;
     flex-direction: column;
 
     .labelled-field {
         margin-bottom: $big-margin / 2;
-
-        .generic-input {
-            min-width: 300px;
-        }
     }
     .generic-btn {
         margin: $small-margin 0 0;
     }
 }
-.updates-cards-wrapper {
+#profile-container {
     align-items: flex-start;
-    display: flex;
-    margin-bottom: $big-margin;
-    width: 100%;
-}
-.info-update-card {
-    display: flex;
-    flex-direction: column;
+    justify-content: initial;
 }
 #fname-update-card {
-    margin: 0 $big-margin;
+    margin-left: $big-margin;
 }
 #reset-profile-card {
+    margin-top: $big-margin;
+
     .generic-card-title {
         color: $danger-color;
     }
@@ -58,5 +56,19 @@
     font-size: 1.1em;
     line-height: 1.3em;
     margin: 0 0 $small-margin;
-    max-width: 332px;
+}
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, tablet)) {
+    .info-update-card {
+        width: 100%;
+    }
+    #fname-update-card {
+        margin-left: 0;
+        margin-top: $big-margin;
+    }
 }

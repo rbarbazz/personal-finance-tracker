@@ -12,8 +12,8 @@
     box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: flex-end;
-    min-height: 50px;
-    padding: 10px $big-margin;
+    min-height: 54px;
+    padding: 8px $big-margin;
     z-index: 1;
 }
 .actions-container {
@@ -39,6 +39,6 @@
 
 @media (max-width: map-get($breakpoints, phone)) {
     .action-bar {
-        padding: 10px $small-margin;
+        padding: 8px $small-margin;
     }
 }

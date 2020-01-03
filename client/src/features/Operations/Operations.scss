@@ -41,7 +41,7 @@
 }
 
 @media (max-width: map-get($breakpoints, phone)) {
-    .page-container .actions-container > button {
+    #operations-page .actions-container > button {
         display: none;
     }
     #operations-container {
@@ -50,9 +50,9 @@
         table {
             min-width: initial;
         }
-    }
-    .MuiTableBody-root .MuiTableCell-root {
-        font-size: 12px;
+        .MuiTableBody-root .MuiTableCell-root {
+            font-size: 12px;
+        }
     }
     .hidden-on-mobile {
         display: none;

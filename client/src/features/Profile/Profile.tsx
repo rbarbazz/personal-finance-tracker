@@ -3,13 +3,13 @@ import React from 'react';
 
 import './Profile.scss';
 import { ActionBar } from '../../common/ActionBar';
+import { FNameUpdate } from './FNameUpdate';
 import { logout } from '../../features/Profile/user';
 import { PwdUpdate } from './PwdUpdate';
+import { ResetProfile } from './ResetProfile';
 import { SectionHeader } from '../../common/SectionHeader';
 import { State } from '../../app/rootReducer';
-import { FNameUpdate } from './FNameUpdate';
 import { updatedFName } from './user';
-import { ResetProfile } from './ResetProfile';
 
 export const updateUserInfo = (
   setMessage: Function,
@@ -48,11 +48,9 @@ export const Profile: React.FC = () => {
           subtitle="Update your info here."
           title={`Welcome back, ${fName}`}
         />
-        <div className="inner-content-container">
-          <div className="updates-cards-wrapper">
-            <PwdUpdate />
-            <FNameUpdate />
-          </div>
+        <div className="inner-content-container" id="profile-container">
+          <PwdUpdate />
+          <FNameUpdate />
           <ResetProfile />
         </div>
       </div>

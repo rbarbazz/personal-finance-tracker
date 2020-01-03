@@ -8,6 +8,8 @@
 
 .fire-number-card {
     display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     width: 100%;
 
     .labelled-field {
@@ -40,7 +42,7 @@
 .fire-number-col {
     display: flex;
     flex-direction: column;
-    width: calc(50% - #{$small-margin});
+    width: calc(50% - #{$big-margin});
 }
 .fire-number-explanation {
     margin-top: $big-margin;
@@ -61,8 +63,49 @@
     text-align: right;
 }
 .retirement-line-chart {
-    display: flex;
-    height: 500px;
     margin-top: $big-margin;
     width: 100%;
+}
+
+/*
+   Breakpoints
+==========================================================================
+*/
+
+@media (max-width: map-get($breakpoints, tablet)) {
+    .fire-number-card .generic-vertical-separator {
+        display: none;
+    }
+    .fire-number-col {
+        width: 100%;
+
+        &:first-child {
+            margin-bottom: $big-margin;
+        }
+    }
+}
+@media (max-width: map-get($breakpoints, phone)) {
+    .fire-number-col:first-child {
+        margin-bottom: $small-margin;
+    }
+    .fire-number-card {
+        .labelled-field {
+            flex-direction: column;
+        }
+        .generic-input {
+            max-width: initial;
+        }
+        .label-input-wrapper {
+            width: 100%;
+        }
+    }
+    .fire-number-amount-container {
+        flex-direction: column;
+    }
+    .fire-amount-explanation {
+        text-align: center;
+    }
+    .fire-number-amount {
+        margin: $small-margin 0;
+    }
 }
