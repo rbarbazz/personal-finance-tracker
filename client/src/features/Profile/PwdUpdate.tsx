@@ -19,7 +19,7 @@ export const PwdUpdate: React.FC = () => {
   }, [newPwd, oldPwd]);
 
   return (
-    <div className="info-update-card generic-card">
+    <div className="info-update-card generic-card" id="pwd-update-card">
       <h3 className="generic-card-title">Update Password</h3>
       <div className="profile-fields-wrapper">
         <LabelledField

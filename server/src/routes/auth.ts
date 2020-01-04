@@ -1,39 +1,39 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import {
-  createTestAccount,
-  createTransport,
-  getTestMessageUrl,
-} from 'nodemailer';
+import mailgun from 'mailgun-js';
 import passport from 'passport';
 import validator from 'validator';
 
 import { getUser, insertUsers, updateUser } from '../controllers/users';
 
 const sendEmailVerifLink = async (userEmail: string, token: string) => {
-  const verifUrl = `${
+  if (!process.env.MG_API_KEY) throw 'Mailgun API key missing';
+
+  const verificationUrl = `${
     process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
   }/api/auth/email-verification/${token}`;
-  const testAccount = await createTestAccount();
-  const transporter = createTransport({
-    host: 'smtp.ethereal.email',
-    port: 587,
-    secure: false,
-    auth: {
-      user: testAccount.user,
-      pass: testAccount.pass,
-    },
-  });
-  const info = await transporter.sendMail({
-    from: '"Monthly Budget Planner" <hello@monthlybudgetplanner.com>',
-    to: userEmail,
-    subject: '[Monthly Budget Planner] Please verify your email',
-    text: `Please verify your email by following this link: ${verifUrl}`,
-    html: `<p>Please verify your email by clicking here <a href="${verifUrl}">link</a></p>`,
-  });
+  const DOMAIN = 'sandbox20f42a2c714a4db4b5cf46eecb3702f5.mailgun.org';
+  const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN });
+  const data = {
+    from:
+      'Mailgun Sandbox <postmaster@sandbox20f42a2c714a4db4b5cf46eecb3702f5.mailgun.org>',
+    to: 'raphael.barbazza@gmail.com',
+    subject: '[Monthly Budget Planner] - Please verify your email',
+    template: 'email_verification',
+    text: `Monthly Budget Planner\nThanks for using Monthly Budget Planner!\nYou're only one step away to start your financial independance journey.\nPlease confirm your email address by following the link below.\n${verificationUrl}`,
+    'v:verification_url': verificationUrl,
+  };
 
-  console.log('Preview URL: %s', getTestMessageUrl(info));
+  try {
+    await mg.messages().send(data);
+  } catch (error) {
+    console.error(
+      `An error has occurred while sending confirmation email to ${userEmail}`,
+    );
+    console.error(error);
+    throw error;
+  }
 };
 
 export const authRouter = Router();
@@ -114,8 +114,18 @@ authRouter.post('/register', async (req, res) => {
       process.env.JWT_VERIF_SECRET || 'really not a secret',
     );
 
-    await sendEmailVerifLink(email, token).catch(console.error);
-    return res.send({ error: false, message: 'Please check your mailbox now' });
+    try {
+      await sendEmailVerifLink(email, token);
+      return res.send({
+        error: false,
+        message: 'Please check your mailbox now',
+      });
+    } catch (error) {
+      return res.send({
+        error: true,
+        message: 'An error has occurred',
+      });
+    }
   });
 });
 

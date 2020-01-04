@@ -9,7 +9,7 @@
 .info-update-card {
     display: flex;
     flex-direction: column;
-    max-width: 700px;
+    max-width: 500px;
     width: calc(50% - #{$big-margin} * 2.5);
 }
 .profile-fields-wrapper {
@@ -26,6 +26,7 @@
 #profile-container {
     align-items: flex-start;
     justify-content: initial;
+    max-width: 1500px;
 }
 #fname-update-card {
     margin-left: $big-margin;
