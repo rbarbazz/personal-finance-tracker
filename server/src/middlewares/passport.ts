@@ -1,10 +1,12 @@
 import { Strategy as JwtStrategy } from 'passport-jwt';
 import { Strategy as LocalStrategy } from 'passport-local';
+import NodeCache from 'node-cache';
 import bcrypt from 'bcrypt';
 import passport from 'passport';
 
 import { Request } from 'express';
 import { getUser } from '../controllers/users';
+import { sendEmailVerifLink } from '../routes/auth';
 
 const cookieExtractor = (req: Request) => {
   let token = null;
@@ -13,6 +15,8 @@ const cookieExtractor = (req: Request) => {
   return token;
 };
 
+export const emailVerifCache = new NodeCache();
+
 passport.use(
   new LocalStrategy(
     { usernameField: 'email' },
@@ -20,7 +24,16 @@ passport.use(
       const user = await getUser(email);
 
       if (user.length < 1) return done('Incorrect username or password', false);
-      if (!user[0].isActive) return done('Account is not active', false);
+      if (!user[0].isActive) {
+        if (!emailVerifCache.get(email)) {
+          sendEmailVerifLink(email);
+          emailVerifCache.set(email, true, 15 * 60);
+        }
+        return done(
+          'A verification link was sent, please check your inbox',
+          false,
+        );
+      }
 
       bcrypt.compare(password, user[0].password, (err, isCorrect) => {
         if (err) return done('An error has occurred', false);

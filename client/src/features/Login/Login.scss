@@ -24,6 +24,9 @@
     .generic-btn {
         width: 100%;
     }
+    .message-container {
+        width: calc(100% - 16px * 2);
+    }
 }
 .greetings-paragraph {
     font-size: 2em;

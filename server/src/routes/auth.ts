@@ -3,11 +3,37 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import mailgun from 'mailgun-js';
 import passport from 'passport';
+import rateLimit from 'express-rate-limit';
 import validator from 'validator';
 
+import { emailVerifCache } from '../middlewares/passport';
 import { getUser, insertUsers, updateUser } from '../controllers/users';
 
-const sendEmailVerifLink = async (userEmail: string, token: string) => {
+const loginLimiter = rateLimit({
+  handler: (_req, res) =>
+    res.status(401).send({
+      error: true,
+      message: 'Too many failed login attempts, please wait a few minutes',
+    }),
+  max: 15,
+  windowMs: 5 * 60 * 1000,
+});
+
+const registerLimiter = rateLimit({
+  handler: (_req, res) =>
+    res.status(401).send({
+      error: true,
+      message: 'Too many registration attempts, please wait a few minutes',
+    }),
+  max: 15,
+  windowMs: 5 * 60 * 1000,
+});
+
+export const sendEmailVerifLink = async (email: string) => {
+  const token = jwt.sign(
+    { email },
+    process.env.JWT_VERIF_SECRET || 'really not a secret',
+  );
   if (!process.env.MG_API_KEY) throw 'Mailgun API key missing';
 
   const verificationUrl = `${
@@ -29,7 +55,7 @@ const sendEmailVerifLink = async (userEmail: string, token: string) => {
     await mg.messages().send(data);
   } catch (error) {
     console.error(
-      `An error has occurred while sending confirmation email to ${userEmail}`,
+      `An error has occurred while sending confirmation email to ${email}`,
     );
     console.error(error);
     throw error;
@@ -55,7 +81,7 @@ authRouter.get('/logout', (_req, res) => {
 });
 
 // Login
-authRouter.post('/login', (req, res) => {
+authRouter.post('/login', loginLimiter, (req, res) => {
   passport.authenticate('local', { session: false }, (err, user) => {
     if (err) return res.status(401).send({ error: true, message: err });
     if (!user)
@@ -78,7 +104,7 @@ authRouter.post('/login', (req, res) => {
 });
 
 // Register
-authRouter.post('/register', async (req, res) => {
+authRouter.post('/register', registerLimiter, async (req, res) => {
   const { email, fName, password } = req.body;
   const user = await getUser(email);
 
@@ -109,13 +135,9 @@ authRouter.post('/register', async (req, res) => {
     if (insertedUserId.length < 1)
       return res.send({ error: true, message: 'An error has occurred' });
 
-    const token = jwt.sign(
-      { email },
-      process.env.JWT_VERIF_SECRET || 'really not a secret',
-    );
-
     try {
-      await sendEmailVerifLink(email, token);
+      await sendEmailVerifLink(email);
+      emailVerifCache.set(email, true, 15 * 60);
       return res.send({
         error: false,
         message: 'Please check your mailbox now',
