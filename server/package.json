@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "build": "NODE_ENV=production tsc",
-    "start": "NODE_ENV=production node -r dotenv/config build/server.js",
-    "watch": "NODE_ENV=development tsnd -r dotenv/config --respawn --no-notify src/server.ts"
+    "start": "NODE_ENV=production node build/server.js",
+    "watch": "NODE_ENV=development tsnd --respawn --no-notify src/server.ts"
   },
   "keywords": [],
   "author": "",
