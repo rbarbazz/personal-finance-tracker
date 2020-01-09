@@ -37,17 +37,18 @@ export const sendEmailVerifLink = async (email: string) => {
   if (!process.env.MG_API_KEY) throw 'Mailgun API key missing';
 
   const verificationUrl = `${
-    process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : ''
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:8080'
+      : 'https://finance.rbarbazz.com'
   }/api/auth/email-verification/${token}`;
-  const DOMAIN = 'sandbox20f42a2c714a4db4b5cf46eecb3702f5.mailgun.org';
+  const DOMAIN = 'mg.rbarbazz.com';
   const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN });
   const data = {
-    from:
-      'Mailgun Sandbox <postmaster@sandbox20f42a2c714a4db4b5cf46eecb3702f5.mailgun.org>',
-    to: 'raphael.barbazza@gmail.com',
-    subject: '[Monthly Budget Planner] - Please verify your email',
+    from: 'Personal Finance Tracker <noreply@mg.rbarbazz.com>',
+    to: email,
+    subject: '[Personal Finance Tracker] - Please verify your email',
     template: 'email_verification',
-    text: `Monthly Budget Planner\nThanks for using Monthly Budget Planner!\nYou're only one step away to start your financial independance journey.\nPlease confirm your email address by following the link below.\n${verificationUrl}`,
+    text: `Personal Finance Tracker\nThanks for using Personal Finance Tracker!\nYou're only one step away to start your financial independance journey.\nPlease confirm your email address by following the link below.\n${verificationUrl}`,
     'v:verification_url': verificationUrl,
   };
 
