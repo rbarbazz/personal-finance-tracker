@@ -159,7 +159,7 @@ export const fetchMonthlyBar = () => {
   return async (dispatch: Function) => {
     dispatch(requestMonthlyBar());
     try {
-      const res = await fetch('/api/analytics/monthlybar', { method: 'GET' });
+      const res = await fetch('/api/charts/monthlybar', { method: 'GET' });
       if (res.status === 200) {
         const { monthlyBarChart } = await res.json();
 
@@ -175,7 +175,7 @@ export const fetchTreeMap = () => {
   return async (dispatch: Function) => {
     dispatch(requestTreeMap());
     try {
-      const res = await fetch('/api/analytics/treemap', { method: 'GET' });
+      const res = await fetch('/api/charts/treemap', { method: 'GET' });
       if (res.status === 200) {
         const { treeMapChart } = await res.json();
 
@@ -191,7 +191,7 @@ export const fetchBudgetLine = () => {
   return async (dispatch: Function) => {
     dispatch(requestBudgetLine());
     try {
-      const res = await fetch('/api/analytics/budgetline', { method: 'GET' });
+      const res = await fetch('/api/charts/budgetline', { method: 'GET' });
       if (res.status === 200) {
         const { budgetLineChart } = await res.json();
 

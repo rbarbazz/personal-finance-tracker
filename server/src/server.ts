@@ -35,7 +35,7 @@ app.use(express.static(path.join(...staticFolder)));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use(
-  '/api/analytics',
+  '/api/charts',
   passport.authenticate('jwt', { session: false }),
   analyticsRouter,
 );
