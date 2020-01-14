@@ -9,18 +9,27 @@
 $arrow-size: 10px;
 
 .side-menu-container {
-    background-color: $primary-bg-color;
+    background-color: $primary-color;
     height: 100%;
+    left: 0;
     overflow: hidden;
-    transition: width 0.1s;
-    width: 80px;
-    z-index: 10;
+    position: absolute;
+    transition: width 0.3s;
+    width: 215px;
+    z-index: 20;
 }
 .side-menu-items {
     -ms-overflow-style: none;
+    background-color: $primary-bg-color;
     height: 100%;
     margin-top: 70px;
     overflow: auto;
+    z-index: 25;
+
+    .side-menu-item-title {
+        left: 80px;
+        position: absolute;
+    }
 }
 .side-menu-items::-webkit-scrollbar {
     display: none;
@@ -28,12 +37,12 @@ $arrow-size: 10px;
 .side-menu-item {
     align-items: center;
     border: none;
+    color: $disabled-color;
     cursor: pointer;
     display: flex;
     height: 70px;
     font-size: 1.2em;
     fill: $disabled-color;
-    justify-content: center;
     overflow: hidden;
     position: relative;
     text-align: left;
@@ -45,16 +54,16 @@ $arrow-size: 10px;
         outline: none;
     }
     &:hover {
+        color: white;
         fill: white;
     }
     &.selected {
+        color: white;
         fill: white;
-
-        .arrow-left {
-            display: block;
-        }
     }
     svg {
+        position: absolute;
+        left: 25px;
         height: 30px;
         width: 30px;
     }
@@ -67,34 +76,15 @@ $arrow-size: 10px;
         position: absolute;
         top: 0;
         width: 80px;
-        z-index: 11;
+        z-index: 25;
     }
 }
-.arrow-left {
-    border-bottom: $arrow-size solid transparent;
-    border-right: $arrow-size solid $secondary-bg-color;
-    border-top: $arrow-size solid transparent;
-    display: none;
-    height: 0;
+.side-menu-dark-overlay {
+    background-color: $primary-bg-color;
+    height: 100%;
+    left: 0;
+    opacity: 0.5;
     position: absolute;
-    right: 0;
-    top: calc(50% - #{$arrow-size});
-    width: 0;
-}
-
-/*
-   Breakpoints
-==========================================================================
-*/
-
-@media (max-width: map-get($breakpoints, phone)) {
-    .side-menu-container {
-        left: 0;
-        position: absolute;
-    }
-    .side-menu-item.selected {
-        .arrow-left {
-            display: none;
-        }
-    }
+    width: 100%;
+    z-index: 15;
 }

@@ -82,7 +82,7 @@ export const FireNumberCalculator: React.FC<{
         <p className="generic-card-subtitle">
           Input your monthly expenses goal (default to your current monthly
           average) to get the amount you need to save to achieve financial
-          independance.
+          independence.
         </p>
         <p className="generic-card-subtitle">
           Based on a 4% yearly return rate after inflation, this is the amount

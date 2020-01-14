@@ -48,7 +48,7 @@ export const sendEmailVerifLink = async (email: string) => {
     to: email,
     subject: '[Personal Finance Tracker] - Please verify your email',
     template: 'email_verification',
-    text: `Personal Finance Tracker\nThanks for using Personal Finance Tracker!\nYou're only one step away to start your financial independance journey.\nPlease confirm your email address by following the link below.\n${verificationUrl}`,
+    text: `Personal Finance Tracker\nThanks for using Personal Finance Tracker!\nYou're only one step away from starting your financial independence journey.\nPlease confirm your email address by following the link below.\n${verificationUrl}`,
     'v:verification_url': verificationUrl,
   };
 

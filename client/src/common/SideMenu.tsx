@@ -46,14 +46,21 @@ export const SideMenu: React.FC = () => {
               to={`/${item.title}`}
             >
               {item.icon}
-              <div className="arrow-left"></div>
+              <div className="side-menu-item-title">{item.title}</div>
             </Link>
           ))}
           <div className="side-menu-item" onClick={() => dispatch(logout())}>
             <LogoutIcon />
+            <div className="side-menu-item-title">Logout</div>
           </div>
         </div>
       </div>
+      {isOpen && (
+        <div
+          className="side-menu-dark-overlay"
+          onClick={() => toggleMenu(prev => !prev)}
+        />
+      )}
     </>
   );
 };
