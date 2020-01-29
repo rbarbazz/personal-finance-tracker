@@ -19,6 +19,7 @@ import { Profile } from '../features/Profile/Profile';
 import { requestUserStatus, receiveUserStatus } from '../features/Profile/user';
 import { SideMenu } from '../common/SideMenu';
 import { State } from './rootReducer';
+import { LostPassword } from '../features/Login/LostPassword';
 
 export const fetchUserStatus = () => {
   return async (dispatch: Function) => {
@@ -63,6 +64,9 @@ const App: React.FC = () => {
           <Switch>
             <Route exact path="/">
               {isLoggedIn ? <Redirect to="/analytics" /> : <Login />}
+            </Route>
+            <Route exact path="/lost-password">
+              <LostPassword />
             </Route>
             <PrivateRoute isLoggedIn={isLoggedIn} path="/analytics">
               <Analytics />

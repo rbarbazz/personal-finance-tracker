@@ -50,6 +50,14 @@
         color: $primary-color-dark;
     }
 }
+.reset-password-link {
+    color: $primary-color;
+    font-weight: 600;
+    text-decoration: none;
+}
+.toggle-registred-paragraph {
+    margin: $small-margin 0 0;
+}
 
 /*
    Breakpoints

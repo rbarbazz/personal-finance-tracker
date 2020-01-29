@@ -1,5 +1,5 @@
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import React, { useState, useEffect } from 'react';
 
@@ -46,6 +46,7 @@ export const Login: React.FC = () => {
           message: string;
           token: string;
         } = await res.json();
+
         if (res.status === 200) {
           setMessage({ error, value: message });
 
@@ -72,14 +73,20 @@ export const Login: React.FC = () => {
     const qs = location.search;
     const params = new URLSearchParams(qs);
     const verif = params.get('verif');
+    const reset = params.get('reset');
 
+    if (reset === 'true')
+      return setMessage({
+        error: false,
+        value: 'Password updated, you may now log in',
+      });
     if (verif === 'true')
-      setMessage({
+      return setMessage({
         error: false,
         value: 'Account activated, you may now log in',
       });
     else if (verif === 'false') {
-      setMessage({
+      return setMessage({
         error: true,
         value: 'Error validating your email',
       });
@@ -140,21 +147,22 @@ export const Login: React.FC = () => {
         {isRegistered ? 'Login' : 'Sign up'}
         <LoginIcon />
       </GenericBtn>
-      <div className="toggle-registered-container">
-        <p className="toggle-registered-paragraph">
-          {`${isRegistered ? "Don't" : 'Already'} have an account?`}
-          <button
-            className="toggle-registered-btn"
-            onClick={() => {
-              setMessage({ error: false, value: '' });
-              toggleIsRegistered(!isRegistered);
-            }}
-            type="button"
-          >
-            {`Sign ${isRegistered ? 'up' : 'in'}`}
-          </button>
-        </p>
-      </div>
+      <Link className="reset-password-link" to="/lost-password">
+        Forgot your password?
+      </Link>
+      <p className="toggle-registred-paragraph">
+        {`${isRegistered ? "Don't" : 'Already'} have an account?`}
+        <button
+          className="toggle-registered-btn"
+          onClick={() => {
+            setMessage({ error: false, value: '' });
+            toggleIsRegistered(!isRegistered);
+          }}
+          type="button"
+        >
+          {`Sign ${isRegistered ? 'up' : 'in'}`}
+        </button>
+      </p>
     </form>
   );
 };

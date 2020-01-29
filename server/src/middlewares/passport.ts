@@ -26,7 +26,7 @@ passport.use(
       if (user.length < 1) return done('Incorrect username or password', false);
       if (!user[0].isActive) {
         if (!emailVerifCache.get(email)) {
-          sendEmailVerifLink(email);
+          await sendEmailVerifLink(email);
           emailVerifCache.set(email, true, 15 * 60);
         }
         return done(

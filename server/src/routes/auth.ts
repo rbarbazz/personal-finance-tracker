@@ -2,6 +2,7 @@ import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import mailgun from 'mailgun-js';
+import NodeCache from 'node-cache';
 import passport from 'passport';
 import rateLimit from 'express-rate-limit';
 import validator from 'validator';
@@ -29,6 +30,18 @@ const registerLimiter = rateLimit({
   windowMs: 5 * 60 * 1000,
 });
 
+const resetLimiter = rateLimit({
+  handler: (_req, res) =>
+    res.status(401).send({
+      error: true,
+      message: 'Too many password reset attempts, please wait a few minutes',
+    }),
+  max: 10,
+  windowMs: 5 * 60 * 1000,
+});
+
+const passwordResetCache = new NodeCache();
+
 export const sendEmailVerifLink = async (email: string) => {
   const token = jwt.sign(
     { email },
@@ -40,7 +53,7 @@ export const sendEmailVerifLink = async (email: string) => {
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:8080'
       : 'https://finance.rbarbazz.com'
-  }/api/auth/email-verification/${token}`;
+  }/api/auth/reset/${token}`;
   const DOMAIN = 'mg.rbarbazz.com';
   const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN });
   const data = {
@@ -57,6 +70,41 @@ export const sendEmailVerifLink = async (email: string) => {
   } catch (error) {
     console.error(
       `An error has occurred while sending confirmation email to ${email}`,
+    );
+    console.error(error);
+    throw error;
+  }
+};
+
+export const sendPasswordResetLink = async (email: string) => {
+  const token = jwt.sign(
+    { email },
+    process.env.JWT_VERIF_SECRET || 'really not a secret',
+    { expiresIn: '15m' },
+  );
+  if (!process.env.MG_API_KEY) throw 'Mailgun API key missing';
+
+  const resetUrl = `${
+    process.env.NODE_ENV === 'development'
+      ? 'http://localhost:3000'
+      : 'https://finance.rbarbazz.com'
+  }/lost-password?token=${token}`;
+  const DOMAIN = 'mg.rbarbazz.com';
+  const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN });
+  const data = {
+    from: 'Personal Finance Tracker <noreply@mg.rbarbazz.com>',
+    to: email,
+    subject: '[Personal Finance Tracker] - Password Reset',
+    template: 'reset_password',
+    text: `Personal Finance Tracker\nTo reset your password, please follow the link below.\n${resetUrl}`,
+    'v:reset_url': resetUrl,
+  };
+
+  try {
+    await mg.messages().send(data);
+  } catch (error) {
+    console.error(
+      `An error has occurred while sending password reset email to ${email}`,
     );
     console.error(error);
     throw error;
@@ -166,7 +214,7 @@ authRouter.get('/email-verification/:token', async (req, res) => {
     const { email } = decoded as { email: string };
     const user = await getUser(email);
 
-    if (user.length > 0) {
+    if (user.length === 1) {
       await updateUser(user[0].id, { email, isActive: true });
       return res.redirect('../../?verif=true');
     } else {
@@ -175,4 +223,67 @@ authRouter.get('/email-verification/:token', async (req, res) => {
   } catch (err) {
     return res.redirect('../../?verif=false');
   }
+});
+
+// Update user with new password
+authRouter.post('/reset-password', async (req, res) => {
+  const { password, token } = req.body;
+
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.JWT_VERIF_SECRET || 'really not a secret',
+    );
+    if (typeof decoded !== 'object')
+      return res.send({ error: true, message: 'An error has occured' });
+
+    const { email } = decoded as { email: string };
+    const user = await getUser(email);
+
+    if (user.length === 1) {
+      if (password.length < 12)
+        return res.send({
+          error: true,
+          message: 'Password minimum 12 characters',
+        });
+
+      bcrypt.hash(password, 10, async (error, hash) => {
+        if (error)
+          return res.send({ error: true, message: 'An error occurred' });
+
+        await updateUser(user[0].id, { password: hash });
+
+        return res.send({ error: false, message: '' });
+      });
+    } else {
+      return res.send({ error: true, message: 'An error has occured' });
+    }
+  } catch (err) {
+    return res.send({ error: true, message: 'An error has occured' });
+  }
+});
+
+// Request a password reset link
+authRouter.get('/reset-password', resetLimiter, async (req, res) => {
+  const { email } = req.query;
+
+  const user = await getUser(email);
+
+  if (user.length === 1) {
+    if (!passwordResetCache.get(email)) {
+      sendPasswordResetLink(email);
+      passwordResetCache.set(email, true, 15 * 60);
+    } else {
+      return res.send({
+        error: true,
+        message: 'A reset link was recently sent already',
+      });
+    }
+  }
+
+  return res.send({
+    error: false,
+    message:
+      'If an account is associated with this email, we will send a reset link',
+  });
 });
