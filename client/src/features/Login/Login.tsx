@@ -55,12 +55,12 @@ export const Login: React.FC = () => {
         } = await res.json();
 
         if (res.status === 200) {
-          setMessage({ error, value: message });
-
           if (!isRegistered && !error) {
             toggleIsRegistered(true);
             resetAllFields();
           }
+
+          setMessage({ error, value: message });
           if (token) {
             const { fName }: { fName: string } = jwtDecode(token);
 

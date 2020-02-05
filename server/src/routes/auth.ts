@@ -53,7 +53,7 @@ export const sendEmailVerifLink = async (email: string) => {
     process.env.NODE_ENV === 'development'
       ? 'http://localhost:8080'
       : 'https://finance.rbarbazz.com'
-  }/api/auth/reset/${token}`;
+  }/api/auth/email-verification/${token}`;
   const DOMAIN = 'mg.rbarbazz.com';
   const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN });
   const data = {

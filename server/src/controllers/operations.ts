@@ -17,6 +17,12 @@ export const getOperations = async (userId: number): Promise<Operation[]> =>
 export const getOperation = async (operationId: number) =>
   await knex<Operation>('operations').where('id', operationId);
 
+export const getOperationFromLabel = async (userId: number, label: string) =>
+  await knex<Operation>('operations')
+    .whereRaw('LOWER(label) LIKE ?', [`%${label.toLowerCase()}%`])
+    .andWhere('userId', userId)
+    .orderBy('operationDate', 'desc');
+
 export const getMonthlyExpensesSumsForParents = async (
   from: Date,
   to: Date,

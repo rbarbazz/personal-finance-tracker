@@ -7,6 +7,7 @@ import Papa from 'papaparse';
 import {
   delOperation,
   getOperation,
+  getOperationFromLabel,
   getOperations,
   insertOperations,
   updateOperation,
@@ -76,9 +77,22 @@ operationsRouter.post(
 // Add operation(s)
 operationsRouter.post('/', async (req, res) => {
   if (req.user) {
+    const userId = req.user.id;
+
     if (req.body.path) {
       // CSV file(s) upload
-      const { colMatches, path } = req.body;
+      const {
+        colMatches,
+        path,
+      }: {
+        colMatches: {
+          amount: string;
+          date: string;
+          label: string;
+          category: string;
+        };
+        path: string;
+      } = req.body;
       let {
         amount = 'amount',
         category = 'category',
@@ -96,46 +110,63 @@ operationsRouter.post('/', async (req, res) => {
       const csvStream = fs.createReadStream(path);
       Papa.parse(csvStream, {
         complete: async results => {
-          for (const data of results.data) {
+          const {
+            data: rows,
+          }: { data: { [index: string]: string }[] } = results;
+
+          for (const row of rows) {
             let operationDate = moment(
-              data[date],
+              row[date],
               ['YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY', 'DD/MM/YYYY'],
               true,
             );
             if (!operationDate.isValid()) return;
 
-            const parsedFloat = parseFloat(data[amount].replace(',', '.'));
+            const parsedFloat = parseFloat(row[amount].replace(',', '.'));
             if (isNaN(parsedFloat) || parsedFloat == 0) return;
 
             let categoryId = 1;
             let parentCategoryId = 0;
             const selectedCategory = childCategories.find(
-              childCategory => childCategory.title === data[category],
+              childCategory => childCategory.title === row[category],
             );
             if (selectedCategory && selectedCategory.id) {
               categoryId = selectedCategory.id;
               parentCategoryId = selectedCategory.parentCategoryId;
+            } else {
+              const labelWords = row[label].match(/[a-z.]{5,}/gi);
+
+              if (labelWords) {
+                const similarLabelMatch = await getOperationFromLabel(
+                  userId,
+                  labelWords[labelWords.length - 1],
+                );
+
+                if (similarLabelMatch.length > 0) {
+                  categoryId = similarLabelMatch[0].categoryId;
+                  parentCategoryId = similarLabelMatch[0].parentCategoryId;
+                }
+              }
             }
 
-            if (data[label].length < 1) return;
-            if (data[label].length > 255) return;
+            if (row[label].length < 1) return;
+            if (row[label].length > 255) return;
 
             if (req.user)
               operationList.push({
                 amount: parsedFloat,
                 categoryId,
-                label: data[label],
+                label: row[label],
                 operationDate: operationDate.toDate(),
                 parentCategoryId,
-                userId: req.user.id,
+                userId,
               });
           }
           fs.unlink(path, err => {
             if (err) console.error(err);
           });
-          if (operationList.length > 0) {
-            await insertOperations(operationList);
-          }
+          if (operationList.length > 0) await insertOperations(operationList);
+          return res.send({ error: false, message: '' });
         },
         delimitersToGuess: [';', ','],
         header: true,
@@ -169,11 +200,10 @@ operationsRouter.post('/', async (req, res) => {
         label,
         operationDate,
         parentCategoryId: category[0].parentCategoryId,
-        userId: req.user.id,
+        userId,
       });
+      return res.send({ error: false, message: '' });
     }
-
-    return res.send({ error: false, message: '' });
   } else {
     return res.status(401).send();
   }
