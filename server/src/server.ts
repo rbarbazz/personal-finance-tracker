@@ -66,10 +66,4 @@ app.use(
   usersRouter,
 );
 
-// Default route
-if (process.env.NODE_ENV === 'production')
-  app.get('*', (_req, res) =>
-    res.sendFile(path.join(...staticFolder, '/index.html')),
-  );
-
 app.listen(port, () => console.log(`App listening on port ${port}!`));

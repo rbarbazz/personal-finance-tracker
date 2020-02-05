@@ -8,6 +8,7 @@ export const LabelledField: React.FC<{
   autoComplete?: string;
   disabled?: boolean;
   id?: string;
+  name?: string;
   max?: number;
   min?: number;
   step?: number;
@@ -21,6 +22,7 @@ export const LabelledField: React.FC<{
   id,
   max,
   min,
+  name,
   step,
   setter,
   type: initialType,
@@ -75,6 +77,7 @@ export const LabelledField: React.FC<{
             }
             return setter(event.target.value);
           }}
+          {...(name ? { name: `${name}` } : {})}
           type={
             initialType === 'password' && isPwdVisible ? 'text' : initialType
           }

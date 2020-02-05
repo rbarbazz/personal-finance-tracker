@@ -24,7 +24,14 @@ export const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [registerFName, setregisterFName] = useState('');
 
-  const loginUser = (userData: Partial<User>) => {
+  const resetAllFields = () => {
+    setEmail('');
+    setMessage({ error: false, value: '' });
+    setPassword('');
+    setregisterFName('');
+  };
+
+  const signUser = (userData: Partial<User>) => {
     return async (dispatch: Function) => {
       toggleLoading(true);
       try {
@@ -50,7 +57,10 @@ export const Login: React.FC = () => {
         if (res.status === 200) {
           setMessage({ error, value: message });
 
-          if (!isRegistered && !error) toggleIsRegistered(true);
+          if (!isRegistered && !error) {
+            toggleIsRegistered(true);
+            resetAllFields();
+          }
           if (token) {
             const { fName }: { fName: string } = jwtDecode(token);
 
@@ -64,10 +74,6 @@ export const Login: React.FC = () => {
       }
     };
   };
-
-  useEffect(() => {
-    setMessage({ error: false, value: '' });
-  }, [email, password, registerFName]);
 
   useEffect(() => {
     const qs = location.search;
@@ -95,10 +101,12 @@ export const Login: React.FC = () => {
 
   return (
     <form
+      action="/"
+      method="post"
       onSubmit={event => {
         event.preventDefault();
         dispatch(
-          loginUser({
+          signUser({
             fName: registerFName,
             email,
             password,
@@ -121,8 +129,9 @@ export const Login: React.FC = () => {
         </LabelledField>
       )}
       <LabelledField
-        autoComplete="email"
+        autoComplete="username email"
         id="email"
+        name="username"
         setter={setEmail}
         type="email"
         value={email}
@@ -133,6 +142,7 @@ export const Login: React.FC = () => {
       <LabelledField
         autoComplete={isRegistered ? 'current-password' : 'new-password'}
         id="password"
+        name="password"
         setter={setPassword}
         type="password"
         value={password}
@@ -155,7 +165,7 @@ export const Login: React.FC = () => {
         <button
           className="toggle-registered-btn"
           onClick={() => {
-            setMessage({ error: false, value: '' });
+            resetAllFields();
             toggleIsRegistered(!isRegistered);
           }}
           type="button"
