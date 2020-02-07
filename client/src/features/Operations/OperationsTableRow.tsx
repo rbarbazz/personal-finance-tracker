@@ -1,7 +1,7 @@
 import { ThemeConfig } from 'react-select/src/theme';
 import { useSelector, useDispatch } from 'react-redux';
 import { withStyles } from '@material-ui/core/styles';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Select, { Styles } from 'react-select';
 import TableCell from '@material-ui/core/TableCell';
 import TableRow from '@material-ui/core/TableRow';
@@ -65,6 +65,10 @@ export const OperationTableRow: React.FC<{
       dispatch(updateOperationCategory(selectedOption.value, id));
   };
 
+  useEffect(() => {
+    setCategory(categories.find(category => category.value === categoryId));
+  }, [operation]);
+
   return (
     <TableRow>
       <StyledTableCell>{dateLocale}</StyledTableCell>
@@ -77,7 +81,7 @@ export const OperationTableRow: React.FC<{
         style={{ minWidth: 200, maxWidth: 200 }}
       >
         <Select
-          formatOptionLabel={({ value, label, parentCategoryTitle }) => {
+          formatOptionLabel={({ label, parentCategoryTitle }) => {
             const ParentCategoryIcon =
               iconsByCategoryTitle[parentCategoryTitle];
 

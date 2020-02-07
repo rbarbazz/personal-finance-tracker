@@ -9,6 +9,7 @@ import {
   requestUpsert,
   responseUpsert,
   SelectOption,
+  updateOperationFromState,
 } from './operationsStore';
 import { colorsByCategory } from '../Analytics/Analytics';
 import { customSelectTheme, customSelectStyles } from './OperationsTableRow';
@@ -20,40 +21,6 @@ import { logout } from '../../features/Profile/user';
 import { Operation } from '../../../../server/src/db/models';
 import { ReactComponent as SaveIcon } from '../../icons/Save.svg';
 import { State } from '../../app/rootReducer';
-
-const upsertOperation = (
-  initialOperationId = 0,
-  isEdit: boolean,
-  operation: Partial<Operation>,
-  setMessage: Function,
-  toggleDialog: Function,
-) => {
-  return async (dispatch: Function) => {
-    dispatch(requestUpsert());
-    try {
-      const res = await fetch(
-        `/api/operations${isEdit ? `/${initialOperationId}` : ''}`,
-        {
-          method: isEdit ? 'PUT' : 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(operation),
-        },
-      );
-      dispatch(responseUpsert());
-      if (res.status === 200) {
-        const { error, message } = await res.json();
-
-        setMessage({ error, value: message });
-        if (!error) {
-          toggleDialog(false);
-          dispatch(getOperations());
-        }
-      } else dispatch(logout());
-    } catch (error) {
-      setMessage({ error: true, value: 'An error has occurred' });
-    }
-  };
-};
 
 export const UpsertOperationDialog: React.FC<{
   initialOperation?: Partial<Operation>;
@@ -85,9 +52,61 @@ export const UpsertOperationDialog: React.FC<{
   );
   const [message, setMessage] = useState({ error: false, value: '' });
 
+  const upsertOperation = (
+    initialOperationId = 0,
+    operation: Partial<Operation>,
+  ) => {
+    return async (dispatch: Function) => {
+      dispatch(requestUpsert());
+      try {
+        const res = await fetch(
+          `/api/operations${isEdit ? `/${initialOperationId}` : ''}`,
+          {
+            method: isEdit ? 'PUT' : 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(operation),
+          },
+        );
+        dispatch(responseUpsert());
+        if (res.status === 200) {
+          const { error, message } = await res.json();
+
+          setMessage({ error, value: message });
+          if (!error) {
+            toggleDialog(false);
+            if (isEdit)
+              dispatch(
+                updateOperationFromState({
+                  ...operation,
+                  id: initialOperationId,
+                }),
+              );
+            else dispatch(getOperations());
+          }
+        } else dispatch(logout());
+      } catch (error) {
+        setMessage({ error: true, value: 'An error has occurred' });
+      }
+    };
+  };
+
   return (
     <Dialog onClose={() => toggleDialog(false)} open>
-      <div className="new-operation-dialog">
+      <form
+        onSubmit={event => {
+          event.preventDefault();
+          dispatch(
+            upsertOperation(initialOperation.id, {
+              amount,
+              categoryId: selectedCategory ? selectedCategory.value : 1,
+              categoryTitle: selectedCategory ? selectedCategory.label : '',
+              label,
+              operationDate,
+            }),
+          );
+        }}
+        className="new-operation-dialog"
+      >
         <h3 className="new-operation-title">{`${
           isEdit ? 'Edit' : 'Add'
         } Operation`}</h3>
@@ -146,29 +165,14 @@ export const UpsertOperationDialog: React.FC<{
           <InfoMessage error={message.error} value={message.value} />
         )}
         <GenericBtn
-          action={() => {
-            dispatch(
-              upsertOperation(
-                initialOperation.id,
-                isEdit,
-                {
-                  amount,
-                  categoryId: selectedCategory ? selectedCategory.value : 1,
-                  label,
-                  operationDate,
-                },
-                setMessage,
-                toggleDialog,
-              ),
-            );
-          }}
           id="add-operation-btn"
           isLoading={isMakingUpsert}
+          type="submit"
         >
           Save
           <SaveIcon />
         </GenericBtn>
-      </div>
+      </form>
     </Dialog>
   );
 };

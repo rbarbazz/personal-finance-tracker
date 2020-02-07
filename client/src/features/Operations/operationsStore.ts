@@ -9,6 +9,8 @@ const REQUEST_OPERATIONS = 'REQUEST_OPERATIONS';
 const RECEIVE_OPERATIONS = 'RECEIVE_OPERATIONS';
 const REQUEST_UPSERT = 'REQUEST_UPSERT';
 const RESPONSE_UPSERT = 'RESPONSE_UPSERT';
+const OPERATION_DELETED = 'OPERATION_DELETED';
+const OPERATION_UPDATED = 'OPERATION_UPDATED';
 
 interface RequestCategoriesAction {
   type: typeof REQUEST_CATEGORIES;
@@ -36,13 +38,25 @@ interface ResponseUpsertAction {
   type: typeof RESPONSE_UPSERT;
 }
 
+interface OperationDeletedAction {
+  type: typeof OPERATION_DELETED;
+  operationId: number;
+}
+
+interface OperationUpdatedAction {
+  type: typeof OPERATION_UPDATED;
+  operation: Partial<Operation>;
+}
+
 type OperationsActionTypes =
   | RequestCategoriesAction
   | ReceiveCategoriesAction
   | RequestOperationsAction
   | ReceiveOperationsAction
   | RequestUpsertAction
-  | ResponseUpsertAction;
+  | ResponseUpsertAction
+  | OperationDeletedAction
+  | OperationUpdatedAction;
 
 // Reducers
 export type SelectOption = {
@@ -104,6 +118,21 @@ export const operations = (
         ...state,
         isMakingUpsert: false,
       };
+    case OPERATION_DELETED:
+      return {
+        ...state,
+        operations: state.operations.filter(
+          operation => operation.id !== action.operationId,
+        ),
+      };
+    case OPERATION_UPDATED:
+      const updatedOperations = state.operations.map(operation =>
+        operation.id === action.operation.id
+          ? { ...operation, ...action.operation }
+          : operation,
+      );
+
+      return { ...state, operations: updatedOperations };
     case USER_LOGGED_OUT:
       return initialState;
     default:
@@ -138,6 +167,20 @@ export const requestUpsert = (): OperationsActionTypes => ({
 
 export const responseUpsert = (): OperationsActionTypes => ({
   type: RESPONSE_UPSERT,
+});
+
+export const deleteOperationFromState = (
+  operationId: number,
+): OperationsActionTypes => ({
+  operationId,
+  type: OPERATION_DELETED,
+});
+
+export const updateOperationFromState = (
+  operation: Partial<Operation>,
+): OperationsActionTypes => ({
+  type: OPERATION_UPDATED,
+  operation,
 });
 
 // Side Effects
@@ -206,7 +249,7 @@ export const delOperation = (operationId: number) => {
       const res = await fetch(`/api/operations/${operationId}`, {
         method: 'DELETE',
       });
-      if (res.status === 200) dispatch(getOperations());
+      if (res.status === 200) dispatch(deleteOperationFromState(operationId));
       else dispatch(logout());
     } catch (error) {
       console.error(error);
