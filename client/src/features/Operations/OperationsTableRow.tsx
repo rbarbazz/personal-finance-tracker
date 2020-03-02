@@ -67,7 +67,7 @@ export const OperationTableRow: React.FC<{
 
   useEffect(() => {
     setCategory(categories.find(category => category.value === categoryId));
-  }, [operation]);
+  }, [operation, categories, categoryId]);
 
   return (
     <TableRow>

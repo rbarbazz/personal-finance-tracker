@@ -66,4 +66,10 @@ app.use(
   usersRouter,
 );
 
+app.get('*', (_req, res) => {
+  if (process.env.NODE_ENV === 'development') return res.send();
+
+  return res.sendFile(path.join(...staticFolder, '/index.html'));
+});
+
 app.listen(port, () => console.log(`App listening on port ${port}!`));
