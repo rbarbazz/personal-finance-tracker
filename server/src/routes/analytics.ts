@@ -5,6 +5,7 @@ import {
   getMonthlyExpensesSumsForChildren,
   getMonthlyExpensesSumsForParents,
   getMonthlyIncomesSums,
+  getMonthlySavingsSums,
 } from '../controllers/operations';
 import { getMonthlyBudgetsSums } from '../controllers/budgets';
 import { getParentCategories } from '../controllers/categories';
@@ -131,6 +132,11 @@ analyticsRouter.get('/budgetline', async (req, res) => {
       to,
       req.user.id,
     );
+    const monthlySavingsSums = await getMonthlySavingsSums(
+      from,
+      to,
+      req.user.id,
+    );
     const monthlyIncomesSums = await getMonthlyIncomesSums(
       from,
       to,
@@ -147,6 +153,11 @@ analyticsRouter.get('/budgetline', async (req, res) => {
 
       if (i) budgetLineChart[0].data[i].y = sum.y;
     }
+    for (const sum of monthlySavingsSums) {
+      const i = budgetLineChart[1].data.findIndex(month => month.x === sum.x);
+
+      if (i) budgetLineChart[1].data[i].y = -sum.y;
+    }
     for (const sum of monthlyExpensesSums) {
       const i = budgetLineChart[2].data.findIndex(month => month.x === sum.x);
 
@@ -156,11 +167,6 @@ analyticsRouter.get('/budgetline', async (req, res) => {
       const i = budgetLineChart[3].data.findIndex(month => month.x === sum.x);
 
       if (i) budgetLineChart[3].data[i].y = sum.y;
-    }
-    for (let i = 0; i < 6; i++) {
-      budgetLineChart[1].data[i].y = +(
-        budgetLineChart[3].data[i].y - budgetLineChart[2].data[i].y
-      ).toFixed(2);
     }
 
     return res.send({ budgetLineChart });

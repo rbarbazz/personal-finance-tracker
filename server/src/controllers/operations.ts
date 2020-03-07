@@ -1,4 +1,4 @@
-import { Operation } from '../db/models';
+import { Operation, Category } from '../db/models';
 import { knex } from '../db/initDatabase';
 
 export const getOperations = async (userId: number): Promise<Operation[]> =>
@@ -68,8 +68,13 @@ export const getMonthlyExpensesSums = async (
   from: Date,
   to: Date,
   userId: number,
-): Promise<{ x: string; y: number }[]> =>
-  await knex<Operation>('operations')
+): Promise<{ x: string; y: number }[]> => {
+  const savingsCategory = await knex<Category>('categories').where(
+    'title',
+    'Savings',
+  );
+
+  return await knex<Operation>('operations')
     .select(
       knex.raw("to_char(operation_date, 'FMMonth') as x"),
       knex.raw('abs(sum(amount)) as y'),
@@ -77,8 +82,10 @@ export const getMonthlyExpensesSums = async (
     .where('userId', userId)
     .andWhere('amount', '<', 0)
     .andWhereBetween('operationDate', [from, to])
+    .andWhereNot('parentCategoryId', savingsCategory[0].id)
     .groupBy('x')
     .orderByRaw('min(operation_date)');
+};
 
 export const getMonthlyIncomesSums = async (
   from: Date,
@@ -95,6 +102,28 @@ export const getMonthlyIncomesSums = async (
     .andWhereBetween('operationDate', [from, to])
     .groupBy('x')
     .orderByRaw('min(operation_date)');
+
+export const getMonthlySavingsSums = async (
+  from: Date,
+  to: Date,
+  userId: number,
+): Promise<{ x: string; y: number }[]> => {
+  const savingsCategory = await knex<Category>('categories').where(
+    'title',
+    'Savings',
+  );
+
+  return await knex<Operation>('operations')
+    .select(
+      knex.raw("to_char(operation_date, 'FMMonth') as x"),
+      knex.raw('sum(amount) as y'),
+    )
+    .where('userId', userId)
+    .andWhere('parentCategoryId', savingsCategory[0].id)
+    .andWhereBetween('operationDate', [from, to])
+    .groupBy('x')
+    .orderByRaw('min(operation_date)');
+};
 
 export const insertOperations = async (
   operations: Partial<Operation> | Partial<Operation>[],
