@@ -120,10 +120,10 @@ operationsRouter.post('/', async (req, res) => {
               ['YYYY-MM-DD', 'YYYY/MM/DD', 'DD-MM-YYYY', 'DD/MM/YYYY'],
               true,
             );
-            if (!operationDate.isValid()) return;
+            if (!operationDate.isValid()) continue;
 
             const parsedFloat = parseFloat(row[amount].replace(',', '.'));
-            if (isNaN(parsedFloat) || parsedFloat == 0) return;
+            if (isNaN(parsedFloat) || parsedFloat == 0) continue;
 
             let categoryId = 1;
             let parentCategoryId = 0;
@@ -149,18 +149,17 @@ operationsRouter.post('/', async (req, res) => {
               }
             }
 
-            if (row[label].length < 1) return;
-            if (row[label].length > 255) return;
+            if (row[label].length < 1) continue;
+            if (row[label].length > 255) continue;
 
-            if (req.user)
-              operationList.push({
-                amount: parsedFloat,
-                categoryId,
-                label: row[label],
-                operationDate: operationDate.toDate(),
-                parentCategoryId,
-                userId,
-              });
+            operationList.push({
+              amount: parsedFloat,
+              categoryId,
+              label: row[label],
+              operationDate: operationDate.toDate(),
+              parentCategoryId,
+              userId,
+            });
           }
           fs.unlink(path, err => {
             if (err) console.error(err);
