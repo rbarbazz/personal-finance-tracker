@@ -33,6 +33,7 @@ export const BudgetLineChart: React.FC<{
                 legendOffset: -55,
               }}
               colors={[
+                colorsByCategory['Uncategorized'],
                 colorsByCategory['Budget'],
                 colorsByCategory['Savings'],
                 colorsByCategory['Expenses'],

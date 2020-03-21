@@ -118,6 +118,7 @@ analyticsRouter.get('/treemap', async (req, res) => {
 analyticsRouter.get('/budgetline', async (req, res) => {
   if (req.user) {
     const budgetLineChart: LineChartData = [
+      { id: 'Difference', data: initArrayWithMonths(5) },
       { id: 'Budget', data: initArrayWithMonths(5) },
       { id: 'Savings', data: initArrayWithMonths(5) },
       { id: 'Expenses', data: initArrayWithMonths(5) },
@@ -149,24 +150,49 @@ analyticsRouter.get('/budgetline', async (req, res) => {
     );
 
     for (const sum of monthlyBudgetsSums) {
-      const i = budgetLineChart[0].data.findIndex(month => month.x === sum.x);
+      const budgetLineChartIndex = budgetLineChart.findIndex(
+        elem => elem.id === 'Budget',
+      );
+      const i = budgetLineChart[budgetLineChartIndex].data.findIndex(
+        month => month.x === sum.x,
+      );
 
-      if (i) budgetLineChart[0].data[i].y = sum.y;
+      if (i) budgetLineChart[budgetLineChartIndex].data[i].y = sum.y;
     }
     for (const sum of monthlySavingsSums) {
-      const i = budgetLineChart[1].data.findIndex(month => month.x === sum.x);
+      const budgetLineChartIndex = budgetLineChart.findIndex(
+        elem => elem.id === 'Savings',
+      );
+      const i = budgetLineChart[budgetLineChartIndex].data.findIndex(
+        month => month.x === sum.x,
+      );
 
-      if (i) budgetLineChart[1].data[i].y = -sum.y;
+      if (i) budgetLineChart[budgetLineChartIndex].data[i].y = -sum.y;
     }
     for (const sum of monthlyExpensesSums) {
-      const i = budgetLineChart[2].data.findIndex(month => month.x === sum.x);
+      const budgetLineChartIndex = budgetLineChart.findIndex(
+        elem => elem.id === 'Expenses',
+      );
+      const i = budgetLineChart[budgetLineChartIndex].data.findIndex(
+        month => month.x === sum.x,
+      );
 
-      if (i) budgetLineChart[2].data[i].y = sum.y;
+      if (i) budgetLineChart[budgetLineChartIndex].data[i].y = sum.y;
     }
     for (const sum of monthlyIncomesSums) {
-      const i = budgetLineChart[3].data.findIndex(month => month.x === sum.x);
+      const budgetLineChartIndex = budgetLineChart.findIndex(
+        elem => elem.id === 'Incomes',
+      );
+      const i = budgetLineChart[budgetLineChartIndex].data.findIndex(
+        month => month.x === sum.x,
+      );
 
-      if (i) budgetLineChart[3].data[i].y = sum.y;
+      if (i) budgetLineChart[budgetLineChartIndex].data[i].y = sum.y;
+    }
+    for (let i = 0; i < 6; i++) {
+      budgetLineChart[0].data[i].y = +(
+        budgetLineChart[4].data[i].y - budgetLineChart[3].data[i].y
+      ).toFixed(2);
     }
 
     return res.send({ budgetLineChart });
