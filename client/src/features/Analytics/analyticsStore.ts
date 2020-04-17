@@ -107,15 +107,15 @@ export const analytics = (
         ...state,
         averages: [
           {
-            amount: average(action.budgetLineChart[3].data.slice(3, 6)),
+            amount: average(action.budgetLineChart[4].data.slice(3, 6)),
             title: 'Incomes',
           },
           {
-            amount: average(action.budgetLineChart[2].data.slice(3, 6)),
+            amount: average(action.budgetLineChart[3].data.slice(3, 6)),
             title: 'Expenses',
           },
           {
-            amount: average(action.budgetLineChart[1].data.slice(3, 6)),
+            amount: average(action.budgetLineChart[2].data.slice(3, 6)),
             title: 'Savings',
           },
         ],
