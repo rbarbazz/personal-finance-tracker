@@ -27,7 +27,7 @@ initDatabase();
  * Init Express with the Passport middleware
  */
 export const app = express();
-const port = process.env.port || 8080;
+const port = process.env.PORT || 8080;
 const staticFolder = [__dirname, '../../client/build'];
 
 app.use(cors());

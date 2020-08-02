@@ -1,4 +1,4 @@
-FROM node
+FROM node:12-alpine
 
 EXPOSE 8080 5432
 
@@ -8,10 +8,12 @@ WORKDIR /home/node/app
 
 COPY --chown=node:node . .
 
+RUN apk add --no-cache python alpine-sdk
+
 USER node
 
-RUN cd /home/node/app/client && npm i && npm run build
 RUN cd /home/node/app/server && npm i && npm run build
+RUN cd /home/node/app/client && npm i && npm run build
 
 WORKDIR /home/node/app/server
 

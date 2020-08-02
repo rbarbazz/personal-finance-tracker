@@ -10,6 +10,8 @@ import validator from 'validator';
 import { emailVerifCache } from '../middlewares/passport';
 import { getUser, insertUsers, updateUser } from '../controllers/users';
 
+const PROD_URL = 'https://rbarbazz-finance.herokuapp.com/';
+
 const loginLimiter = rateLimit({
   handler: (_req, res) =>
     res.status(401).send({
@@ -50,9 +52,7 @@ export const sendEmailVerifLink = async (email: string) => {
   if (!process.env.MG_API_KEY) throw 'Mailgun API key missing';
 
   const verificationUrl = `${
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:8080'
-      : 'https://finance.rbarbazz.com'
+    process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : PROD_URL
   }/api/auth/email-verification/${token}`;
   const DOMAIN = 'mg.rbarbazz.com';
   const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN });
@@ -85,9 +85,7 @@ export const sendPasswordResetLink = async (email: string) => {
   if (!process.env.MG_API_KEY) throw 'Mailgun API key missing';
 
   const resetUrl = `${
-    process.env.NODE_ENV === 'development'
-      ? 'http://localhost:3000'
-      : 'https://finance.rbarbazz.com'
+    process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : PROD_URL
   }/lost-password?token=${token}`;
   const DOMAIN = 'mg.rbarbazz.com';
   const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN });

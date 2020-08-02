@@ -9,8 +9,8 @@ export const knexConfig: { [env: string]: object } = {
   },
   production: {
     client: 'pg',
-    connection: process.env.PG_CONNECTION_STRING_PROD,
+    connection: process.env.DATABASE_URL,
     ...knexSnakeCaseMappers(),
-    pool: { min: 0, max: 5 },
+    pool: { min: 0, max: 20 },
   },
 };
