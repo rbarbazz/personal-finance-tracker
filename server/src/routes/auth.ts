@@ -54,10 +54,10 @@ export const sendEmailVerifLink = async (email: string) => {
   const verificationUrl = `${
     process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : PROD_URL
   }/api/auth/email-verification/${token}`;
-  const DOMAIN = 'mg.rbarbazz.com';
+  const DOMAIN = 'rbarbazz.com';
   const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN });
   const data = {
-    from: 'Personal Finance Tracker <noreply@mg.rbarbazz.com>',
+    from: 'Personal Finance Tracker <noreply@rbarbazz.com>',
     to: email,
     subject: '[Personal Finance Tracker] - Please verify your email',
     template: 'email_verification',
@@ -87,10 +87,10 @@ export const sendPasswordResetLink = async (email: string) => {
   const resetUrl = `${
     process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : PROD_URL
   }/lost-password?token=${token}`;
-  const DOMAIN = 'mg.rbarbazz.com';
+  const DOMAIN = 'rbarbazz.com';
   const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN });
   const data = {
-    from: 'Personal Finance Tracker <noreply@mg.rbarbazz.com>',
+    from: 'Personal Finance Tracker <noreply@rbarbazz.com>',
     to: email,
     subject: '[Personal Finance Tracker] - Password Reset',
     template: 'reset_password',
