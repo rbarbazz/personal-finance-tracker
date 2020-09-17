@@ -1,7 +1,7 @@
 import { Router } from 'express'
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
-import mailgun from 'mailgun-js'
+import sgMail from '@sendgrid/mail'
 import NodeCache from 'node-cache'
 import passport from 'passport'
 import rateLimit from 'express-rate-limit'
@@ -11,6 +11,7 @@ import { emailVerifCache } from '../middlewares/passport'
 import { getUser, insertUsers, updateUser } from '../controllers/users'
 
 const PROD_URL = 'https://rbarbazz-finance.herokuapp.com/'
+const DOMAIN = 'em7529.rbarbazz.com'
 
 const loginLimiter = rateLimit({
   handler: (_req, res) =>
@@ -49,24 +50,23 @@ export const sendEmailVerifLink = async (email: string) => {
     { email },
     process.env.JWT_VERIF_SECRET || 'really not a secret',
   )
-  if (!process.env.MG_API_KEY) throw 'Mailgun API key missing'
+  if (!process.env.SG_API_KEY) throw 'Sendgrid API key missing'
 
   const verificationUrl = `${
     process.env.NODE_ENV === 'development' ? 'http://localhost:8080' : PROD_URL
   }/api/auth/email-verification/${token}`
-  const DOMAIN = 'rbarbazz.com'
-  const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN })
-  const data = {
-    from: 'Personal Finance Tracker <noreply@rbarbazz.com>',
+  const msg = {
     to: email,
-    subject: '[Personal Finance Tracker] - Please verify your email',
-    template: 'email_verification',
-    text: `Personal Finance Tracker\nThanks for using Personal Finance Tracker!\nYou're only one step away from starting your financial independence journey.\nPlease confirm your email address by following the link below.\n${verificationUrl}`,
-    'v:verification_url': verificationUrl,
+    from: `Personal Finance Tracker <noreply@${DOMAIN}>`,
+    templateId: 'd-04169895452e4b328e421760733ae68f',
+    dynamicTemplateData: {
+      verification_url: verificationUrl,
+    },
   }
 
+  sgMail.setApiKey(process.env.SG_API_KEY)
   try {
-    await mg.messages().send(data)
+    await sgMail.send(msg)
   } catch (error) {
     console.error(
       `An error has occurred while sending confirmation email to ${email}`,
@@ -82,24 +82,23 @@ export const sendPasswordResetLink = async (email: string) => {
     process.env.JWT_VERIF_SECRET || 'really not a secret',
     { expiresIn: '15m' },
   )
-  if (!process.env.MG_API_KEY) throw 'Mailgun API key missing'
+  if (!process.env.SG_API_KEY) throw 'Sendgrid API key missing'
 
   const resetUrl = `${
     process.env.NODE_ENV === 'development' ? 'http://localhost:3000' : PROD_URL
   }/lost-password?token=${token}`
-  const DOMAIN = 'rbarbazz.com'
-  const mg = mailgun({ apiKey: process.env.MG_API_KEY, domain: DOMAIN })
-  const data = {
-    from: 'Personal Finance Tracker <noreply@rbarbazz.com>',
+  const msg = {
     to: email,
-    subject: '[Personal Finance Tracker] - Password Reset',
-    template: 'reset_password',
-    text: `Personal Finance Tracker\nTo reset your password, please follow the link below.\n${resetUrl}`,
-    'v:reset_url': resetUrl,
+    from: `Personal Finance Tracker <noreply@${DOMAIN}>`,
+    templateId: 'd-70985b6208654f1a954021b0c5f0e69f',
+    dynamicTemplateData: {
+      reset_url: resetUrl,
+    },
   }
 
+  sgMail.setApiKey(process.env.SG_API_KEY)
   try {
-    await mg.messages().send(data)
+    await sgMail.send(msg)
   } catch (error) {
     console.error(
       `An error has occurred while sending password reset email to ${email}`,

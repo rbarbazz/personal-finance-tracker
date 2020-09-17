@@ -8,14 +8,14 @@ Production:
 DATABASE_URL
 JWT_ACCESS_SECRET
 JWT_VERIF_SECRET
-MG_API_KEY
+SG_API_KEY
 ```
 
 Development:
 
 ```bash
 PG_CONNECTION_STRING_DEV
-MG_API_KEY
+SG_API_KEY
 ```
 
 ### Deploy to Heroku
