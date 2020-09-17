@@ -1,39 +1,39 @@
-import { useDispatch } from 'react-redux';
-import { useLocation, Link } from 'react-router-dom';
-import jwtDecode from 'jwt-decode';
-import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux'
+import { useLocation, Link } from 'react-router-dom'
+import jwtDecode from 'jwt-decode'
+import React, { useState, useEffect } from 'react'
 
-import './Login.scss';
-import { GenericBtn } from '../../common/GenericBtn';
-import { InfoMessage } from '../../common/InfoMessage';
-import { LabelledField } from '../../common/LabelledField';
-import { ReactComponent as EmailIcon } from '../../icons/Email.svg';
-import { ReactComponent as LockIcon } from '../../icons/Lock.svg';
-import { ReactComponent as LoginIcon } from '../../icons/Login.svg';
-import { ReactComponent as PersonIcon } from '../../icons/Person.svg';
-import { User } from '../../../../server/src/db/models';
-import { userLoggedIn } from '../Profile/user';
+import './Login.scss'
+import { GenericBtn } from '../../common/GenericBtn'
+import { InfoMessage } from '../../common/InfoMessage'
+import { LabelledField } from '../../common/LabelledField'
+import { ReactComponent as EmailIcon } from '../../icons/Email.svg'
+import { ReactComponent as LockIcon } from '../../icons/Lock.svg'
+import { ReactComponent as LoginIcon } from '../../icons/Login.svg'
+import { ReactComponent as PersonIcon } from '../../icons/Person.svg'
+import { User } from '../../../../server/src/db/models'
+import { userLoggedIn } from '../Profile/user'
 
 export const Login: React.FC = () => {
-  const dispatch = useDispatch();
-  const location = useLocation();
-  const [email, setEmail] = useState('');
-  const [isLoading, toggleLoading] = useState(false);
-  const [isRegistered, toggleIsRegistered] = useState(true);
-  const [message, setMessage] = useState({ error: false, value: '' });
-  const [password, setPassword] = useState('');
-  const [registerFName, setregisterFName] = useState('');
+  const dispatch = useDispatch()
+  const location = useLocation()
+  const [email, setEmail] = useState('')
+  const [isLoading, toggleLoading] = useState(false)
+  const [isRegistered, toggleIsRegistered] = useState(true)
+  const [message, setMessage] = useState({ error: false, value: '' })
+  const [password, setPassword] = useState('')
+  const [registerFName, setregisterFName] = useState('')
 
   const resetAllFields = () => {
-    setEmail('');
-    setMessage({ error: false, value: '' });
-    setPassword('');
-    setregisterFName('');
-  };
+    setEmail('')
+    setMessage({ error: false, value: '' })
+    setPassword('')
+    setregisterFName('')
+  }
 
   const signUser = (userData: Partial<User>) => {
     return async (dispatch: Function) => {
-      toggleLoading(true);
+      toggleLoading(true)
       try {
         const res = await fetch(
           `/api/auth/${isRegistered ? 'login' : 'register'}`,
@@ -42,76 +42,76 @@ export const Login: React.FC = () => {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(userData),
           },
-        );
-        toggleLoading(false);
+        )
+        toggleLoading(false)
         const {
           error,
           message,
           token,
         }: {
-          error: boolean;
-          message: string;
-          token: string;
-        } = await res.json();
+          error: boolean
+          message: string
+          token: string
+        } = await res.json()
 
         if (res.status === 200) {
           if (!isRegistered && !error) {
-            toggleIsRegistered(true);
-            resetAllFields();
+            toggleIsRegistered(true)
+            resetAllFields()
           }
 
-          setMessage({ error, value: message });
+          setMessage({ error, value: message })
           if (token) {
-            const { fName }: { fName: string } = jwtDecode(token);
+            const { fName }: { fName: string } = jwtDecode(token)
 
-            return dispatch(userLoggedIn(fName));
+            return dispatch(userLoggedIn(fName))
           }
         } else if (res.status === 401) {
-          setMessage({ error, value: message });
-        } else setMessage({ error: true, value: 'An error has occurred' });
+          setMessage({ error, value: message })
+        } else setMessage({ error: true, value: 'An error has occurred' })
       } catch (error) {
-        console.error(error);
+        console.error(error)
       }
-    };
-  };
+    }
+  }
 
   useEffect(() => {
-    const qs = location.search;
-    const params = new URLSearchParams(qs);
-    const verif = params.get('verif');
-    const reset = params.get('reset');
+    const qs = location.search
+    const params = new URLSearchParams(qs)
+    const verif = params.get('verif')
+    const reset = params.get('reset')
 
     if (reset === 'true')
       return setMessage({
         error: false,
         value: 'Password updated, you may now log in',
-      });
+      })
     if (verif === 'true')
       return setMessage({
         error: false,
         value: 'Account activated, you may now log in',
-      });
+      })
     else if (verif === 'false') {
       return setMessage({
         error: true,
         value: 'Error validating your email',
-      });
+      })
     }
-  }, [location]);
+  }, [location])
 
   return (
     <form
       action="/"
       method="post"
-      onSubmit={event => {
-        event.preventDefault();
+      onSubmit={(event) => {
+        event.preventDefault()
         dispatch(
           signUser({
             fName: registerFName,
             email,
             password,
           }),
-        );
+        )
       }}
       className="login-container"
     >
@@ -165,8 +165,8 @@ export const Login: React.FC = () => {
         <button
           className="toggle-registered-btn"
           onClick={() => {
-            resetAllFields();
-            toggleIsRegistered(!isRegistered);
+            resetAllFields()
+            toggleIsRegistered(!isRegistered)
           }}
           type="button"
         >
@@ -174,5 +174,5 @@ export const Login: React.FC = () => {
         </button>
       </p>
     </form>
-  );
-};
+  )
+}

@@ -1,8 +1,8 @@
-import React from 'react';
+import React from 'react'
 
-import './InfoMessage.scss';
+import './InfoMessage.scss'
 
 export const InfoMessage: React.FC<{ value: string; error: boolean }> = ({
   value,
   error,
-}) => <p className={`message-container${!error ? ' success' : ''}`}>{value}</p>;
+}) => <p className={`message-container${!error ? ' success' : ''}`}>{value}</p>

@@ -1,34 +1,34 @@
-import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useCallback } from 'react'
 
-import './Budget.scss';
-import { ActionBar } from '../../common/ActionBar';
-import { BudgetPieChart } from './BudgetPieChart';
-import { BudgetTable } from './BudgetTable';
-import { getBudgets } from './budgetStore';
-import { LoadingSpinner } from '../../common/LoadingSpinner';
-import { MonthPicker } from './MonthPicker';
-import { SectionHeader } from '../../common/SectionHeader';
-import { State } from '../../app/rootReducer';
+import './Budget.scss'
+import { ActionBar } from '../../common/ActionBar'
+import { BudgetPieChart } from './BudgetPieChart'
+import { BudgetTable } from './BudgetTable'
+import { getBudgets } from './budgetStore'
+import { LoadingSpinner } from '../../common/LoadingSpinner'
+import { MonthPicker } from './MonthPicker'
+import { SectionHeader } from '../../common/SectionHeader'
+import { State } from '../../app/rootReducer'
 
 export const Budget: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const selectedMonth = useSelector(
     (state: State) => state.budgets.selectedMonth,
-  );
-  const budgets = useSelector((state: State) => state.budgets.budgets);
+  )
+  const budgets = useSelector((state: State) => state.budgets.budgets)
   const isFetchingBudgets = useSelector(
     (state: State) => state.budgets.isFetchingBudgets,
-  );
-  const budgetTotal = budgets.reduce((a, b) => a + b.amount, 0);
+  )
+  const budgetTotal = budgets.reduce((a, b) => a + b.amount, 0)
   const getInitialBudgets = useCallback(
     () => dispatch(getBudgets(selectedMonth)),
     [dispatch, selectedMonth],
-  );
+  )
 
   useEffect(() => {
-    getInitialBudgets();
-  }, [getInitialBudgets]);
+    getInitialBudgets()
+  }, [getInitialBudgets])
 
   return (
     <div className="page-container">
@@ -65,5 +65,5 @@ export const Budget: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

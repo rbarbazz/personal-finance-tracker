@@ -1,21 +1,21 @@
-import { useSelector, useDispatch } from 'react-redux';
-import React, { useEffect, useCallback } from 'react';
+import { useSelector, useDispatch } from 'react-redux'
+import React, { useEffect, useCallback } from 'react'
 
-import './Analytics.scss';
+import './Analytics.scss'
 import {
   fetchBudgetLine,
   fetchMonthlyBar,
   fetchTreeMap,
-} from './analyticsStore';
-import { ActionBar } from '../../common/ActionBar';
-import { Averages } from './Averages';
-import { BudgetLineChart } from './BudgetLineChart';
-import { GenericBtn } from '../../common/GenericBtn';
-import { MonthlyBarChart } from './MonthlyBarChart';
-import { ReactComponent as SyncIcon } from '../../icons/Sync.svg';
-import { SectionHeader } from '../../common/SectionHeader';
-import { State } from '../../app/rootReducer';
-import { TreeMapChart } from './TreeMapChart';
+} from './analyticsStore'
+import { ActionBar } from '../../common/ActionBar'
+import { Averages } from './Averages'
+import { BudgetLineChart } from './BudgetLineChart'
+import { GenericBtn } from '../../common/GenericBtn'
+import { MonthlyBarChart } from './MonthlyBarChart'
+import { ReactComponent as SyncIcon } from '../../icons/Sync.svg'
+import { SectionHeader } from '../../common/SectionHeader'
+import { State } from '../../app/rootReducer'
+import { TreeMapChart } from './TreeMapChart'
 
 export const chartTheme = {
   axis: {
@@ -46,7 +46,7 @@ export const chartTheme = {
     },
   },
   tooltip: { container: { color: 'black' } },
-};
+}
 
 export const colorsByCategory: { [index: string]: string } = {
   'Daily Life': '#5F4690',
@@ -60,50 +60,50 @@ export const colorsByCategory: { [index: string]: string } = {
   Taxes: '#94346E',
   Transport: '#665046',
   Uncategorized: '#666666',
-};
+}
 
 const loadingAnimation = {
   webKitAnimation: 'rotate-center 2s linear infinite',
   animation: 'rotate-center 2s linear infinite',
-};
+}
 
 export const Analytics: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const getInitialCharts = useCallback(() => {
-    dispatch(fetchMonthlyBar());
-    dispatch(fetchBudgetLine());
-    dispatch(fetchTreeMap());
-  }, [dispatch]);
+    dispatch(fetchMonthlyBar())
+    dispatch(fetchBudgetLine())
+    dispatch(fetchTreeMap())
+  }, [dispatch])
   const monthlyBarChart = useSelector(
     (state: State) => state.analytics.monthlyBarChart,
-  );
+  )
   const isFetchingMonthlyBar = useSelector(
     (state: State) => state.analytics.isFetchingMonthlyBar,
-  );
+  )
   const treeMapChart = useSelector(
     (state: State) => state.analytics.treeMapChart,
-  );
+  )
   const isFetchingTreeMap = useSelector(
     (state: State) => state.analytics.isFetchingTreeMap,
-  );
+  )
   const budgetLineChart = useSelector(
     (state: State) => state.analytics.budgetLineChart,
-  );
-  const averages = useSelector((state: State) => state.analytics.averages);
+  )
+  const averages = useSelector((state: State) => state.analytics.averages)
   const isFetchingBudgetLine = useSelector(
     (state: State) => state.analytics.isFetchingBudgetLine,
-  );
+  )
   const isFetchingCharts =
-    isFetchingMonthlyBar || isFetchingBudgetLine || isFetchingTreeMap;
+    isFetchingMonthlyBar || isFetchingBudgetLine || isFetchingTreeMap
 
-  useEffect(() => getInitialCharts(), [getInitialCharts]);
+  useEffect(() => getInitialCharts(), [getInitialCharts])
 
   return (
     <div className="page-container">
       <ActionBar>
         <GenericBtn
           action={() => {
-            if (!isFetchingCharts) getInitialCharts();
+            if (!isFetchingCharts) getInitialCharts()
           }}
         >
           Refresh
@@ -129,5 +129,5 @@ export const Analytics: React.FC = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

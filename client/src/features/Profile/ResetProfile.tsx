@@ -1,33 +1,33 @@
-import { useDispatch } from 'react-redux';
-import React, { useState } from 'react';
+import { useDispatch } from 'react-redux'
+import React, { useState } from 'react'
 
-import { GenericBtn } from '../../common/GenericBtn';
-import { InfoMessage } from '../../common/InfoMessage';
-import { logout } from '../../features/Profile/user';
-import { ReactComponent as ResetIcon } from '../../icons/Reset.svg';
+import { GenericBtn } from '../../common/GenericBtn'
+import { InfoMessage } from '../../common/InfoMessage'
+import { logout } from '../../features/Profile/user'
+import { ReactComponent as ResetIcon } from '../../icons/Reset.svg'
 
 const resetProfile = (setMessage: Function, toggleLoading: Function) => {
   return async (dispatch: Function) => {
-    toggleLoading(true);
+    toggleLoading(true)
     try {
-      const res = await fetch('/api/users/', { method: 'DELETE' });
-      toggleLoading(false);
+      const res = await fetch('/api/users/', { method: 'DELETE' })
+      toggleLoading(false)
       if (res.status === 200) {
-        const { error, message } = await res.json();
+        const { error, message } = await res.json()
 
-        setMessage({ error, value: message });
-      } else dispatch(logout());
+        setMessage({ error, value: message })
+      } else dispatch(logout())
     } catch (error) {
-      setMessage({ error: true, value: 'An error has occurred' });
+      setMessage({ error: true, value: 'An error has occurred' })
     }
-  };
-};
+  }
+}
 
 export const ResetProfile: React.FC = () => {
-  const dispatch = useDispatch();
-  const [isLoading, toggleIsLoading] = useState(false);
-  const [hasConfirmed, toggleConfirmation] = useState(false);
-  const [message, setMessage] = useState({ error: false, value: '' });
+  const dispatch = useDispatch()
+  const [isLoading, toggleIsLoading] = useState(false)
+  const [hasConfirmed, toggleConfirmation] = useState(false)
+  const [message, setMessage] = useState({ error: false, value: '' })
 
   return (
     <div className="info-update-card generic-card" id="reset-profile-card">
@@ -43,11 +43,11 @@ export const ResetProfile: React.FC = () => {
         <GenericBtn
           action={() => {
             if (!hasConfirmed) {
-              toggleConfirmation(true);
-              return setMessage({ error: true, value: 'Are you sure?' });
+              toggleConfirmation(true)
+              return setMessage({ error: true, value: 'Are you sure?' })
             }
-            dispatch(resetProfile(setMessage, toggleIsLoading));
-            toggleConfirmation(false);
+            dispatch(resetProfile(setMessage, toggleIsLoading))
+            toggleConfirmation(false)
           }}
           isLoading={isLoading}
         >
@@ -56,5 +56,5 @@ export const ResetProfile: React.FC = () => {
         </GenericBtn>
       </div>
     </div>
-  );
-};
+  )
+}

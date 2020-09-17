@@ -1,16 +1,16 @@
-import { Router } from 'express';
+import { Router } from 'express'
 
-import { getChildCategoriesWithParent } from '../controllers/categories';
+import { getChildCategoriesWithParent } from '../controllers/categories'
 
-export const categoriesRouter = Router();
+export const categoriesRouter = Router()
 
 // Get all child categories
 categoriesRouter.get('/', async (req, res) => {
   if (req.user) {
-    const categories = await getChildCategoriesWithParent();
+    const categories = await getChildCategoriesWithParent()
 
-    res.send({ categories });
+    res.send({ categories })
   } else {
-    res.status(401).send();
+    res.status(401).send()
   }
-});
+})

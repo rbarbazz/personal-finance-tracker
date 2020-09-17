@@ -1,17 +1,17 @@
-import { ResponsiveBar } from '@nivo/bar';
-import React from 'react';
+import { ResponsiveBar } from '@nivo/bar'
+import React from 'react'
 
-import { BarChartData } from '../../../../shared';
-import { CardErrorMessage } from '../../common/CardErrorMessage';
-import { chartTheme, colorsByCategory } from './Analytics';
-import { LoadingSpinner } from '../../common/LoadingSpinner';
-import { ResponsiveChart } from '../../common/ResponsiveChart';
+import { BarChartData } from '../../../../shared'
+import { CardErrorMessage } from '../../common/CardErrorMessage'
+import { chartTheme, colorsByCategory } from './Analytics'
+import { LoadingSpinner } from '../../common/LoadingSpinner'
+import { ResponsiveChart } from '../../common/ResponsiveChart'
 
 export const MonthlyBarChart: React.FC<{
-  root: BarChartData;
-  isLoading: boolean;
+  root: BarChartData
+  isLoading: boolean
 }> = ({ root, isLoading }) => {
-  const { data, keys } = root;
+  const { data, keys } = root
 
   return (
     <div className="chart-wrapper generic-card" id="monthlybarchart">
@@ -32,11 +32,11 @@ export const MonthlyBarChart: React.FC<{
                 legendPosition: 'middle',
                 legendOffset: -55,
               }}
-              colors={bar => colorsByCategory[bar.id]}
+              colors={(bar) => colorsByCategory[bar.id]}
               data={data}
               indexBy="month"
               keys={keys}
-              label={d => `$ ${d.value}`}
+              label={(d) => `$ ${d.value}`}
               labelSkipHeight={15}
               labelTextColor="white"
               margin={{ top: 10, right: 0, bottom: 50, left: 60 }}
@@ -49,5 +49,5 @@ export const MonthlyBarChart: React.FC<{
         </ResponsiveChart>
       )}
     </div>
-  );
-};
+  )
+}

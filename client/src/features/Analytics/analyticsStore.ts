@@ -1,49 +1,49 @@
-import { BarChartData, LineChartData } from '../../../../shared';
-import { logout } from '../../features/Profile/user';
-import { TreeMapChartNode } from '../../../../shared';
-import { UserActionTypes, USER_LOGGED_OUT } from '../Profile/user';
+import { BarChartData, LineChartData } from '../../../../shared'
+import { logout } from '../../features/Profile/user'
+import { TreeMapChartNode } from '../../../../shared'
+import { UserActionTypes, USER_LOGGED_OUT } from '../Profile/user'
 
 const average = (array: { x: string; y: number }[]) => {
   if (array.length > 0)
     return parseFloat(
       (array.reduce((a, b) => a + b.y, 0) / array.length).toFixed(2),
-    );
-  else return 0;
-};
+    )
+  else return 0
+}
 
 // Actions
-export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR';
-export const RECEIVE_MONTHLY_BAR = 'RECEIVE_MONTHLY_BAR';
-export const REQUEST_TREEMAP = 'REQUEST_TREEMAP';
-export const RECEIVE_TREEMAP = 'RECEIVE_TREEMAP';
-export const REQUEST_BUDGET_LINE = 'REQUEST_BUDGET_LINE';
-export const RECEIVE_BUDGET_LINE = 'RECEIVE_BUDGET_LINE';
+export const REQUEST_MONTHLY_BAR = 'REQUEST_MONTHLY_BAR'
+export const RECEIVE_MONTHLY_BAR = 'RECEIVE_MONTHLY_BAR'
+export const REQUEST_TREEMAP = 'REQUEST_TREEMAP'
+export const RECEIVE_TREEMAP = 'RECEIVE_TREEMAP'
+export const REQUEST_BUDGET_LINE = 'REQUEST_BUDGET_LINE'
+export const RECEIVE_BUDGET_LINE = 'RECEIVE_BUDGET_LINE'
 
 interface RequestMonthlyBarAction {
-  type: typeof REQUEST_MONTHLY_BAR;
+  type: typeof REQUEST_MONTHLY_BAR
 }
 
 interface ReceiveMonthlyBarAction {
-  type: typeof RECEIVE_MONTHLY_BAR;
-  monthlyBarChart: BarChartData;
+  type: typeof RECEIVE_MONTHLY_BAR
+  monthlyBarChart: BarChartData
 }
 
 interface RequestTreeMapAction {
-  type: typeof REQUEST_TREEMAP;
+  type: typeof REQUEST_TREEMAP
 }
 
 interface ReceiveTreeMapAction {
-  type: typeof RECEIVE_TREEMAP;
-  treeMapChart: TreeMapChartNode;
+  type: typeof RECEIVE_TREEMAP
+  treeMapChart: TreeMapChartNode
 }
 
 interface RequestBudgetLineAction {
-  type: typeof REQUEST_BUDGET_LINE;
+  type: typeof REQUEST_BUDGET_LINE
 }
 
 interface ReceiveBudgetLineAction {
-  type: typeof RECEIVE_BUDGET_LINE;
-  budgetLineChart: LineChartData;
+  type: typeof RECEIVE_BUDGET_LINE
+  budgetLineChart: LineChartData
 }
 
 export type AnalyticsActionTypes =
@@ -52,18 +52,18 @@ export type AnalyticsActionTypes =
   | RequestTreeMapAction
   | ReceiveTreeMapAction
   | RequestBudgetLineAction
-  | ReceiveBudgetLineAction;
+  | ReceiveBudgetLineAction
 
 // Reducer
 export type AnalyticsState = {
-  averages: { amount: number; title: string }[];
-  budgetLineChart: LineChartData;
-  isFetchingBudgetLine: boolean;
-  isFetchingMonthlyBar: boolean;
-  isFetchingTreeMap: boolean;
-  monthlyBarChart: BarChartData;
-  treeMapChart: TreeMapChartNode;
-};
+  averages: { amount: number; title: string }[]
+  budgetLineChart: LineChartData
+  isFetchingBudgetLine: boolean
+  isFetchingMonthlyBar: boolean
+  isFetchingTreeMap: boolean
+  monthlyBarChart: BarChartData
+  treeMapChart: TreeMapChartNode
+}
 
 const initialState: AnalyticsState = {
   averages: [
@@ -77,7 +77,7 @@ const initialState: AnalyticsState = {
   isFetchingTreeMap: false,
   monthlyBarChart: { data: [], keys: [] },
   treeMapChart: { categoryId: 0, title: 'Expenses', children: [] },
-};
+}
 
 export const analytics = (
   state = initialState,
@@ -85,23 +85,23 @@ export const analytics = (
 ) => {
   switch (action.type) {
     case REQUEST_MONTHLY_BAR:
-      return { ...state, isFetchingMonthlyBar: true };
+      return { ...state, isFetchingMonthlyBar: true }
     case RECEIVE_MONTHLY_BAR:
       return {
         ...state,
         monthlyBarChart: action.monthlyBarChart,
         isFetchingMonthlyBar: false,
-      };
+      }
     case REQUEST_TREEMAP:
-      return { ...state, isFetchingTreeMap: true };
+      return { ...state, isFetchingTreeMap: true }
     case RECEIVE_TREEMAP:
       return {
         ...state,
         treeMapChart: action.treeMapChart,
         isFetchingTreeMap: false,
-      };
+      }
     case REQUEST_BUDGET_LINE:
-      return { ...state, isFetchingBudgetLine: true };
+      return { ...state, isFetchingBudgetLine: true }
     case RECEIVE_BUDGET_LINE:
       return {
         ...state,
@@ -121,84 +121,84 @@ export const analytics = (
         ],
         budgetLineChart: action.budgetLineChart,
         isFetchingBudgetLine: false,
-      };
+      }
     case USER_LOGGED_OUT:
-      return initialState;
+      return initialState
     default:
-      return state;
+      return state
   }
-};
+}
 
 // Action Creators
 const requestMonthlyBar = (): AnalyticsActionTypes => ({
   type: REQUEST_MONTHLY_BAR,
-});
+})
 
 const receiveMonthlyBar = (
   monthlyBarChart: BarChartData,
-): AnalyticsActionTypes => ({ monthlyBarChart, type: RECEIVE_MONTHLY_BAR });
+): AnalyticsActionTypes => ({ monthlyBarChart, type: RECEIVE_MONTHLY_BAR })
 
 const requestTreeMap = (): AnalyticsActionTypes => ({
   type: REQUEST_TREEMAP,
-});
+})
 
 const receiveTreeMap = (
   treeMapChart: TreeMapChartNode,
-): AnalyticsActionTypes => ({ treeMapChart, type: RECEIVE_TREEMAP });
+): AnalyticsActionTypes => ({ treeMapChart, type: RECEIVE_TREEMAP })
 
 const requestBudgetLine = (): AnalyticsActionTypes => ({
   type: REQUEST_BUDGET_LINE,
-});
+})
 
 const receiveBudgetLine = (
   budgetLineChart: LineChartData,
-): AnalyticsActionTypes => ({ budgetLineChart, type: RECEIVE_BUDGET_LINE });
+): AnalyticsActionTypes => ({ budgetLineChart, type: RECEIVE_BUDGET_LINE })
 
 // Side Effects
 export const fetchMonthlyBar = () => {
   return async (dispatch: Function) => {
-    dispatch(requestMonthlyBar());
+    dispatch(requestMonthlyBar())
     try {
-      const res = await fetch('/api/charts/monthlybar', { method: 'GET' });
+      const res = await fetch('/api/charts/monthlybar', { method: 'GET' })
       if (res.status === 200) {
-        const { monthlyBarChart } = await res.json();
+        const { monthlyBarChart } = await res.json()
 
-        dispatch(receiveMonthlyBar(monthlyBarChart));
-      } else dispatch(logout());
+        dispatch(receiveMonthlyBar(monthlyBarChart))
+      } else dispatch(logout())
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
-};
+  }
+}
 
 export const fetchTreeMap = () => {
   return async (dispatch: Function) => {
-    dispatch(requestTreeMap());
+    dispatch(requestTreeMap())
     try {
-      const res = await fetch('/api/charts/treemap', { method: 'GET' });
+      const res = await fetch('/api/charts/treemap', { method: 'GET' })
       if (res.status === 200) {
-        const { treeMapChart } = await res.json();
+        const { treeMapChart } = await res.json()
 
-        dispatch(receiveTreeMap(treeMapChart));
-      } else dispatch(logout());
+        dispatch(receiveTreeMap(treeMapChart))
+      } else dispatch(logout())
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
-};
+  }
+}
 
 export const fetchBudgetLine = () => {
   return async (dispatch: Function) => {
-    dispatch(requestBudgetLine());
+    dispatch(requestBudgetLine())
     try {
-      const res = await fetch('/api/charts/budgetline', { method: 'GET' });
+      const res = await fetch('/api/charts/budgetline', { method: 'GET' })
       if (res.status === 200) {
-        const { budgetLineChart } = await res.json();
+        const { budgetLineChart } = await res.json()
 
-        dispatch(receiveBudgetLine(budgetLineChart));
-      } else dispatch(logout());
+        dispatch(receiveBudgetLine(budgetLineChart))
+      } else dispatch(logout())
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
-};
+  }
+}

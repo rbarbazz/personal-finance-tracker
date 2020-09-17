@@ -1,31 +1,31 @@
-import { useDispatch } from 'react-redux';
-import Dialog from '@material-ui/core/Dialog';
-import React, { useState, useRef } from 'react';
+import { useDispatch } from 'react-redux'
+import Dialog from '@material-ui/core/Dialog'
+import React, { useState, useRef } from 'react'
 
-import './UploadDialog.scss';
-import { GenericBtn } from '../../common/GenericBtn';
-import { getOperations } from './operationsStore';
-import { InfoMessage } from '../../common/InfoMessage';
-import { logout } from '../../features/Profile/user';
-import { ReactComponent as UploadIcon } from '../../icons/Upload.svg';
-import { ReactComponent as ArrowRightIcon } from '../../icons/ArrowRight.svg';
-import { UploadCategoryMatch } from './UploadCategoryMatch';
+import './UploadDialog.scss'
+import { GenericBtn } from '../../common/GenericBtn'
+import { getOperations } from './operationsStore'
+import { InfoMessage } from '../../common/InfoMessage'
+import { logout } from '../../features/Profile/user'
+import { ReactComponent as UploadIcon } from '../../icons/Upload.svg'
+import { ReactComponent as ArrowRightIcon } from '../../icons/ArrowRight.svg'
+import { UploadCategoryMatch } from './UploadCategoryMatch'
 
 export const UploadDialog: React.FC<{
-  toggleUpload: Function;
+  toggleUpload: Function
 }> = ({ toggleUpload }) => {
-  const dispatch = useDispatch();
-  const [fileName, setFileName] = useState('');
-  const [headers, setHeaders] = useState([] as string[]);
-  const [isLoading, toggleLoading] = useState(false);
-  const [message, setMessage] = useState({ error: false, value: '' });
+  const dispatch = useDispatch()
+  const [fileName, setFileName] = useState('')
+  const [headers, setHeaders] = useState([] as string[])
+  const [isLoading, toggleLoading] = useState(false)
+  const [message, setMessage] = useState({ error: false, value: '' })
   const [colMatches, setColMatches] = useState<{ [index: string]: string }>({
     amount: '',
     category: '',
     date: '',
     label: '',
-  });
-  const fileInput = useRef<HTMLInputElement>(null);
+  })
+  const fileInput = useRef<HTMLInputElement>(null)
 
   const uploadFile = (files: FileList) => {
     return async (dispatch: Function) => {
@@ -33,69 +33,69 @@ export const UploadDialog: React.FC<{
         return setMessage({
           error: true,
           value: 'Please select a file',
-        });
-      toggleLoading(true);
+        })
+      toggleLoading(true)
 
-      const data = new FormData();
+      const data = new FormData()
 
-      data.append('csvFiles', files[0], files[0].name);
+      data.append('csvFiles', files[0], files[0].name)
 
       try {
         const res = await fetch('/api/operations/read-csv-col', {
           method: 'POST',
           body: data,
-        });
-        toggleLoading(false);
+        })
+        toggleLoading(false)
         if (res.status === 200) {
-          const { error, message, headers, path } = await res.json();
+          const { error, message, headers, path } = await res.json()
 
           for (const header of headers) {
             const found = Object.keys(colMatches).find(
-              colName => colName === header,
-            );
-            if (found) setColMatches(prev => ({ ...prev, [found]: found }));
+              (colName) => colName === header,
+            )
+            if (found) setColMatches((prev) => ({ ...prev, [found]: found }))
           }
-          setHeaders(headers);
-          setFileName(path);
-          setMessage({ error, value: message });
-        } else dispatch(logout());
+          setHeaders(headers)
+          setFileName(path)
+          setMessage({ error, value: message })
+        } else dispatch(logout())
       } catch (error) {
-        setMessage({ error: true, value: 'An error has occurred' });
+        setMessage({ error: true, value: 'An error has occurred' })
       }
-    };
-  };
+    }
+  }
 
   const sendMatchedCols = () => {
     return async (dispatch: Function) => {
-      const { amount, date, label } = colMatches;
+      const { amount, date, label } = colMatches
       if (!amount || !date || !label)
         return setMessage({
           error: true,
           value: 'Please match at least amount, date and label',
-        });
-      toggleLoading(true);
+        })
+      toggleLoading(true)
 
       try {
         const res = await fetch('/api/operations', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ colMatches, path: fileName }),
-        });
-        toggleLoading(false);
+        })
+        toggleLoading(false)
         if (res.status === 200) {
-          const { error, message } = await res.json();
+          const { error, message } = await res.json()
 
-          setMessage({ error, value: message });
+          setMessage({ error, value: message })
           if (!error) {
-            toggleUpload(false);
-            dispatch(getOperations());
+            toggleUpload(false)
+            dispatch(getOperations())
           }
-        } else dispatch(logout());
+        } else dispatch(logout())
       } catch (error) {
-        setMessage({ error: true, value: 'An error has occurred' });
+        setMessage({ error: true, value: 'An error has occurred' })
       }
-    };
-  };
+    }
+  }
 
   return (
     <Dialog onClose={() => toggleUpload(false)} open>
@@ -103,7 +103,7 @@ export const UploadDialog: React.FC<{
         <h3 className="upload-title">Import Transactions</h3>
         {headers.length > 0 ? (
           <div className="col-match-container">
-            {['amount', 'category', 'date', 'label'].map(colName => (
+            {['amount', 'category', 'date', 'label'].map((colName) => (
               <UploadCategoryMatch
                 colName={colName}
                 headers={headers}
@@ -148,8 +148,8 @@ export const UploadDialog: React.FC<{
               id="upload-input"
               name="files"
               ref={fileInput}
-              onChange={event => {
-                if (event.target.files) setFileName(event.target.files[0].name);
+              onChange={(event) => {
+                if (event.target.files) setFileName(event.target.files[0].name)
               }}
               type="file"
             />
@@ -166,8 +166,8 @@ export const UploadDialog: React.FC<{
               fileInput.current &&
               fileInput.current.files
             )
-              dispatch(uploadFile(fileInput.current.files));
-            else if (headers.length > 0) dispatch(sendMatchedCols());
+              dispatch(uploadFile(fileInput.current.files))
+            else if (headers.length > 0) dispatch(sendMatchedCols())
           }}
           id="upload-csv-btn"
           isLoading={isLoading}
@@ -186,5 +186,5 @@ export const UploadDialog: React.FC<{
         </GenericBtn>
       </div>
     </Dialog>
-  );
-};
+  )
+}

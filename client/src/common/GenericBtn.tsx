@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import './GenericBtn.scss';
-import { LoadingSpinner } from './LoadingSpinner';
+import './GenericBtn.scss'
+import { LoadingSpinner } from './LoadingSpinner'
 
 export const GenericBtn: React.FC<{
-  action?: Function;
-  id?: string;
-  isLoading?: boolean;
-  type?: 'button' | 'submit' | 'reset' | undefined;
+  action?: Function
+  id?: string
+  isLoading?: boolean
+  type?: 'button' | 'submit' | 'reset' | undefined
 }> = ({ action, children, id, isLoading = false, type = 'button' }) => (
   <button
     className="generic-btn"
@@ -18,4 +18,4 @@ export const GenericBtn: React.FC<{
   >
     {isLoading ? <LoadingSpinner /> : children}
   </button>
-);
+)

@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import './LabelledField.scss';
-import { ReactComponent as EyeIcon } from '../icons/Eye.svg';
-import { ReactComponent as EyeOffIcon } from '../icons/EyeOff.svg';
+import './LabelledField.scss'
+import { ReactComponent as EyeIcon } from '../icons/Eye.svg'
+import { ReactComponent as EyeOffIcon } from '../icons/EyeOff.svg'
 
 export const LabelledField: React.FC<{
-  autoComplete?: string;
-  disabled?: boolean;
-  id?: string;
-  name?: string;
-  max?: number;
-  min?: number;
-  step?: number;
-  setter: Function;
-  type: string;
-  value: any;
+  autoComplete?: string
+  disabled?: boolean
+  id?: string
+  name?: string
+  max?: number
+  min?: number
+  step?: number
+  setter: Function
+  type: string
+  value: any
 }> = ({
   autoComplete,
   children,
@@ -28,7 +28,7 @@ export const LabelledField: React.FC<{
   type: initialType,
   value,
 }) => {
-  const [isPwdVisible, toggleVisibility] = useState(false);
+  const [isPwdVisible, toggleVisibility] = useState(false)
 
   return (
     <div className="labelled-field">
@@ -38,7 +38,7 @@ export const LabelledField: React.FC<{
           {initialType === 'password' && (
             <div
               className="password-toggler"
-              onClick={() => toggleVisibility(prev => !prev)}
+              onClick={() => toggleVisibility((prev) => !prev)}
             >
               {value !== '' &&
                 (isPwdVisible ? (
@@ -65,17 +65,17 @@ export const LabelledField: React.FC<{
           {...(max !== undefined ? { max } : {})}
           {...(min !== undefined ? { min } : {})}
           {...(step ? { step } : {})}
-          onChange={event => {
+          onChange={(event) => {
             if (initialType === 'number') {
-              let valAsNum = parseFloat(event.target.value);
-              if (Number.isInteger(valAsNum)) valAsNum = Math.round(valAsNum);
+              let valAsNum = parseFloat(event.target.value)
+              if (Number.isInteger(valAsNum)) valAsNum = Math.round(valAsNum)
 
-              if (isNaN(valAsNum)) return setter(0);
-              if (min && valAsNum < min) return setter(min);
-              if (max && valAsNum > max) return setter(max);
-              return setter(valAsNum);
+              if (isNaN(valAsNum)) return setter(0)
+              if (min && valAsNum < min) return setter(min)
+              if (max && valAsNum > max) return setter(max)
+              return setter(valAsNum)
             }
-            return setter(event.target.value);
+            return setter(event.target.value)
           }}
           {...(name ? { name: `${name}` } : {})}
           type={
@@ -85,5 +85,5 @@ export const LabelledField: React.FC<{
         />
       </div>
     </div>
-  );
-};
+  )
+}

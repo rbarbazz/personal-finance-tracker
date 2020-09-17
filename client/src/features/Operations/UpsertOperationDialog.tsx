@@ -1,31 +1,31 @@
-import { useSelector, useDispatch } from 'react-redux';
-import Dialog from '@material-ui/core/Dialog';
-import React, { useState } from 'react';
-import Select from 'react-select';
+import { useSelector, useDispatch } from 'react-redux'
+import Dialog from '@material-ui/core/Dialog'
+import React, { useState } from 'react'
+import Select from 'react-select'
 
-import './UpsertOperationDialog.scss';
+import './UpsertOperationDialog.scss'
 import {
   getOperations,
   requestUpsert,
   responseUpsert,
   SelectOption,
   updateOperationFromState,
-} from './operationsStore';
-import { colorsByCategory } from '../Analytics/Analytics';
-import { customSelectTheme, customSelectStyles } from './OperationsTableRow';
-import { GenericBtn } from '../../common/GenericBtn';
-import { iconsByCategoryTitle } from '../Budget/BudgetCategory';
-import { InfoMessage } from '../../common/InfoMessage';
-import { LabelledField } from '../../common/LabelledField';
-import { logout } from '../../features/Profile/user';
-import { Operation } from '../../../../server/src/db/models';
-import { ReactComponent as SaveIcon } from '../../icons/Save.svg';
-import { State } from '../../app/rootReducer';
+} from './operationsStore'
+import { colorsByCategory } from '../Analytics/Analytics'
+import { customSelectTheme, customSelectStyles } from './OperationsTableRow'
+import { GenericBtn } from '../../common/GenericBtn'
+import { iconsByCategoryTitle } from '../Budget/BudgetCategory'
+import { InfoMessage } from '../../common/InfoMessage'
+import { LabelledField } from '../../common/LabelledField'
+import { logout } from '../../features/Profile/user'
+import { Operation } from '../../../../server/src/db/models'
+import { ReactComponent as SaveIcon } from '../../icons/Save.svg'
+import { State } from '../../app/rootReducer'
 
 export const UpsertOperationDialog: React.FC<{
-  initialOperation?: Partial<Operation>;
-  isEdit?: boolean;
-  toggleDialog: Function;
+  initialOperation?: Partial<Operation>
+  isEdit?: boolean
+  toggleDialog: Function
 }> = ({
   toggleDialog,
   initialOperation = {
@@ -37,27 +37,29 @@ export const UpsertOperationDialog: React.FC<{
   },
   isEdit = false,
 }) => {
-  const dispatch = useDispatch();
-  const categories = useSelector((state: State) => state.operations.categories);
+  const dispatch = useDispatch()
+  const categories = useSelector((state: State) => state.operations.categories)
   const isMakingUpsert = useSelector(
     (state: State) => state.operations.isMakingUpsert,
-  );
+  )
   const [operationDate, setDate] = useState(
     new Date(initialOperation.operationDate || '').toISOString().slice(0, 10),
-  );
-  const [amount, setAmount] = useState(initialOperation.amount);
-  const [label, setLabel] = useState(initialOperation.label);
+  )
+  const [amount, setAmount] = useState(initialOperation.amount)
+  const [label, setLabel] = useState(initialOperation.label)
   const [selectedCategory, setCategory] = useState<SelectOption | any>(
-    categories.find(category => category.value === initialOperation.categoryId),
-  );
-  const [message, setMessage] = useState({ error: false, value: '' });
+    categories.find(
+      (category) => category.value === initialOperation.categoryId,
+    ),
+  )
+  const [message, setMessage] = useState({ error: false, value: '' })
 
   const upsertOperation = (
     initialOperationId = 0,
     operation: Partial<Operation>,
   ) => {
     return async (dispatch: Function) => {
-      dispatch(requestUpsert());
+      dispatch(requestUpsert())
       try {
         const res = await fetch(
           `/api/operations${isEdit ? `/${initialOperationId}` : ''}`,
@@ -66,35 +68,35 @@ export const UpsertOperationDialog: React.FC<{
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(operation),
           },
-        );
-        dispatch(responseUpsert());
+        )
+        dispatch(responseUpsert())
         if (res.status === 200) {
-          const { error, message } = await res.json();
+          const { error, message } = await res.json()
 
-          setMessage({ error, value: message });
+          setMessage({ error, value: message })
           if (!error) {
-            toggleDialog(false);
+            toggleDialog(false)
             if (isEdit)
               dispatch(
                 updateOperationFromState({
                   ...operation,
                   id: initialOperationId,
                 }),
-              );
-            else dispatch(getOperations());
+              )
+            else dispatch(getOperations())
           }
-        } else dispatch(logout());
+        } else dispatch(logout())
       } catch (error) {
-        setMessage({ error: true, value: 'An error has occurred' });
+        setMessage({ error: true, value: 'An error has occurred' })
       }
-    };
-  };
+    }
+  }
 
   return (
     <Dialog onClose={() => toggleDialog(false)} open>
       <form
-        onSubmit={event => {
-          event.preventDefault();
+        onSubmit={(event) => {
+          event.preventDefault()
           dispatch(
             upsertOperation(initialOperation.id, {
               amount,
@@ -103,7 +105,7 @@ export const UpsertOperationDialog: React.FC<{
               label,
               operationDate,
             }),
-          );
+          )
         }}
         className="new-operation-dialog"
       >
@@ -134,8 +136,7 @@ export const UpsertOperationDialog: React.FC<{
         </label>
         <Select
           formatOptionLabel={({ value, label, parentCategoryTitle }) => {
-            const ParentCategoryIcon =
-              iconsByCategoryTitle[parentCategoryTitle];
+            const ParentCategoryIcon = iconsByCategoryTitle[parentCategoryTitle]
 
             return (
               <div style={{ alignItems: 'center', display: 'flex' }}>
@@ -151,11 +152,11 @@ export const UpsertOperationDialog: React.FC<{
                 )}
                 <div>{label}</div>
               </div>
-            );
+            )
           }}
           inputId="category-select"
           menuPosition="fixed"
-          onChange={selectedOption => setCategory(selectedOption)}
+          onChange={(selectedOption) => setCategory(selectedOption)}
           options={categories}
           styles={customSelectStyles}
           theme={customSelectTheme}
@@ -174,5 +175,5 @@ export const UpsertOperationDialog: React.FC<{
         </GenericBtn>
       </form>
     </Dialog>
-  );
-};
+  )
+}

@@ -1,21 +1,21 @@
-import { useDispatch } from 'react-redux';
-import React, { useState, useEffect } from 'react';
+import { useDispatch } from 'react-redux'
+import React, { useState, useEffect } from 'react'
 
-import { GenericBtn } from '../../common/GenericBtn';
-import { InfoMessage } from '../../common/InfoMessage';
-import { LabelledField } from '../../common/LabelledField';
-import { ReactComponent as SaveIcon } from '../../icons/Save.svg';
-import { updateUserInfo } from './Profile';
+import { GenericBtn } from '../../common/GenericBtn'
+import { InfoMessage } from '../../common/InfoMessage'
+import { LabelledField } from '../../common/LabelledField'
+import { ReactComponent as SaveIcon } from '../../icons/Save.svg'
+import { updateUserInfo } from './Profile'
 
 export const FNameUpdate: React.FC = () => {
-  const dispatch = useDispatch();
-  const [fName, setFName] = useState('');
-  const [isLoading, toggleIsLoading] = useState(false);
-  const [message, setMessage] = useState({ error: false, value: '' });
+  const dispatch = useDispatch()
+  const [fName, setFName] = useState('')
+  const [isLoading, toggleIsLoading] = useState(false)
+  const [message, setMessage] = useState({ error: false, value: '' })
 
   useEffect(() => {
-    setMessage({ error: false, value: '' });
-  }, [fName]);
+    setMessage({ error: false, value: '' })
+  }, [fName])
 
   return (
     <div className="info-update-card generic-card" id="fname-update-card">
@@ -43,5 +43,5 @@ export const FNameUpdate: React.FC = () => {
         </GenericBtn>
       </div>
     </div>
-  );
-};
+  )
+}

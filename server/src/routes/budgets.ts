@@ -1,4 +1,4 @@
-import { Router } from 'express';
+import { Router } from 'express'
 
 import {
   getAllBudgets,
@@ -6,46 +6,43 @@ import {
   getLatestBudgets,
   insertBudgets,
   updateBudget,
-} from '../controllers/budgets';
-import {
-  getCategoryById,
-  getParentCategories,
-} from '../controllers/categories';
-import { BudgetCategoryType } from '../../../shared';
+} from '../controllers/budgets'
+import { getCategoryById, getParentCategories } from '../controllers/categories'
+import { BudgetCategoryType } from '../../../shared'
 
-export const budgetsRouter = Router();
+export const budgetsRouter = Router()
 
 budgetsRouter.get('/', async (req, res) => {
   if (req.user) {
-    let { selectedMonth, selectedYear } = req.query;
-    const from = new Date(selectedYear, selectedMonth, 1);
-    const to = new Date(selectedYear, selectedMonth, 2);
+    let { selectedMonth, selectedYear } = req.query
+    const from = new Date(selectedYear, selectedMonth, 1)
+    const to = new Date(selectedYear, selectedMonth, 2)
 
-    let userBudgets = await getAllBudgets(from, to, req.user.id);
+    let userBudgets = await getAllBudgets(from, to, req.user.id)
     // If no results use latests budgets
     if (userBudgets.length < 1) {
-      const latestsBudgets = await getLatestBudgets(req.user.id);
+      const latestsBudgets = await getLatestBudgets(req.user.id)
 
       if (latestsBudgets.length > 0) {
         const budgetsToInsert = latestsBudgets.filter(
-          budget =>
+          (budget) =>
             budget.budgetDate.toISOString() ===
             latestsBudgets[0].budgetDate.toISOString(),
-        );
-        const budgetDate = new Date(selectedYear, selectedMonth, 1);
+        )
+        const budgetDate = new Date(selectedYear, selectedMonth, 1)
 
         for (const budgetToInsert of budgetsToInsert) {
           await insertBudgets({
             ...budgetToInsert,
             budgetDate,
-          });
+          })
         }
-        userBudgets = await getAllBudgets(from, to, req.user.id);
+        userBudgets = await getAllBudgets(from, to, req.user.id)
       }
     }
 
-    const parentCategories = await getParentCategories();
-    const budgets: BudgetCategoryType[] = [];
+    const parentCategories = await getParentCategories()
+    const budgets: BudgetCategoryType[] = []
 
     for (const parentCategory of parentCategories) {
       if (parentCategory.title !== 'Income')
@@ -53,54 +50,54 @@ budgetsRouter.get('/', async (req, res) => {
           amount: 0,
           categoryId: parentCategory.id,
           title: parentCategory.title,
-        });
+        })
     }
     for (const userBudget of userBudgets) {
       const index = budgets.findIndex(
-        parentCategory => parentCategory.categoryId === userBudget.categoryId,
-      );
-      budgets[index].amount = userBudget.amount;
+        (parentCategory) => parentCategory.categoryId === userBudget.categoryId,
+      )
+      budgets[index].amount = userBudget.amount
     }
 
-    res.send({ budgets });
+    res.send({ budgets })
   } else {
-    res.status(401).send();
+    res.status(401).send()
   }
-});
+})
 
 budgetsRouter.post('/', async (req, res) => {
   if (req.user) {
-    const { categoryId, selectedMonth, selectedYear } = req.body;
-    const from = new Date(selectedYear, selectedMonth, 1);
-    const to = new Date(selectedYear, selectedMonth, 2);
-    let { amount } = req.body;
+    const { categoryId, selectedMonth, selectedYear } = req.body
+    const from = new Date(selectedYear, selectedMonth, 1)
+    const to = new Date(selectedYear, selectedMonth, 2)
+    let { amount } = req.body
 
-    const category = await getCategoryById(categoryId);
+    const category = await getCategoryById(categoryId)
     if (isNaN(categoryId) || category.length < 1)
-      return res.send({ error: true, message: 'Wrong category' });
-    if (amount < 0) amount = 0;
+      return res.send({ error: true, message: 'Wrong category' })
+    if (amount < 0) amount = 0
 
     const existingBudget = await getBudgetByCategory(
       categoryId,
       from,
       to,
       req.user.id,
-    );
+    )
 
-    const budgetDate = new Date(selectedYear, selectedMonth, 1);
+    const budgetDate = new Date(selectedYear, selectedMonth, 1)
 
     if (existingBudget.length > 0)
-      await updateBudget(existingBudget[0].id, { amount, budgetDate });
+      await updateBudget(existingBudget[0].id, { amount, budgetDate })
     else
       await insertBudgets({
         amount,
         budgetDate,
         categoryId,
         userId: req.user.id,
-      });
+      })
 
-    return res.send({ error: false, message: '' });
+    return res.send({ error: false, message: '' })
   } else {
-    res.status(401).send();
+    res.status(401).send()
   }
-});
+})

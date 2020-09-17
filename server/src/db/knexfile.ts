@@ -1,4 +1,4 @@
-import { knexSnakeCaseMappers } from 'objection';
+import { knexSnakeCaseMappers } from 'objection'
 
 export const knexConfig: { [env: string]: object } = {
   development: {
@@ -13,4 +13,4 @@ export const knexConfig: { [env: string]: object } = {
     ...knexSnakeCaseMappers(),
     pool: { min: 0, max: 20 },
   },
-};
+}

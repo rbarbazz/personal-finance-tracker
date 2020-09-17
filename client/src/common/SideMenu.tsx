@@ -1,27 +1,27 @@
-import { Link, useLocation } from 'react-router-dom';
-import { useDispatch } from 'react-redux';
-import React, { useState } from 'react';
+import { Link, useLocation } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import React, { useState } from 'react'
 
-import './SideMenu.scss';
-import { logout } from '../features/Profile/user';
-import { ReactComponent as CalculatorIcon } from '../icons/Calculator.svg';
-import { ReactComponent as BurgerIcon } from '../icons/Burger.svg';
-import { ReactComponent as ChartIcon } from '../icons/Chart.svg';
-import { ReactComponent as FireIcon } from '../icons/Fire.svg';
-import { ReactComponent as LogoutIcon } from '../icons/Logout.svg';
-import { ReactComponent as PersonIcon } from '../icons/Person.svg';
-import { ReactComponent as PriceTagIcon } from '../icons/PriceTag.svg';
+import './SideMenu.scss'
+import { logout } from '../features/Profile/user'
+import { ReactComponent as CalculatorIcon } from '../icons/Calculator.svg'
+import { ReactComponent as BurgerIcon } from '../icons/Burger.svg'
+import { ReactComponent as ChartIcon } from '../icons/Chart.svg'
+import { ReactComponent as FireIcon } from '../icons/Fire.svg'
+import { ReactComponent as LogoutIcon } from '../icons/Logout.svg'
+import { ReactComponent as PersonIcon } from '../icons/Person.svg'
+import { ReactComponent as PriceTagIcon } from '../icons/PriceTag.svg'
 
 export const SideMenu: React.FC = () => {
-  const dispatch = useDispatch();
-  const { pathname } = useLocation();
-  const [isOpen, toggleMenu] = useState(false);
+  const dispatch = useDispatch()
+  const { pathname } = useLocation()
+  const [isOpen, toggleMenu] = useState(false)
 
   return (
     <>
       <button
         className="side-menu-item brand-logo"
-        onClick={() => toggleMenu(prev => !prev)}
+        onClick={() => toggleMenu((prev) => !prev)}
       >
         <BurgerIcon />
       </button>
@@ -36,7 +36,7 @@ export const SideMenu: React.FC = () => {
             { title: 'transactions', icon: <PriceTagIcon /> },
             { title: 'calculators', icon: <FireIcon /> },
             { title: 'profile', icon: <PersonIcon /> },
-          ].map(item => (
+          ].map((item) => (
             <Link
               className={`side-menu-item${
                 pathname === `/${item.title}` ? ' selected' : ''
@@ -58,9 +58,9 @@ export const SideMenu: React.FC = () => {
       {isOpen && (
         <div
           className="side-menu-dark-overlay"
-          onClick={() => toggleMenu(prev => !prev)}
+          onClick={() => toggleMenu((prev) => !prev)}
         />
       )}
     </>
-  );
-};
+  )
+}

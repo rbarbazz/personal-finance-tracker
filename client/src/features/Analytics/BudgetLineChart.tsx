@@ -1,17 +1,17 @@
-import { ResponsiveLine } from '@nivo/line';
-import React from 'react';
+import { ResponsiveLine } from '@nivo/line'
+import React from 'react'
 
-import { CardErrorMessage } from '../../common/CardErrorMessage';
-import { chartTheme, colorsByCategory } from './Analytics';
-import { LineChartData } from '../../../../shared';
-import { LoadingSpinner } from '../../common/LoadingSpinner';
-import { ResponsiveChart } from '../../common/ResponsiveChart';
+import { CardErrorMessage } from '../../common/CardErrorMessage'
+import { chartTheme, colorsByCategory } from './Analytics'
+import { LineChartData } from '../../../../shared'
+import { LoadingSpinner } from '../../common/LoadingSpinner'
+import { ResponsiveChart } from '../../common/ResponsiveChart'
 
 export const BudgetLineChart: React.FC<{
-  isLoading: boolean;
-  root: LineChartData;
+  isLoading: boolean
+  root: LineChartData
 }> = ({ isLoading, root }) => {
-  const isNotEmpty = !!root.find(line => line.data.length > 0);
+  const isNotEmpty = !!root.find((line) => line.data.length > 0)
 
   return (
     <div className="chart-wrapper generic-card" id="budgetlinechart">
@@ -72,5 +72,5 @@ export const BudgetLineChart: React.FC<{
         </ResponsiveChart>
       )}
     </div>
-  );
-};
+  )
+}

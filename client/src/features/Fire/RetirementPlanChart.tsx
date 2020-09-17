@@ -1,14 +1,14 @@
-import { ResponsiveLine } from '@nivo/line';
-import numeral from 'numeral';
-import React from 'react';
+import { ResponsiveLine } from '@nivo/line'
+import numeral from 'numeral'
+import React from 'react'
 
-import { colorsByCategory, chartTheme } from '../Analytics/Analytics';
-import { LineChartData } from '../../../../shared';
-import { ResponsiveChart } from '../../common/ResponsiveChart';
+import { colorsByCategory, chartTheme } from '../Analytics/Analytics'
+import { LineChartData } from '../../../../shared'
+import { ResponsiveChart } from '../../common/ResponsiveChart'
 
 export const RetirementPlanChart: React.FC<{
-  fireNumber: number;
-  root: LineChartData;
+  fireNumber: number
+  root: LineChartData
 }> = ({ fireNumber, root }) => (
   <div className="generic-card retirement-line-chart">
     <ResponsiveChart>
@@ -17,13 +17,13 @@ export const RetirementPlanChart: React.FC<{
           legend: 'Year',
           legendPosition: 'middle',
           legendOffset: 40,
-          format: value => (+value % 2 ? value.toString() : ''),
+          format: (value) => (+value % 2 ? value.toString() : ''),
         }}
         axisLeft={{
           legend: 'Portfolio Value',
           legendPosition: 'middle',
           legendOffset: -60,
-          format: value => numeral(value).format('0a'),
+          format: (value) => numeral(value).format('0a'),
         }}
         colors={[colorsByCategory['Income']]}
         data={root}
@@ -56,4 +56,4 @@ export const RetirementPlanChart: React.FC<{
       />
     </ResponsiveChart>
   </div>
-);
+)

@@ -1,5 +1,5 @@
-import { Operation, Category } from '../db/models';
-import { knex } from '../db/initDatabase';
+import { Operation, Category } from '../db/models'
+import { knex } from '../db/initDatabase'
 
 export const getOperations = async (userId: number): Promise<Operation[]> =>
   await knex<Operation>('operations')
@@ -12,16 +12,16 @@ export const getOperations = async (userId: number): Promise<Operation[]> =>
       'categoryId',
     )
     .leftJoin('categories', { 'operations.categoryId': 'categories.id' })
-    .where('userId', userId);
+    .where('userId', userId)
 
 export const getOperation = async (operationId: number) =>
-  await knex<Operation>('operations').where('id', operationId);
+  await knex<Operation>('operations').where('id', operationId)
 
 export const getOperationFromLabel = async (userId: number, label: string) =>
   await knex<Operation>('operations')
     .whereRaw('LOWER(label) LIKE ?', [`%${label.toLowerCase()}%`])
     .andWhere('userId', userId)
-    .orderBy('operationDate', 'desc');
+    .orderBy('operationDate', 'desc')
 
 export const getMonthlyExpensesSumsForParents = async (
   from: Date,
@@ -36,18 +36,20 @@ export const getMonthlyExpensesSumsForParents = async (
     .where('userId', userId)
     .andWhere('amount', '<', 0)
     .andWhereBetween('operationDate', [from, to])
-    .groupBy('categories.title');
+    .groupBy('categories.title')
 
 export const getMonthlyExpensesSumsForChildren = async (
   from: Date,
   to: Date,
   userId: number,
-): Promise<{
-  categoryId: number;
-  parentCategoryId: number;
-  sum: number;
-  title: string;
-}[]> =>
+): Promise<
+  {
+    categoryId: number
+    parentCategoryId: number
+    sum: number
+    title: string
+  }[]
+> =>
   await knex<Operation>('operations')
     .select(
       'categories.id as categoryId',
@@ -62,7 +64,7 @@ export const getMonthlyExpensesSumsForChildren = async (
     .andWhere('amount', '<', 0)
     .andWhereBetween('operationDate', [from, to])
     .andWhereNot('categories.parentCategoryId', 0)
-    .groupBy('categories.id');
+    .groupBy('categories.id')
 
 export const getMonthlyExpensesSums = async (
   from: Date,
@@ -72,7 +74,7 @@ export const getMonthlyExpensesSums = async (
   const savingsCategory = await knex<Category>('categories').where(
     'title',
     'Savings',
-  );
+  )
 
   return await knex<Operation>('operations')
     .select(
@@ -84,8 +86,8 @@ export const getMonthlyExpensesSums = async (
     .andWhereBetween('operationDate', [from, to])
     .andWhereNot('parentCategoryId', savingsCategory[0].id)
     .groupBy('x')
-    .orderByRaw('min(operation_date)');
-};
+    .orderByRaw('min(operation_date)')
+}
 
 export const getMonthlyIncomesSums = async (
   from: Date,
@@ -101,7 +103,7 @@ export const getMonthlyIncomesSums = async (
     .andWhere('amount', '>', 0)
     .andWhereBetween('operationDate', [from, to])
     .groupBy('x')
-    .orderByRaw('min(operation_date)');
+    .orderByRaw('min(operation_date)')
 
 export const getMonthlySavingsSums = async (
   from: Date,
@@ -111,7 +113,7 @@ export const getMonthlySavingsSums = async (
   const savingsCategory = await knex<Category>('categories').where(
     'title',
     'Savings',
-  );
+  )
 
   return await knex<Operation>('operations')
     .select(
@@ -122,27 +124,21 @@ export const getMonthlySavingsSums = async (
     .andWhere('parentCategoryId', savingsCategory[0].id)
     .andWhereBetween('operationDate', [from, to])
     .groupBy('x')
-    .orderByRaw('min(operation_date)');
-};
+    .orderByRaw('min(operation_date)')
+}
 
 export const insertOperations = async (
   operations: Partial<Operation> | Partial<Operation>[],
-) => await knex<Operation>('operations').insert(operations);
+) => await knex<Operation>('operations').insert(operations)
 
 export const delOperation = async (operationId: number) =>
-  await knex<Operation>('operations')
-    .where('id', operationId)
-    .del();
+  await knex<Operation>('operations').where('id', operationId).del()
 
 export const updateOperation = async (
   operationId: number,
   operation: Partial<Operation>,
 ) =>
-  await knex<Operation>('operations')
-    .where('id', operationId)
-    .update(operation);
+  await knex<Operation>('operations').where('id', operationId).update(operation)
 
 export const deleteOperations = async (userId: number) =>
-  await knex<Operation>('operations')
-    .where('userId', userId)
-    .del();
+  await knex<Operation>('operations').where('userId', userId).del()

@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'
 
-import { InfoMessage } from '../../common/InfoMessage';
-import { LabelledField } from '../../common/LabelledField';
-import { State } from '../../app/rootReducer';
-import { updateFireParam } from './fireStore';
-import { useSelector, useDispatch } from 'react-redux';
+import { InfoMessage } from '../../common/InfoMessage'
+import { LabelledField } from '../../common/LabelledField'
+import { State } from '../../app/rootReducer'
+import { updateFireParam } from './fireStore'
+import { useSelector, useDispatch } from 'react-redux'
 
-const currentYear = new Date().getFullYear();
+const currentYear = new Date().getFullYear()
 
 export const FireNumberCalculator: React.FC<{
-  message: { error: boolean; value: string };
-  setChartData: Function;
-  setMessage: Function;
+  message: { error: boolean; value: string }
+  setChartData: Function
+  setMessage: Function
 }> = ({ message, setChartData, setMessage }) => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
   const {
     age,
     expectedRoi,
@@ -21,50 +21,49 @@ export const FireNumberCalculator: React.FC<{
     incomes,
     netWorth,
     savingsRate,
-  } = useSelector((state: State) => state.fire.params);
-  const [yearsToRet, setYearsToRet] = useState(0);
+  } = useSelector((state: State) => state.fire.params)
+  const [yearsToRet, setYearsToRet] = useState(0)
 
   useEffect(() => {
-    const fireNumber = expenses * 300;
-    const quarterIncomesSavings = incomes * 4 * (savingsRate / 100);
-    const quarterROIRate = expectedRoi / 4 / 100;
-    const newChartData = [];
-    let index = 0;
-    let hasReachedFire = false;
-    let portfolioValue = netWorth;
+    const fireNumber = expenses * 300
+    const quarterIncomesSavings = incomes * 4 * (savingsRate / 100)
+    const quarterROIRate = expectedRoi / 4 / 100
+    const newChartData = []
+    let index = 0
+    let hasReachedFire = false
+    let portfolioValue = netWorth
 
-    setMessage({ error: false, value: '' });
+    setMessage({ error: false, value: '' })
 
     while (portfolioValue < fireNumber * 1.1) {
-      let quarterEarnings = quarterIncomesSavings;
+      let quarterEarnings = quarterIncomesSavings
 
       // Add up quarterly incomes
-      if (portfolioValue > 0)
-        quarterEarnings += portfolioValue * quarterROIRate;
-      portfolioValue += quarterEarnings;
+      if (portfolioValue > 0) quarterEarnings += portfolioValue * quarterROIRate
+      portfolioValue += quarterEarnings
 
       // Add data point every year
       if (index % 4 === 0)
         newChartData.push({
           x: (currentYear + index / 4).toString(),
           y: Math.round(portfolioValue),
-        });
-      index += 1;
+        })
+      index += 1
 
       // Check that values aren't nonsense
       if (index > 1200)
         return setMessage({
           error: true,
           value: 'Be realistic, this would take more than a lifetime...',
-        });
+        })
 
       // Save index when reached FIRE number
       if (portfolioValue >= fireNumber && !hasReachedFire) {
-        hasReachedFire = true;
-        setYearsToRet(index / 4);
+        hasReachedFire = true
+        setYearsToRet(index / 4)
       }
     }
-    setChartData(newChartData);
+    setChartData(newChartData)
   }, [
     expectedRoi,
     expenses,
@@ -73,7 +72,7 @@ export const FireNumberCalculator: React.FC<{
     savingsRate,
     setChartData,
     setMessage,
-  ]);
+  ])
 
   return (
     <div className="generic-card fire-number-card">
@@ -195,5 +194,5 @@ export const FireNumberCalculator: React.FC<{
         </div>
       </div>
     </div>
-  );
-};
+  )
+}

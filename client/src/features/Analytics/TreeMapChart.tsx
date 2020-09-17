@@ -1,19 +1,19 @@
-import { ResponsiveTreeMap } from '@nivo/treemap';
-import React from 'react';
+import { ResponsiveTreeMap } from '@nivo/treemap'
+import React from 'react'
 
-import { CardErrorMessage } from '../../common/CardErrorMessage';
-import { chartTheme, colorsByCategory } from './Analytics';
-import { LoadingSpinner } from '../../common/LoadingSpinner';
-import { ResponsiveChart } from '../../common/ResponsiveChart';
-import { TreeMapChartNode } from '../../../../shared';
+import { CardErrorMessage } from '../../common/CardErrorMessage'
+import { chartTheme, colorsByCategory } from './Analytics'
+import { LoadingSpinner } from '../../common/LoadingSpinner'
+import { ResponsiveChart } from '../../common/ResponsiveChart'
+import { TreeMapChartNode } from '../../../../shared'
 
 export const TreeMapChart: React.FC<{
-  root: TreeMapChartNode;
-  isLoading: boolean;
+  root: TreeMapChartNode
+  isLoading: boolean
 }> = ({ root, isLoading }) => {
   const isNotEmpty =
     root.children &&
-    !!root.children.find(child => child.children && child.children.length > 0);
+    !!root.children.find((child) => child.children && child.children.length > 0)
 
   return (
     <div className="chart-wrapper generic-card" id="treemapchart">
@@ -46,5 +46,5 @@ export const TreeMapChart: React.FC<{
         </ResponsiveChart>
       )}
     </div>
-  );
-};
+  )
+}

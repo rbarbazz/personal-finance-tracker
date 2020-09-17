@@ -1,11 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import './CardErrorMessage.scss';
-import { ReactComponent as AlertIcon } from '../icons/Alert.svg';
+import './CardErrorMessage.scss'
+import { ReactComponent as AlertIcon } from '../icons/Alert.svg'
 
 export const CardErrorMessage: React.FC<{
-  isMobileError?: boolean;
-  message: string;
+  isMobileError?: boolean
+  message: string
 }> = ({ isMobileError = false, message }) => (
   <div
     className={`chart-error-container${isMobileError ? ' mobile-error' : ''}`}
@@ -13,4 +13,4 @@ export const CardErrorMessage: React.FC<{
     <AlertIcon />
     <p className="chart-error-message">{message}</p>
   </div>
-);
+)

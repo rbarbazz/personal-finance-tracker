@@ -1,90 +1,90 @@
-import { Link, useLocation, useHistory } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import { Link, useLocation, useHistory } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 
-import './LostPassword.scss';
-import { GenericBtn } from '../../common/GenericBtn';
-import { InfoMessage } from '../../common/InfoMessage';
-import { LabelledField } from '../../common/LabelledField';
-import { ReactComponent as EmailIcon } from '../../icons/Email.svg';
-import { ReactComponent as LockIcon } from '../../icons/Lock.svg';
+import './LostPassword.scss'
+import { GenericBtn } from '../../common/GenericBtn'
+import { InfoMessage } from '../../common/InfoMessage'
+import { LabelledField } from '../../common/LabelledField'
+import { ReactComponent as EmailIcon } from '../../icons/Email.svg'
+import { ReactComponent as LockIcon } from '../../icons/Lock.svg'
 
 export const LostPassword: React.FC = () => {
-  const location = useLocation();
-  const history = useHistory();
-  const [email, setEmail] = useState('');
-  const [isLoading, toggleLoading] = useState(false);
-  const [message, setMessage] = useState({ error: false, value: '' });
-  const [password, setPassword] = useState('');
-  const [token, setToken] = useState('');
+  const location = useLocation()
+  const history = useHistory()
+  const [email, setEmail] = useState('')
+  const [isLoading, toggleLoading] = useState(false)
+  const [message, setMessage] = useState({ error: false, value: '' })
+  const [password, setPassword] = useState('')
+  const [token, setToken] = useState('')
 
   const resetPassword = async (email: string) => {
     if (email.length === 0)
       return setMessage({
         error: true,
         value: 'Please provide an email',
-      });
-    toggleLoading(true);
+      })
+    toggleLoading(true)
     try {
       const res = await fetch(`/api/auth/reset-password?email=${email}`, {
         method: 'GET',
-      });
-      toggleLoading(false);
+      })
+      toggleLoading(false)
       const {
         error,
         message,
       }: {
-        error: boolean;
-        message: string;
-      } = await res.json();
+        error: boolean
+        message: string
+      } = await res.json()
 
       if (res.status === 200) {
-        setMessage({ error, value: message });
-      } else setMessage({ error: true, value: 'An error has occurred' });
+        setMessage({ error, value: message })
+      } else setMessage({ error: true, value: 'An error has occurred' })
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   const updatePassword = async (password: string) => {
-    toggleLoading(true);
+    toggleLoading(true)
     try {
       const res = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ password, token }),
-      });
-      toggleLoading(false);
+      })
+      toggleLoading(false)
       const {
         error,
         message,
       }: {
-        error: boolean;
-        message: string;
-      } = await res.json();
+        error: boolean
+        message: string
+      } = await res.json()
 
       if (res.status === 200) {
-        setMessage({ error, value: message });
+        setMessage({ error, value: message })
 
-        if (!error) history.push('/?reset=true');
-      } else setMessage({ error: true, value: 'An error has occurred' });
+        if (!error) history.push('/?reset=true')
+      } else setMessage({ error: true, value: 'An error has occurred' })
     } catch (error) {
-      console.error(error);
+      console.error(error)
     }
-  };
+  }
 
   useEffect(() => {
-    const qs = location.search;
-    const params = new URLSearchParams(qs);
-    const token = params.get('token');
+    const qs = location.search
+    const params = new URLSearchParams(qs)
+    const token = params.get('token')
 
-    if (token) setToken(token);
-  }, [location]);
+    if (token) setToken(token)
+  }, [location])
 
   return (
     <form
-      onSubmit={event => {
-        event.preventDefault();
-        token.length < 1 ? resetPassword(email) : updatePassword(password);
+      onSubmit={(event) => {
+        event.preventDefault()
+        token.length < 1 ? resetPassword(email) : updatePassword(password)
       }}
       className="reset-password-container"
     >
@@ -122,5 +122,5 @@ export const LostPassword: React.FC = () => {
         Return to the homepage
       </Link>
     </form>
-  );
-};
+  )
+}

@@ -1,13 +1,13 @@
-import React from 'react';
+import React from 'react'
 
-import { LoadingSpinner } from '../../common/LoadingSpinner';
+import { LoadingSpinner } from '../../common/LoadingSpinner'
 
 export const Averages: React.FC<{
-  averages: { amount: number; title: string }[];
-  isLoading: boolean;
+  averages: { amount: number; title: string }[]
+  isLoading: boolean
 }> = ({ averages, isLoading }) => (
   <div className="text-card-containter">
-    {averages.map(average => (
+    {averages.map((average) => (
       <div key={average.title} className="generic-card">
         {isLoading ? (
           <LoadingSpinner />
@@ -21,4 +21,4 @@ export const Averages: React.FC<{
       </div>
     ))}
   </div>
-);
+)

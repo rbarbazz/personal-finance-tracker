@@ -1,6 +1,6 @@
-import { Budget } from '../db/models';
+import { Budget } from '../db/models'
 
-import { knex } from '../db/initDatabase';
+import { knex } from '../db/initDatabase'
 
 export const getAllBudgets = async (
   from: Date,
@@ -17,7 +17,7 @@ export const getAllBudgets = async (
     )
     .leftJoin('categories', { 'budgets.categoryId': 'categories.id' })
     .where('userId', userId)
-    .andWhereBetween('budgetDate', [from, to]);
+    .andWhereBetween('budgetDate', [from, to])
 
 export const getMonthlyBudgetsSums = async (
   from: Date,
@@ -32,7 +32,7 @@ export const getMonthlyBudgetsSums = async (
     .where('userId', userId)
     .andWhereBetween('budgetDate', [from, to])
     .groupBy('x')
-    .orderByRaw('min(budget_date)');
+    .orderByRaw('min(budget_date)')
 
 export const getBudgetByCategory = async (
   categoryId: number,
@@ -43,25 +43,21 @@ export const getBudgetByCategory = async (
   await knex<Budget>('budgets')
     .where('userId', userId)
     .andWhere('categoryId', categoryId)
-    .andWhereBetween('budgetDate', [from, to]);
+    .andWhereBetween('budgetDate', [from, to])
 
 export const getLatestBudgets = async (userId: number) =>
   await knex<Budget>('budgets')
     .select('amount', 'budgetDate', 'categoryId', 'userId')
     .where('userId', userId)
     .limit(9)
-    .orderBy('budgetDate', 'desc');
+    .orderBy('budgetDate', 'desc')
 
 export const insertBudgets = async (
   budgets: Partial<Budget> | Partial<Budget>[],
-) => await knex<Budget>('budgets').insert(budgets);
+) => await knex<Budget>('budgets').insert(budgets)
 
 export const updateBudget = async (budgetId: number, budget: Partial<Budget>) =>
-  await knex<Budget>('budgets')
-    .where('id', budgetId)
-    .update(budget);
+  await knex<Budget>('budgets').where('id', budgetId).update(budget)
 
 export const deleteBudgets = async (userId: number) =>
-  await knex<Budget>('budgets')
-    .where('userId', userId)
-    .del();
+  await knex<Budget>('budgets').where('userId', userId).del()
