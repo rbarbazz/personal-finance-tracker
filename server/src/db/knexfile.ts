@@ -9,7 +9,7 @@ export const knexConfig: { [env: string]: object } = {
   },
   production: {
     client: 'pg',
-    connection: process.env.DATABASE_URL,
+    connection: `${process.env.DATABASE_URL}?ssl=true`,
     ...knexSnakeCaseMappers(),
     pool: { min: 0, max: 20 },
   },
