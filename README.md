@@ -1,6 +1,6 @@
 # Personal Finance Tracker
 
-### Environment Variables
+## Environment Variables
 
 Production:
 
@@ -18,7 +18,7 @@ PG_CONNECTION_STRING_DEV
 SG_API_KEY
 ```
 
-### Deploy to Heroku
+## Deploy to Heroku
 
 ```bash
 heroku container:push web -a rbarbazz-finance
