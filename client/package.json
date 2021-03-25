@@ -4,9 +4,9 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.9.7",
-    "@nivo/line": "^0.59.3",
-    "@nivo/pie": "^0.59.1",
-    "@nivo/treemap": "^0.59.0",
+    "@nivo/line": "^0.67.0",
+    "@nivo/pie": "^0.67.0",
+    "@nivo/treemap": "^0.67.0",
     "@types/jest": "24.0.22",
     "@types/node": "12.12.7",
     "@types/react": "16.9.11",
@@ -51,7 +51,7 @@
     ]
   },
   "devDependencies": {
-    "@nivo/bar": "^0.59.2",
+    "@nivo/bar": "^0.67.0",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@types/jwt-decode": "^2.2.1",
