@@ -12,8 +12,8 @@ RUN apk add --no-cache python alpine-sdk
 
 USER node
 
-RUN cd /home/node/app/server && npm i && npm run build
-RUN cd /home/node/app/client && npm i && npm run build
+RUN cd /home/node/app/server && npm ci && npm run build
+RUN cd /home/node/app/client && npm ci && npm run build
 
 WORKDIR /home/node/app/server
 
