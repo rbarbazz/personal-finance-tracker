@@ -1,5 +1,9 @@
 # Personal Finance Tracker
 
+A web app to help track your incomes and expenses.
+
+Requires a Sendgrid API key.
+
 ## Environment Variables
 
 Production:
@@ -20,7 +24,7 @@ SG_API_KEY
 
 ## Deploy to Heroku
 
-```bash
-heroku container:push web -a rbarbazz-finance
-heroku container:release web -a rbarbazz-finance
+```shell
+heroku container:push web -a my-app
+heroku container:release web -a my-app
 ```
